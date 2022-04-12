@@ -13,7 +13,7 @@ class MeasUnit:
         self.kind = kind
 
     def transform(self, new_kind):
-        self.kind = new_kind
+        return self.kind.get_multiple() / new_kind.get_multiple()
 
     def get_kind(self):
         return self.kind
@@ -44,5 +44,5 @@ class Parameter:
         self.option = option
 
     def transform(self, new_unit):
-        self.value *= self.unit.get_kind().get_multiple() / new_unit.get_kind().get_multiple()
+        self.value *= self.unit.transform(new_unit.get_kind())
         self.unit = new_unit
