@@ -1,0 +1,7 @@
+parameters = {
+  "wire diameter": {
+    "name": "d",
+    "value": null,
+    "":  ,
+  }
+}
