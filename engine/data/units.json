@@ -19,6 +19,14 @@
         "atto": [-18, "а", "a"]
     },
     "unit": {
-        "length": ["l", ]
+                "number": ["N", "unit"],
+        "length": ["L", "m"],
+        "square": ["S", "m^2"],
+        "volume": ["V", "m^3"],
+        "mass": ["m", "kg"],
+        "time": ["t", "s"],
+        "temperature": ["T", "K"],
+        "amperage": ["I", "A"],
+        "resistance": ["R", "Om"]
     }
 }

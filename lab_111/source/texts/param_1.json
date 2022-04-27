@@ -1,0 +1,71 @@
+{
+    "parameters":
+    [
+        "wire_diameter": {
+            "symbol": "d",
+            "value": null,
+            "category": "length",
+            "unit": "mm",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        },
+        "reochord_drum":{
+            "symbol": "D",
+            "value": null,
+            "category": "length",
+            "unit": "mm",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        },
+        "length of the drum section with the wire": {
+            "symbol": "L",
+            "value": null,
+            "category": "length",
+            "unit": "mm",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        },
+        "total number of turns": {
+            "symbol": "N",
+            "value": null,
+            "category": "number",
+            "unit": "unit",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        },
+        "Resistance of 40 turns": {
+            "symbol": "R_40",
+            "value": null,
+            "category": "resistance",
+            "unit": "Om",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        },
+        "Groove depth": {
+            "symbol": "h",
+            "value": null,
+            "category": "length",
+            "unit": "mm",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "texts":
+    {
+        "text_1": {
+            "options": {},
+            "kind": "text",
+            "text": "Удельное сопротивление проволоки: "
+        },
+        "text_2": {
+            "options": {},
+            "kind": "formula",
+            "text": "ρ=RS/L"
+        }
+    }
+}
