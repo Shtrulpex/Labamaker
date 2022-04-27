@@ -1,14 +1,40 @@
 import enum
 import pandas as pd
-from pandas import DataFrame, read_csv
+from pandas import DataFrame
 import os
 import json
 
 
+class Prefix:
+    prefix = {
+        'exa': [18, 'Э', 'E'],
+        'peta': [15, 'П', 'P'],
+        'tera': [12, 'Т', 'T'],
+        'giga': [9, 'Г', 'G'],
+        'mega': [6, 'М', 'M'],
+        'kilo': [3, 'к', 'k'],
+        'hecto': [2, 'г', 'h'],
+        'deca': [1, 'да', 'da'],
+        '': [1, '', ''],
+        'deci': [-1, 'д', 'd'],
+        'santi': [-2, 'с', 'c'],
+        'milli': [-3, 'м', 'm'],
+        'micro': [-6, 'мк', 'mk'],
+        'nano': [-9, 'н', 'n'],
+        'pico': [-12, 'п', 'p'],
+        'femto': [-15, 'ф', 'f'],
+        'atto': [-18, 'а', 'a']
+    }
+
+
 class Kind:
-    def __init__(self, name, multiplier):
+    def __init__(self, name, prefix: str):
         self.name = name
-        self.multiplier = multiplier  # absolute multiplier
+        if prefix in Prefix.prefix.keys():
+            self.prefix = Prefix.prefix[prefix]
+        else:
+            raise RuntimeError(f'incorrect prefix: {prefix}')
+        self.multiplier = 10 ** self.prefix[0]
 
     def get_multiplier(self):
         return self.multiplier
@@ -33,7 +59,7 @@ class TextOption:
                  color: str = 'black',
                  italics: bool = False,
                  frame: bool = False,
-                 underline: bool = False) -> object:
+                 underline: bool = False):
         self.font = font
         self.size = size
         self.bold = bold
@@ -115,6 +141,30 @@ class ParamOptions:
                 'name': self.name_option}
 
 
+class Category(enum.Enum):
+    number = 'number'
+    length = 'length'
+    square = 'square'
+    volume = 'volume'
+    mass = 'mass'
+    time = 'time'
+    temperature = 'temperature'
+    amperage = 'amperage'
+    resistance = 'resistance'
+
+
+class Si(enum.Enum):
+    number = 'unit'
+    length = 'm'
+    square = 'm^2'
+    volume = 'm^3'
+    mass = 'kg'
+    time = 's'
+    temperature = 'K'
+    amperage = 'A'
+    resistance = 'Om'
+
+
 class Parameter:
     def __init__(self, name, value, unit: MeasUnit, options: ParamOptions):
         self.name = name
@@ -126,10 +176,29 @@ class Parameter:
     def convert(self, new_unit: MeasUnit):
         if new_unit.get_category() != self.unit.get_category():
             raise RuntimeError('Incorrect unit to transform')
+        multiplier = self.unit.get_multiplier()
+        self.value /= multiplier
+        self.value *= new_unit.get_multiplier()
         self.unit = new_unit
 
     def to_si(self):  # transform to SI unit in this category
-        pass
+        category = self.unit.get_category()
+        multiplier = self.unit.get_multiplier()
+        if category == Category.square:
+            self.value /= 10 ** multiplier ** 2
+            unit = MeasUnit(Category.length,
+                            Kind(Si.square, ''))
+            self.unit = unit
+        elif category == Category.volume:
+            self.value /= 10 ** multiplier ** 3
+            unit = MeasUnit(Category.volume,
+                            Kind(Si.volume, ''))
+            self.unit = unit
+        else:
+            self.value /= 10 ** multiplier
+            unit = MeasUnit(Category[category],
+                            Kind(Si[category], ''))
+            self.unit = unit
 
 
 class Table(DataFrame):
@@ -154,7 +223,7 @@ class Data:
         tables = dict()
         for file in files:
             name = file.split('\\')[-1].split('.')[0]
-            table = Table(name, pd.read_csv(file, index_col=0))
+            table = Table(name, pd.read_csv(path + '\\' + file, index_col=0))
             tables[name] = table
         return tables
 
@@ -163,8 +232,8 @@ class Data:
         files = os.listdir(path=path)
         texts = []
         for file in files:
-            with open(file, 'r', encoding='utf8') as f:
-                data = json.loads(f)
+            with open(path + '\\' + file, 'r', encoding='utf8') as f:
+                data = json.load(f)
                 texts_ = data['texts']
                 for txt in texts_.keys():
                     text = Text(texts_[txt]['options'],
@@ -213,4 +282,3 @@ class DataController:
 
     def get_result(self):
         return self.result
-
