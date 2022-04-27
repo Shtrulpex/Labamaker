@@ -1,7 +1,27 @@
-parameters = {
-  "wire diameter": {
-    "name": "d",
-    "value": null,
-    "":  ,
-  }
+{
+    "parameters":
+    {
+        "wire_diameter": {
+            "symbol": "d",
+            "value": null,
+            "category": "length",
+            "unit": "mm",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        },
+        "reochord_drum": {
+            "symbol": "D",
+            "value": null,
+            "category": "length",
+            "unit": "mm",
+            "options": {
+                "value": {},
+                "unit": {},
+                "name": {}
+            }
+        }
+    }
 }
