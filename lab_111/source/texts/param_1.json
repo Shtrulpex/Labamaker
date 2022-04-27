@@ -1,6 +1,5 @@
 {
-    "parameters":
-    [
+    "parameters": {
         "wire_diameter": {
             "symbol": "d",
             "value": null,
@@ -12,7 +11,7 @@
                 "name": {}
             }
         },
-        "reochord_drum":{
+        "reochord_drum": {
             "symbol": "D",
             "value": null,
             "category": "length",
@@ -67,5 +66,5 @@
                 "name": {}
             }
         }
-    ]
+    }
 }
