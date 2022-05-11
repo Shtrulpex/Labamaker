@@ -1,49 +1,49 @@
 import enum
 import pandas as pd
-from pandas import DataFrame
 import os
+import shutil
 import json
 
 
 class Prefix:
-    prefix = {
-        'exa': [18, 'Э', 'E'],
-        'peta': [15, 'П', 'P'],
-        'tera': [12, 'Т', 'T'],
-        'giga': [9, 'Г', 'G'],
-        'mega': [6, 'М', 'M'],
-        'kilo': [3, 'к', 'k'],
-        'hecto': [2, 'г', 'h'],
-        'deca': [1, 'да', 'da'],
-        '': [1, '', ''],
-        'deci': [-1, 'д', 'd'],
-        'santi': [-2, 'с', 'c'],
-        'milli': [-3, 'м', 'm'],
-        'micro': [-6, 'мк', 'mk'],
-        'nano': [-9, 'н', 'n'],
-        'pico': [-12, 'п', 'p'],
-        'femto': [-15, 'ф', 'f'],
-        'atto': [-18, 'а', 'a']
-    }
+    @staticmethod
+    def load_prefix():
+        with open('units.json', 'r', encoding='utf8') as f:
+            data = json.load(f)
+            return data['prefix']
 
+    __prefixes = load_prefix()
 
-class Kind:
-    def __init__(self, name, prefix: str):
-        self.name = name
-        if prefix in Prefix.prefix.keys():
-            self.prefix = Prefix.prefix[prefix]
+    def __init__(self, prefix: str):
+        if prefix in Prefix.__prefixes:
+            self.prefix = Prefix.__prefixes[prefix]
+            self.multiplier = self.prefix[0]
         else:
             raise RuntimeError(f'incorrect prefix: {prefix}')
-        self.multiplier = 10 ** self.prefix[0]
+
+    def get_prefix(self, language='en'):
+        if language == 'en':
+            return self.prefix[2]
+        elif language == 'ru':
+            return self.prefix[1]
+        raise RuntimeError(f"incorrect language: {language}\n"
+                           f"(accessible: 'en' or 'ru', not {language})")
+        
+
+class Kind:
+    def __init__(self, name: str, prefix: str):
+        self.name = name
+        self.prefix = Prefix(prefix)
+        self.multiplier = 10 ** self.prefix.multiplier
 
     def get_multiplier(self):
         return self.multiplier
 
 
 class MeasUnit:
-    def __init__(self, category, kind):
+    def __init__(self, category: str, kind: Kind):
         self.category = category
-        self.kind = kind  # Kind object
+        self.kind = kind
 
     def get_category(self):
         return self.category
@@ -69,18 +69,17 @@ class TextOption:
         self.underline = underline
 
 
-class Kinds(enum.Enum):
-    text = 'text'
-    formula = 'formula'
-    list = 'list'
-    title = 'title'
-
-
 class Text:
+    class Kinds(enum.Enum):
+        text = 'text'
+        formula = 'formula'
+        list = 'list'
+        title = 'title'
+        
     def __init__(self, text_option: dict, kind: str, text: str):
         self.text = text
         self.kind = kind  # text/formula/list/title
-        if kind == Kinds.text:
+        if kind == Text.Kinds.text:
             self.text_option = TextOption(font='arial',
                                           size=12,
                                           bold=False,
@@ -88,7 +87,7 @@ class Text:
                                           italics=False,
                                           frame=False,
                                           underline=False)
-        elif kind == Kinds.formula:
+        elif kind == Text.Kinds.formula:
             self.text_option = TextOption(font='arial',
                                           size=12,
                                           bold=False,
@@ -96,7 +95,7 @@ class Text:
                                           italics=False,
                                           frame=True,
                                           underline=False)
-        elif kind == Kinds.title:
+        elif kind == Text.Kinds.title:
             self.text_option = TextOption(font='arial',
                                           size=16,
                                           bold=True,
@@ -104,7 +103,7 @@ class Text:
                                           italics=False,
                                           frame=False,
                                           underline=True)
-        elif kind == Kinds.list:
+        elif kind == Text.Kinds.list:
             self.text_option = TextOption(font='arial',
                                           size=12,
                                           bold=False,
@@ -130,43 +129,43 @@ class Text:
 
 
 class ParamOptions:
-    def __init__(self, value_option: TextOption, unit_option: TextOption, name_option: TextOption):
-        self.value_option = value_option
-        self.unit_option = unit_option
-        self.name_option = name_option
+    def __init__(self, value_option: TextOption,
+                 unit_option: TextOption,
+                 name_option: TextOption):
+        self.__value_option = value_option
+        self.__unit_option = unit_option
+        self.__name_option = name_option
 
     def get_options(self):
-        return {'value': self.value_option,
-                'unit': self.unit_option,
-                'name': self.name_option}
-
-
-class Category(enum.Enum):
-    number = 'number'
-    length = 'length'
-    square = 'square'
-    volume = 'volume'
-    mass = 'mass'
-    time = 'time'
-    temperature = 'temperature'
-    amperage = 'amperage'
-    resistance = 'resistance'
-
-
-class Si(enum.Enum):
-    number = 'unit'
-    length = 'm'
-    square = 'm^2'
-    volume = 'm^3'
-    mass = 'kg'
-    time = 's'
-    temperature = 'K'
-    amperage = 'A'
-    resistance = 'Om'
+        return {'value': self.__value_option,
+                'unit': self.__unit_option,
+                'name': self.__name_option}
 
 
 class Parameter:
-    def __init__(self, name, value, unit: MeasUnit, options: ParamOptions):
+    class Category(enum.Enum):
+        number = 'number'
+        length = 'length'
+        square = 'square'
+        volume = 'volume'
+        mass = 'mass'
+        time = 'time'
+        temperature = 'temperature'
+        amperage = 'amperage'
+        resistance = 'resistance'
+
+    class Si(enum.Enum):
+        number = 'unit'
+        length = 'm'
+        square = 'm^2'
+        volume = 'm^3'
+        mass = 'kg'
+        time = 's'
+        temperature = 'K'
+        amperage = 'A'
+        resistance = 'Om'
+        
+    def __init__(self, name: str, value: float, unit: MeasUnit, options: ParamOptions):
         self.name = name
         self.value = value
         self.unit = unit
@@ -175,7 +174,8 @@ class Parameter:
     # Transform from one unit to other (P -> N/m^2) (Па ->  Н/м^2) OR change the prefix
     def convert(self, new_unit: MeasUnit):
         if new_unit.get_category() != self.unit.get_category():
-            raise RuntimeError('Incorrect unit to transform')
+            raise RuntimeError(f'Incorrect unit to transform (wrong category):\t'
+                               f'{new_unit.get_category()} to {self.unit.get_category()}')
         multiplier = self.unit.get_multiplier()
         self.value /= multiplier
         self.value *= new_unit.get_multiplier()
@@ -184,41 +184,72 @@ class Parameter:
     def to_si(self):  # transform to SI unit in this category
         category = self.unit.get_category()
         multiplier = self.unit.get_multiplier()
-        if category == Category.square:
-            self.value /= 10 ** multiplier ** 2
-            unit = MeasUnit(Category.length,
-                            Kind(Si.square, ''))
-            self.unit = unit
-        elif category == Category.volume:
-            self.value /= 10 ** multiplier ** 3
-            unit = MeasUnit(Category.volume,
-                            Kind(Si.volume, ''))
-            self.unit = unit
+        if category == Parameter.Category.square:
+            self.value /= multiplier ** 2
+        elif category == Parameter.Category.volume:
+            self.value /= multiplier ** 3
         else:
-            self.value /= 10 ** multiplier
-            unit = MeasUnit(Category[category],
-                            Kind(Si[category], ''))
-            self.unit = unit
+            self.value /= multiplier
+        unit = MeasUnit(category, Kind(Parameter.Si[category], ''))
+        self.unit = unit
 
 
-class Table(DataFrame):
-    def __init__(self, name, *args):
+class Table(pd.DataFrame):
+    def __init__(self, name: str, *args):
         self.name = name
         super().__init__(*args)
 
-    def convert(self, column, new_unit: MeasUnit):
+    def convert(self, column: str, new_unit: MeasUnit):
+        if column not in self.columns:
+            raise RuntimeError(f'Wrong column name: {column}')
         for param in self[column]:
             param.convert(new_unit)
 
 
 class Data:
-    def __init__(self, folder):
-        self.folder = folder
-        self.tables = self.__form_tables()  # dict of tables: {name: table_obj}
-        self.texts = self.__form_texts()  # list of texts (titles, lists, simple texts or formulas)
+    def __init__(self, folder: str):
+        self._folder = folder
+        self._tables = dict()  # dict of tables: {name: table_obj}
+        self._texts = []  # list of texts (titles, lists, simple texts or formulas)
+
+    def get_tables(self, *name):
+        if name:
+            return self._tables[name]
+        return self._tables
+
+    def get_texts(self):
+        return self._texts
+
+    def add_table(self, filepath: str):
+        path = self._folder + '\\tables'
+        name = filepath.split('\\')[-1].split('.')[0]
+        if name in self._tables.keys():
+            raise RuntimeError(f'Table "{name}" also exists!: locates in {path}')
+        table = Table(name, pd.read_csv(filepath, index_col=0))
+        self._tables[name] = table
+        shutil.move(filepath, path)
+
+    def add_text(self, filepath: str):
+        path = self._folder + '\\texts'
+        with open(filepath, 'r', encoding='utf8') as f:
+            data = json.load(f)
+            texts_ = data['texts']
+            for txt in texts_.keys():
+                text = Text(texts_[txt]['options'],
+                            texts_[txt]['kind'],
+                            texts_[txt]['text'])
+                self._texts.append(text)
+        shutil.move(filepath, path)
+
+
+class DataSource(Data):
+    def __init__(self, folder: str):
+        super(DataSource, self).__init__(folder)
+        self._tables = self.__form_tables()  # dict of tables: {name: table_obj}
+        self._texts = self.__form_texts()  # list of texts (titles, lists, simple texts or formulas)
 
     def __form_tables(self) -> dict:
-        path = self.folder + '\\tables'
+        path = self._folder + '\\tables'
         files = os.listdir(path=path)
         tables = dict()
         for file in files:
@@ -228,7 +259,7 @@ class Data:
         return tables
 
     def __form_texts(self) -> list:
-        path = self.folder + '\\texts'
+        path = self._folder + '\\texts'
         files = os.listdir(path=path)
         texts = []
         for file in files:
@@ -242,43 +273,47 @@ class Data:
                     texts.append(text)
         return texts
 
-    def get_table(self, *name):
-        if name:
-            return self.tables[name]
-        return self.tables
-
-    def get_text(self, *name):
-        if name:
-            return self.texts[name]
-        return self.texts
+    # КАК УДАЛИТЬ МЕТОД?!?!?!
+    # @property
+    # def add_table(self, filepath):
+    #     raise AttributeError("'DataSource' object has no attribute 'add_table'")
 
     def get_description(self):
-        return self.folder + '\\description\\description.pdf'
+        return self._folder + '\\description.pdf'
+
+
+class DataResult(Data):
+    def __init__(self, folder: str):
+        super(DataResult, self).__init__(folder)
+        self._images = []
+
+    def add_image(self, filepath: str):
+        path = self._folder + '\\images'
+        name = filepath.split('\\')[-1]  # !!! name with file extension (for example: .png)
+        if name in self._images:
+            raise RuntimeError(f'Image "{name}" also exists!: locates in {path}')
+        self._images.append(name)
+        shutil.move(filepath, path)
+
+    def get_images(self):
+        return self._images
+
+
+class DataMaterial(Data):
+    pass
 
 
 class DataController:
-    def __init__(self, folder):
-        self.folder = folder
-        self.source = None
-        self.material = None
-        self.result = None
+    def __init__(self, lab: str):
+        self.lab = lab
         self.__generate_data()
 
     def __generate_data(self):
-        source_folder = self.folder + '\\source'
-        self.source = Data(source_folder)
+        source_folder = f'..\\..\\sources\\{self.lab}'
+        self.source = DataSource(source_folder)
 
-        material_folder = self.folder + '\\material'
-        self.material = Data(material_folder)
+        material_folder = f'..\\..\\materials\\{self.lab}'
+        self.material = DataMaterial(material_folder)
 
-        result_folder = self.folder + '\\result'
-        self.result = Data(result_folder)
-
-    def get_source(self):
-        return self.source
-
-    def get_materials(self):
-        return self.material
-
-    def get_result(self):
-        return self.result
+        result_folder = f'..\\..\\results\\{self.lab}'
+        self.result: DataResult = DataResult(result_folder)
