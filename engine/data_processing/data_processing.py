@@ -24,24 +24,26 @@ class Method:
 class CalcData:
     @staticmethod
     def do(d):
-        return {Data.X: [1, 2, 3, 4, 5]}
+        return {Data.X: [1, 2, 3, 4, 5], Data.Y:[1, 2,3,4,5]}
     # парсит на x и y, но хз как
 
 
 class CalcK(CalcData):
     @staticmethod
     def do(d):
-        a = np.vstack([d[Data.X], np.ones(len(d.Data.X))]).T
+        a = np.vstack([d[Data.X], np.ones(len(d[Data.X]))]).T
         k, b = np.linalg.lstsq(a, d[Data.Y], rcond=None)[0]
-        return d + {Data.K: k}
+        d[Data.K] = k
+        return d
 
 
 class CalcB(CalcData):
     @staticmethod
     def do(d):
-        a = np.vstack([d[Data.X], np.ones(len(d.Data.X))]).T
+        a = np.vstack([d[Data.X], np.ones(len(d[Data.X]))]).T
         k, b = np.linalg.lstsq(a, d[Data.Y], rcond=None)[0]
-        return d + {Data.B: b}
+        d[Data.B] = b
+        return d
 
 
 class CalcDK(CalcData):
@@ -54,7 +56,8 @@ class CalcDK(CalcData):
         dk = (y2_ - y_2) / (x2_ - x_2) - np.array(d[Data.B]) ** 2
         dk **= 0.5
         dk /= len(d[Data.X]) ** 0.5
-        return d + {Data.DK: dk}
+        d[Data.DK] = dk
+        return d
 
 
 class CalcDB(CalcData):
@@ -62,7 +65,8 @@ class CalcDB(CalcData):
     def do(d):
         x_2 = np.array(d[Data.X]).mean() ** 2
         x2_ = (np.array(d[Data.X]) ** 2).mean()
-        return d + {Data.DB: d.Data.DK * (x2_ - x_2) ** 0.5}
+        d[Data.DB] = d[Data.DK] * (x2_ - x_2) ** 0.5
+        return d
 
 
 class MLS(Method):
