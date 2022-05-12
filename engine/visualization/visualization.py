@@ -1,27 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from enum import Enum, auto
-
-# надо будет удалить(это тот же data что и в data_proc)
-class Data(Enum):
-    X = auto()
-    Y = auto()
-    K = auto()
-    B = auto()
-    DK = auto()
-    DB = auto()
-
-
-class GraphType(Enum):
-    MLS = auto()
-    BAR = auto()
+from ..enums import *
 
 
 class Visualizator:
     @staticmethod
     def illustrate(arguments, graph_type):
         if graph_type == GraphType.MLS:
-            return MLS(arguments).get_graph()
+            return MLSLine(arguments).get_graph()
 
 
 class Graph:
@@ -35,7 +21,7 @@ class Graph:
         pass
 
 
-class MLS(Graph):
+class MLSLine(Graph):
     def __init__(self, arguments, size_x=20, size_y=20, dpi=300, grid=True):
         super().__init__(arguments, size_x, size_y, dpi)
         self.grid = grid
@@ -50,5 +36,4 @@ class MLS(Graph):
         b = np.array(self.args[Data.B])
         ax.plot(x, k*x + b)
         ax.scatter(x, y)
-        fig.savefig('MLS1.pdf')
         return fig
