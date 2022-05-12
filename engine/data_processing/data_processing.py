@@ -1,14 +1,5 @@
 import numpy as np
-from enum import Enum, auto
-
-
-class Data(Enum):
-    X = auto()
-    Y = auto()
-    K = auto()
-    B = auto()
-    DK = auto()
-    DB = auto()
+from ..enums import *
 
 
 class Method:
@@ -18,14 +9,15 @@ class Method:
         self.sequence = sequence
 
     def calc(self):
-        pass
+        for i in self.sequence:
+            self.result = i.do(self.result)
+        return self.result
 
 
 class CalcData:
     @staticmethod
     def do(d):
-        return {Data.X: [1, 2, 3, 4, 5], Data.Y:[1, 2,3,4,5]}
-    # парсит на x и y, но хз как
+        return d
 
 
 class CalcK(CalcData):
@@ -69,11 +61,24 @@ class CalcDB(CalcData):
         return d
 
 
+class Divide(CalcData):
+    @staticmethod
+    def do(d):
+        x = 1
+        y = 1
+        for i in d[Data.X]:
+            x *= i
+        for i in d[Data.Y]:
+            y *= i
+        d[Data.RESULT] = x / y
+        return d
+
+
 class MLS(Method):
     def __init__(self, arguments):
         super().__init__(CalcData.do(arguments), arguments, [CalcData, CalcK, CalcB, CalcDK, CalcDB])
 
-    def calc(self):
-        for i in self.sequence:
-            self.result = i.do(self.result)
-        return self.result
+
+class Division(Method):
+    def __init__(self, arguments):
+        super().__init__(CalcData.do(arguments), arguments, [CalcData, Divide])
