@@ -112,7 +112,11 @@ class Text:
                                           frame=False,
                                           underline=True)
         else:
-            font = text_option['font'],
+            options = []
+            if 'font' in text_option.keys():
+                options.append(text_option['font'])
+            else:
+                font = False
             size = text_option['size'],
             bold = text_option['bold'],
             color = text_option['color'],
@@ -143,33 +147,54 @@ class ParamOptions:
 
 
 class Parameter:
-    class Category(enum.Enum):
-        number = 'number'
-        length = 'length'
-        square = 'square'
-        volume = 'volume'
-        mass = 'mass'
-        time = 'time'
-        temperature = 'temperature'
-        amperage = 'amperage'
-        resistance = 'resistance'
+    @staticmethod
+    def load_category():
+        with open('units.json', 'r', encoding='utf8') as f:
+            data = json.load(f)
+            category = dict()
+            for key in data['unit'].keys():
+                category[key] = key
+            return category
 
-    class Si(enum.Enum):
-        number = 'unit'
-        length = 'm'
-        square = 'm^2'
-        volume = 'm^3'
-        mass = 'kg'
-        time = 's'
-        temperature = 'K'
-        amperage = 'A'
-        resistance = 'Om'
+    @staticmethod
+    def load_si():
+        with open('units.json', 'r', encoding='utf8') as f:
+            data = json.load(f)
+            si = dict()
+            for key in data['unit'].keys():
+                si[key] = data['unit'][1]
+            return si
+
+    @staticmethod
+    def load_symbol():
+        with open('units.json', 'r', encoding='utf8') as f:
+            data = json.load(f)
+            symbol = dict()
+            for key in data['unit'].keys():
+                symbol[key] = data['unit'][0]
+            return symbol
+
+    __Symbol = enum.Enum(
+        value='__Symbol',
+        names=load_symbol()
+    )
+
+    __Category = enum.Enum(
+        value='__Category',
+        names=load_category()
+    )
+
+    __Si = enum.Enum(
+        value='__Si',
+        names=load_si()
+    )
         
     def __init__(self, name: str, value: float, unit: MeasUnit, options: ParamOptions):
         self.name = name
         self.value = value
         self.unit = unit
         self.options = options
+        self.symbol = Parameter.__Symbol[unit.get_category()]
 
     # Transform from one unit to other (P -> N/m^2) (Па ->  Н/м^2) OR change the prefix
     def convert(self, new_unit: MeasUnit):
@@ -184,13 +209,13 @@ class Parameter:
     def to_si(self):  # transform to SI unit in this category
         category = self.unit.get_category()
         multiplier = self.unit.get_multiplier()
-        if category == Parameter.Category.square:
+        if category == Parameter.__Category.square:
             self.value /= multiplier ** 2
-        elif category == Parameter.Category.volume:
+        elif category == Parameter.__Category.volume:
             self.value /= multiplier ** 3
         else:
             self.value /= multiplier
-        unit = MeasUnit(category, Kind(Parameter.Si[category], ''))
+        unit = MeasUnit(category, Kind(Parameter.__Si[category], ''))
         self.unit = unit
 
 
@@ -234,10 +259,10 @@ class Data:
         with open(filepath, 'r', encoding='utf8') as f:
             data = json.load(f)
             texts_ = data['texts']
-            for txt in texts_.keys():
-                text = Text(texts_[txt]['options'],
-                            texts_[txt]['kind'],
-                            texts_[txt]['text'])
+            for name in texts_.keys():
+                text = Text(texts_[name]['options'],
+                            texts_[name]['kind'],
+                            texts_[name]['text'])
                 self._texts.append(text)
         shutil.move(filepath, path)
 
@@ -246,7 +271,7 @@ class DataSource(Data):
     def __init__(self, folder: str):
         super(DataSource, self).__init__(folder)
         self._tables = self.__form_tables()  # dict of tables: {name: table_obj}
-        self._texts = self.__form_texts()  # list of texts (titles, lists, simple texts or formulas)
+        self._texts = self.__form_parameters()  # list of texts (titles, lists, simple texts or formulas)
 
     def __form_tables(self) -> dict:
         path = self._folder + '\\tables'
@@ -257,6 +282,35 @@ class DataSource(Data):
             table = Table(name, pd.read_csv(path + '\\' + file, index_col=0))
             tables[name] = table
         return tables
+
+    def __form_parameters(self): -> list:
+        return []
+
+    # КАК УДАЛИТЬ МЕТОД?!?!?!
+    # @property
+    # def add_table(self, filepath):
+    #     raise AttributeError("'DataSource' object has no attribute 'add_table'")
+
+    def get_description(self):
+        return self._folder + '\\description.pdf'
+
+
+class DataResult(Data):
+    def __init__(self, folder: str):
+        super(DataResult, self).__init__(folder)
+        self._images = []
+        self._texts = self.__form_texts()
+
+    def add_image(self, filepath: str):
+        path = self._folder + '\\images'
+        name = filepath.split('\\')[-1]  # !!! name with file extension (for example: .png)
+        if name in self._images:
+            raise RuntimeError(f'Image "{name}" also exists!: locates in {path}')
+        self._images.append(name)
+        shutil.move(filepath, path)
+
+    def get_images(self):
+        return self._images
 
     def __form_texts(self) -> list:
         path = self._folder + '\\texts'
@@ -272,31 +326,6 @@ class DataSource(Data):
                                 texts_[txt]['text'])
                     texts.append(text)
         return texts
-
-    # КАК УДАЛИТЬ МЕТОД?!?!?!
-    # @property
-    # def add_table(self, filepath):
-    #     raise AttributeError("'DataSource' object has no attribute 'add_table'")
-
-    def get_description(self):
-        return self._folder + '\\description.pdf'
-
-
-class DataResult(Data):
-    def __init__(self, folder: str):
-        super(DataResult, self).__init__(folder)
-        self._images = []
-
-    def add_image(self, filepath: str):
-        path = self._folder + '\\images'
-        name = filepath.split('\\')[-1]  # !!! name with file extension (for example: .png)
-        if name in self._images:
-            raise RuntimeError(f'Image "{name}" also exists!: locates in {path}')
-        self._images.append(name)
-        shutil.move(filepath, path)
-
-    def get_images(self):
-        return self._images
 
 
 class DataMaterial(Data):
