@@ -6,26 +6,22 @@ import json
 
 
 class Prefix:
-    @staticmethod
-    def load_prefix():
-        with open('units.json', 'r', encoding='utf8') as f:
-            data = json.load(f)
-            return data['prefix']
-
-    __prefixes = load_prefix()
+    with open('units.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        __prefixes = data['prefix']
 
     def __init__(self, prefix: str):
         if prefix in Prefix.__prefixes:
-            self.prefix = Prefix.__prefixes[prefix]
-            self.multiplier = self.prefix[0]
+            self.__prefix = Prefix.__prefixes[prefix]
+            self.multiplier = self.__prefix[0]
         else:
             raise RuntimeError(f'incorrect prefix: {prefix}')
 
     def get_prefix(self, language='en'):
         if language == 'en':
-            return self.prefix[2]
+            return self.__prefix[2]
         elif language == 'ru':
-            return self.prefix[1]
+            return self.__prefix[1]
         raise RuntimeError(f"incorrect language: {language}\n"
                            f"(accessible: 'en' or 'ru', not {language})")
         
@@ -52,103 +48,59 @@ class MeasUnit:
         return self.kind.get_multiplier()
 
 
+class TextKinds(enum.Enum):
+    text = 'text'
+    formula = 'formula'
+    list = 'list'
+    title = 'title'
+    default = 'default'
+
+
 class TextOption:
-    def __init__(self, font: str = 'arial',
-                 size: int = 12,
-                 bold: bool = False,
-                 color: str = 'black',
-                 italics: bool = False,
-                 frame: bool = False,
-                 underline: bool = False):
-        self.font = font
-        self.size = size
-        self.bold = bold
-        self.color = color
-        self.italics = italics
-        self.frame = frame
-        self.underline = underline
+    with open('text_options.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        __options = data['options']
+        __kinds_options = data['kinds_options']
+
+    @classmethod
+    def __fill_options(cls, **kwargs):
+        kind = TextOption.__kinds_options[kwargs['kind']]
+        for option in TextOption.__options.keys():
+            if option not in kwargs.keys():
+                kwargs[option] = kind[option]
+
+    def __init__(self, kind: TextKinds.value = TextKinds.default.value, **kwargs):
+        TextOption.__fill_options(kind=kind, **kwargs)
+        self.font = kwargs['font']
+        self.size = kwargs['size']
+        self.bold = kwargs['bold']
+        self.color = kwargs['color']
+        self.italics = kwargs['italics']
+        self.frame = kwargs['frame']
+        self.underline = kwargs['underline']
 
 
 class Text:
-    class Kinds(enum.Enum):
-        text = 'text'
-        formula = 'formula'
-        list = 'list'
-        title = 'title'
-        
-    def __init__(self, text_option: dict, kind: str, text: str):
+    def __init__(self, text: str = '',
+                 kind: TextKinds.value = TextKinds.default.value,
+                 **params):
         self.text = text
         self.kind = kind  # text/formula/list/title
-        if kind == Text.Kinds.text:
-            self.text_option = TextOption(font='arial',
-                                          size=12,
-                                          bold=False,
-                                          color='black',
-                                          italics=False,
-                                          frame=False,
-                                          underline=False)
-        elif kind == Text.Kinds.formula:
-            self.text_option = TextOption(font='arial',
-                                          size=12,
-                                          bold=False,
-                                          color='black',
-                                          italics=False,
-                                          frame=True,
-                                          underline=False)
-        elif kind == Text.Kinds.title:
-            self.text_option = TextOption(font='arial',
-                                          size=16,
-                                          bold=True,
-                                          color='black',
-                                          italics=False,
-                                          frame=False,
-                                          underline=True)
-        elif kind == Text.Kinds.list:
-            self.text_option = TextOption(font='arial',
-                                          size=12,
-                                          bold=False,
-                                          color='black',
-                                          italics=True,
-                                          frame=False,
-                                          underline=True)
-        else:
-            options = []
-            if 'font' in text_option.keys():
-                options.append(text_option['font'])
-            else:
-                font = False
-            size = text_option['size'],
-            bold = text_option['bold'],
-            color = text_option['color'],
-            italics = text_option['italics'],
-            frame = text_option['frame'],
-            underline = text_option['underline']
-            self.text_option = TextOption(font=font,
-                                          size=size,
-                                          bold=bold,
-                                          color=color,
-                                          italics=italics,
-                                          frame=frame,
-                                          underline=underline)
+        self.options = TextOption(kind=kind, **params)
 
 
 class ParamOptions:
     def __init__(self, value_option: TextOption,
                  unit_option: TextOption,
                  name_option: TextOption):
-        self.__value_option = value_option
-        self.__unit_option = unit_option
-        self.__name_option = name_option
-
-    def get_options(self):
-        return {'value': self.__value_option,
-                'unit': self.__unit_option,
-                'name': self.__name_option}
+        self.value_option = value_option
+        self.unit_option = unit_option
+        self.name_option = name_option
 
 
 class Parameter:
-    @staticmethod
-    def load_category():
+    @classmethod
+    def __load_category(cls):
         with open('units.json', 'r', encoding='utf8') as f:
             data = json.load(f)
             category = dict()
@@ -156,8 +108,8 @@ class Parameter:
                 category[key] = key
             return category
 
-    @staticmethod
-    def load_si():
+    @classmethod
+    def __load_si(cls):
         with open('units.json', 'r', encoding='utf8') as f:
             data = json.load(f)
             si = dict()
@@ -165,8 +117,8 @@ class Parameter:
                 si[key] = data['unit'][1]
             return si
 
-    @staticmethod
-    def load_symbol():
+    @classmethod
+    def __load_symbol(cls):
         with open('units.json', 'r', encoding='utf8') as f:
             data = json.load(f)
             symbol = dict()
@@ -176,20 +128,23 @@ class Parameter:
 
     __Symbol = enum.Enum(
         value='__Symbol',
-        names=load_symbol()
+        names=__load_symbol()
     )
 
     __Category = enum.Enum(
         value='__Category',
-        names=load_category()
+        names=__load_category()
     )
 
     __Si = enum.Enum(
         value='__Si',
-        names=load_si()
+        names=__load_si()
     )
         
-    def __init__(self, name: str, value: float, unit: MeasUnit, options: ParamOptions):
+    def __init__(self, name: str,
+                 value: float,
+                 unit: MeasUnit,
+                 options: ParamOptions):
         self.name = name
         self.value = value
         self.unit = unit
@@ -260,9 +215,9 @@ class Data:
             data = json.load(f)
             texts_ = data['texts']
             for name in texts_.keys():
-                text = Text(texts_[name]['options'],
-                            texts_[name]['kind'],
-                            texts_[name]['text'])
+                text = Text(text=texts_[name]['text'],
+                            kind=TextKinds[texts_[name]['kind']],
+                            **texts_[name]['options'])
                 self._texts.append(text)
         shutil.move(filepath, path)
 
@@ -270,26 +225,19 @@ class Data:
 class DataSource(Data):
     def __init__(self, folder: str):
         super(DataSource, self).__init__(folder)
-        self._tables = self.__form_tables()  # dict of tables: {name: table_obj}
+        self.__form_tables()  # self._tables = dict of tables: {name: table_obj}
         self._texts = self.__form_parameters()  # list of texts (titles, lists, simple texts or formulas)
 
-    def __form_tables(self) -> dict:
+    def __form_tables(self):
         path = self._folder + '\\tables'
         files = os.listdir(path=path)
-        tables = dict()
         for file in files:
             name = file.split('\\')[-1].split('.')[0]
             table = Table(name, pd.read_csv(path + '\\' + file, index_col=0))
-            tables[name] = table
-        return tables
+            self._tables[name] = table
 
-    def __form_parameters(self): -> list:
-        return []
-
-    # КАК УДАЛИТЬ МЕТОД?!?!?!
-    # @property
-    # def add_table(self, filepath):
-    #     raise AttributeError("'DataSource' object has no attribute 'add_table'")
+    def __form_parameters(self) -> list:
+        pass
 
     def get_description(self):
         return self._folder + '\\description.pdf'
@@ -297,7 +245,7 @@ class DataSource(Data):
 
 class DataResult(Data):
     def __init__(self, folder: str):
-        super(DataResult, self).__init__(folder)
+        super().__init__(folder)
         self._images = []
         self._texts = self.__form_texts()
 
@@ -320,10 +268,10 @@ class DataResult(Data):
             with open(path + '\\' + file, 'r', encoding='utf8') as f:
                 data = json.load(f)
                 texts_ = data['texts']
-                for txt in texts_.keys():
-                    text = Text(texts_[txt]['options'],
-                                texts_[txt]['kind'],
-                                texts_[txt]['text'])
+                for name in texts_.keys():
+                    text = Text(text=texts_[name]['text'],
+                                kind=TextKinds[texts_[name]['kind']],
+                                **texts_[name]['options'])
                     texts.append(text)
         return texts
 
