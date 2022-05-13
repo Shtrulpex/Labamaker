@@ -1,0 +1,63 @@
+{
+    "options": [
+        "font",
+        "size",
+        "bold",
+        "color",
+        "italics",
+        "frame",
+        "underline"
+    ],
+    "kinds_options": {
+        "default":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "text":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "formula":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "title":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "list":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        }
+    }
+}
