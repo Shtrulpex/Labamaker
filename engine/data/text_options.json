@@ -58,6 +58,66 @@
             "italics": false,
             "frame": false,
             "underline": false
+        },
+        "parameter_value":
+        {
+            "font": "helvetica",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "parameter_absolute_error":
+        {
+            "font": "helvetica",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "parameter_relative_error":
+        {
+            "font": "helvetica",
+            "size": 12,
+            "bold": false,
+            "color": "red",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "parameter_unit":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": true,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
+        },
+        "parameter_name":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": false,
+            "color": "black",
+            "italics": true,
+            "frame": false,
+            "underline": true
+        },
+        "parameter_symbol":
+        {
+            "font": "arial",
+            "size": 12,
+            "bold": true,
+            "color": "black",
+            "italics": false,
+            "frame": false,
+            "underline": false
         }
     }
 }

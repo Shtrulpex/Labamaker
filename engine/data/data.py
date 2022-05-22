@@ -10,10 +10,30 @@ class Prefix:
         data = json.load(f)
         __prefixes = data['prefix']
 
+    @classmethod
+    def all_prefixes(cls, language='en'):
+        if language == 'en':
+            n = 2
+        elif language == 'ru':
+            n = 1
+        else:
+            raise RuntimeError(f"incorrect language: {language}\n"
+                               f"(accessible: 'en' or 'ru', not {language})")
+        prefixes = dict()
+        for prefix in Prefix.__prefixes.keys():
+            prefixes[Prefix.__prefixes[prefix][n]] = prefix
+        return prefixes
+
     def __init__(self, prefix: str):
-        if prefix in Prefix.__prefixes:
+        # for example:
+        # Prefix('mk') or Prefix ('micro')
+        if prefix in Prefix.all_prefixes().keys():
+            self.__prefix = Prefix.__prefixes[Prefix.all_prefixes()[prefix]]
+            tmp = Prefix.all_prefixes()[prefix]
+            self.multiplier = int(Prefix.__prefixes[tmp][0])
+        elif prefix in Prefix.__prefixes.keys():
             self.__prefix = Prefix.__prefixes[prefix]
-            self.multiplier = self.__prefix[0]
+            self.multiplier = int(self.__prefix[0])
         else:
             raise RuntimeError(f'incorrect prefix: {prefix}')
 
@@ -24,7 +44,7 @@ class Prefix:
             return self.__prefix[1]
         raise RuntimeError(f"incorrect language: {language}\n"
                            f"(accessible: 'en' or 'ru', not {language})")
-        
+
 
 class Kind:
     def __init__(self, name: str, prefix: str):
@@ -35,17 +55,61 @@ class Kind:
     def get_multiplier(self):
         return self.multiplier
 
+    def get_unit(self):
+        return f'{self.prefix.get_prefix()}{self.name}'
+
 
 class MeasUnit:
     def __init__(self, category: str, kind: Kind):
-        self.category = category
-        self.kind = kind
+        self.__category = category
+        self.__kind = kind
 
     def get_category(self):
-        return self.category
+        return self.__category
 
     def get_multiplier(self):
-        return self.kind.get_multiplier()
+        return self.__kind.get_multiplier()
+
+    def get_unit(self):
+        return self.__kind.get_unit()
+
+    def __str__(self):
+        return self.get_unit()
+
+    def __repr__(self):
+        return str(self)
+
+
+class Parser:
+    __Base_units = []
+    with open('units.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        for unit in data['unit'].keys():
+            __Base_units.append(data['unit'][unit][1])
+
+    @staticmethod
+    def __reverse_all(strings):
+        for i in range(len(strings)):
+            strings[i] = strings[i][::-1]
+        return strings
+
+    @staticmethod
+    def __end_replace(s: str, s1: str, s2: str):
+        a = [s, s1, s2]
+        a = Parser.__reverse_all(a)
+        s = s.replace(a[1], a[2], 1)
+        s = s[::-1]
+        return s
+
+    # now it is a simplistic parser!!! from unit to (prefix, base_unit)
+    @staticmethod
+    def parse(unit: str):
+        for base_unit in Parser.__Base_units:
+            if unit.endswith(base_unit):
+                if unit == base_unit:
+                    return '', base_unit
+                prefix = Parser.__end_replace(unit, base_unit, '')
+                return prefix, base_unit
 
 
 class TextKinds(enum.Enum):
@@ -54,24 +118,32 @@ class TextKinds(enum.Enum):
     list = 'list'
     title = 'title'
     default = 'default'
+    par_val = 'parameter_value'
+    par_abs_err = 'parameter_absolute_error'
+    par_rel_err = 'parameter_relative_error'
+    par_unit = 'parameter_unit'
+    par_name = 'parameter_name'
+    par_symb = 'parameter_symbol'
 
 
-class TextOption:
+class Option:
     with open('text_options.json', 'r', encoding='utf8') as f:
         data = json.load(f)
-        __options = data['options']
-        __kinds_options = data['kinds_options']
+        _options = data['options']
+        _kinds_options = data['kinds_options']
 
     @classmethod
-    def __fill_options(cls, **kwargs):
-        kind = TextOption.__kinds_options[kwargs['kind']]
-        for option in TextOption.__options:
+    def _fill_options(cls, **kwargs):
+        kind = Option._kinds_options[kwargs['kind']]
+        for option in Option._options:
             if option not in kwargs.keys():
                 kwargs[option] = kind[option]
         return kwargs
 
+
+class TextOption(Option):
     def __init__(self, kind: str = TextKinds.default.name, **kwargs):
-        kwargs = TextOption.__fill_options(kind=kind, **kwargs)
+        kwargs = TextOption._fill_options(kind=kind, **kwargs)
         self.font = kwargs['font']
         self.size = kwargs['size']
         self.bold = kwargs['bold']
@@ -90,25 +162,33 @@ class Text:
         self.options = TextOption(kind=kind, **params)
 
 
-class ParamOptions:
-    def __init__(self, value_option: TextOption,
-                 unit_option: TextOption,
-                 name_option: TextOption):
-        self.value_option = value_option
-        self.unit_option = unit_option
-        self.name_option = name_option
+class ParamOptions(Option):
+    def __init__(self, **kwargs):
+        for option in kwargs.keys():
+            kwargs[option] = ParamOptions._fill_options(
+                kind='parameter_' + option,
+                **kwargs[option]
+            )
+        self.value_option = kwargs['value']
+        if 'absolute_error' in kwargs.keys():
+            self.absolute_error_option = kwargs['absolute_error']
+            self.relative_error_option = kwargs['relative_error']
+        self.unit_option = kwargs['unit']
+        self.name_option = kwargs['name']
+        self.symbol_option = kwargs['symbol']
 
 
 class Parameter:
+    __Counter = {}
+    __Symbol = dict()
+    __Category = dict()
+    __Si = dict()
+
     with open('units.json', 'r', encoding='utf8') as f:
         data = json.load(f)
         symbol = dict()
         for key in data['unit'].keys():
-            symbol[key] = data['unit'][key][0]
-    __Symbol = enum.Enum(
-        value='__Symbol',
-        names=symbol
-    )
+            __Symbol[key] = data['unit'][key][0]
 
     with open('units.json', 'r', encoding='utf8') as f:
         data = json.load(f)
@@ -133,22 +213,46 @@ class Parameter:
     def __init__(self, name: str,
                  value: float,
                  unit: MeasUnit,
-                 options: ParamOptions):
+                 options: ParamOptions,
+                 *absolute_error
+                 ):
         self.name = name
         self.value = value
+        if absolute_error[0]:
+            self.abs_error = absolute_error[0]
+            self.rel_err = self.abs_error / value * 100
+        else:
+            self.abs_error = None
+            self.rel_err = None
         self.unit = unit
+
         self.options = options
-        self.symbol = Parameter.__Symbol[unit.get_category()]
+
+        symbol = str(Parameter.__Symbol[unit.get_category()])
+        if symbol in Parameter.__Counter.keys():
+            Parameter.__Counter[symbol] += 1
+        else:
+            Parameter.__Counter[symbol] = 1
+        self.symbol = symbol + '_' + str(Parameter.__Counter[symbol])
 
     # Transform from one unit to other (P -> N/m^2) (Па ->  Н/м^2) OR change the prefix
     def convert(self, new_unit: MeasUnit):
         if new_unit.get_category() != self.unit.get_category():
             raise RuntimeError(f'Incorrect unit to transform (wrong category):\t'
                                f'{new_unit.get_category()} to {self.unit.get_category()}')
+        self.__recount_value(new_unit)
+        self.__recount_absolute_error(new_unit)
+        self.unit = new_unit
+
+    def __recount_value(self, new_unit: MeasUnit):
         multiplier = self.unit.get_multiplier()
         self.value /= multiplier
         self.value *= new_unit.get_multiplier()
-        self.unit = new_unit
+
+    def __recount_absolute_error(self, new_unit: MeasUnit):
+        multiplier = self.unit.get_multiplier()
+        self.abs_error /= multiplier
+        self.abs_error *= new_unit.get_multiplier()
 
     def to_si(self):  # transform to SI unit in this category
         category = self.unit.get_category()
@@ -162,11 +266,25 @@ class Parameter:
         unit = MeasUnit(category, Kind(Parameter.__Si[category], ''))
         self.unit = unit
 
+    def get_unit(self):
+        return str(self.unit)
+
+    def __str__(self):
+        if self.abs_error:
+            s = f'{self.symbol} = {self.value} ± {str(self.abs_error)} {str(self.unit)}'
+        else:
+            s = f'{self.symbol} = {self.value} {str(self.unit)}'
+        return s
+
+    def __repr__(self):
+        return str(self)
+
 
 class Table:
     def __init__(self, name: str, file: str):
-        self.name = name
-        self.table = pd.read_csv(file, index_col=0)
+        self.name = name.split('.')[0]
+        if name.endswith('.csv'):
+            self.table = pd.read_csv(file, index_col=0)
 
     def convert(self, column: str, new_unit: MeasUnit):
         if column not in self.table.columns:
@@ -176,6 +294,8 @@ class Table:
 
 
 class Data:
+    _parser = Parser()
+
     def __init__(self, folder: str):
         self._folder = folder
         self._tables = dict()  # dict of tables: {name: table_obj}
@@ -214,19 +334,48 @@ class DataSource(Data):
     def __init__(self, folder: str):
         super(DataSource, self).__init__(folder)
         self.__form_tables()  # self._tables = dict of tables: {name: table_obj}
-        self._texts = self.__form_parameters()  # list of texts (titles, lists, simple texts or formulas)
+        self.__form_parameters()  # list of texts (titles, lists, simple texts or formulas)
 
     def __form_tables(self):
         path = self._folder + '\\tables'
         files = os.listdir(path=path)
         for file in files:
-            if file.endswith('.csv'):
-                name = file.split('\\')[-1].split('.')[0]
-                table = Table(name, path + '\\' + file)
-                self._tables[name] = table
+            table = Table(file.split('\\')[-1], path + '\\' + file)
+            if table.name not in self._tables.keys():
+                self._tables[table.name] = table
 
-    def __form_parameters(self) -> list:
-        pass
+    def __form_parameters(self):
+        path = self._folder + '\\texts'
+        files = os.listdir(path=path)
+        for file in files:
+            if file.startswith('param'):
+                with open(path + '\\' + file, 'r', encoding='utf8') as f:
+                    data = json.load(f)
+                    self.__set_file_parameters(data)
+
+    def __set_file_parameters(self, data: dict):
+        for parameter in data.keys():
+            options = ParamOptions(**data[parameter]['options'])
+            category = data[parameter]['category']
+            prefix, name = DataSource._parser.parse(
+                data[parameter]['unit']
+            )
+            meas_unit = MeasUnit(
+                category,
+                Kind(name, prefix)
+            )
+            value = data[parameter]['value']
+            absolute_error = None
+            if 'absolute_error' in data[parameter].keys():
+                absolute_error = data[parameter]['absolute_error']
+            param = Parameter(
+                parameter,
+                value,
+                meas_unit,
+                options,
+                absolute_error
+                )
+            self._texts.append(param)
 
     def get_description(self):
         return self._folder + '\\description.pdf'
@@ -285,3 +434,4 @@ class DataController:
 
 
 dc = DataController('lab_111')
+print('All is good')
