@@ -65,12 +65,13 @@ class TextOption:
     @classmethod
     def __fill_options(cls, **kwargs):
         kind = TextOption.__kinds_options[kwargs['kind']]
-        for option in TextOption.__options.keys():
+        for option in TextOption.__options:
             if option not in kwargs.keys():
                 kwargs[option] = kind[option]
+        return kwargs
 
-    def __init__(self, kind: TextKinds.value = TextKinds.default.value, **kwargs):
-        TextOption.__fill_options(kind=kind, **kwargs)
+    def __init__(self, kind: str = TextKinds.default.name, **kwargs):
+        kwargs = TextOption.__fill_options(kind=kind, **kwargs)
         self.font = kwargs['font']
         self.size = kwargs['size']
         self.bold = kwargs['bold']
@@ -82,7 +83,7 @@ class TextOption:
 
 class Text:
     def __init__(self, text: str = '',
-                 kind: TextKinds.value = TextKinds.default.value,
+                 kind: str = TextKinds.default.value,
                  **params):
         self.text = text
         self.kind = kind  # text/formula/list/title
@@ -99,46 +100,34 @@ class ParamOptions:
 
 
 class Parameter:
-    @classmethod
-    def __load_category(cls):
-        with open('units.json', 'r', encoding='utf8') as f:
-            data = json.load(f)
-            category = dict()
-            for key in data['unit'].keys():
-                category[key] = key
-            return category
-
-    @classmethod
-    def __load_si(cls):
-        with open('units.json', 'r', encoding='utf8') as f:
-            data = json.load(f)
-            si = dict()
-            for key in data['unit'].keys():
-                si[key] = data['unit'][1]
-            return si
-
-    @classmethod
-    def __load_symbol(cls):
-        with open('units.json', 'r', encoding='utf8') as f:
-            data = json.load(f)
-            symbol = dict()
-            for key in data['unit'].keys():
-                symbol[key] = data['unit'][0]
-            return symbol
-
+    with open('units.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        symbol = dict()
+        for key in data['unit'].keys():
+            symbol[key] = data['unit'][key][0]
     __Symbol = enum.Enum(
         value='__Symbol',
-        names=__load_symbol()
+        names=symbol
     )
 
+    with open('units.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        category = dict()
+        for key in data['unit'].keys():
+            category[key] = key
     __Category = enum.Enum(
         value='__Category',
-        names=__load_category()
+        names=category
     )
 
+    with open('units.json', 'r', encoding='utf8') as f:
+        data = json.load(f)
+        si = dict()
+        for key in data['unit'].keys():
+            si[key] = data['unit'][key][1]
     __Si = enum.Enum(
         value='__Si',
-        names=__load_si()
+        names=si
     )
         
     def __init__(self, name: str,
@@ -174,15 +163,15 @@ class Parameter:
         self.unit = unit
 
 
-class Table(pd.DataFrame):
-    def __init__(self, name: str, *args):
+class Table:
+    def __init__(self, name: str, file: str):
         self.name = name
-        super().__init__(*args)
+        self.table = pd.read_csv(file, index_col=0)
 
     def convert(self, column: str, new_unit: MeasUnit):
-        if column not in self.columns:
+        if column not in self.table.columns:
             raise RuntimeError(f'Wrong column name: {column}')
-        for param in self[column]:
+        for param in self.table[column]:
             param.convert(new_unit)
 
 
@@ -214,11 +203,10 @@ class Data:
         with open(filepath, 'r', encoding='utf8') as f:
             data = json.load(f)
             texts_ = data['texts']
-            for name in texts_.keys():
-                text = Text(text=texts_[name]['text'],
-                            kind=TextKinds[texts_[name]['kind']],
-                            **texts_[name]['options'])
-                self._texts.append(text)
+            for text in texts_:
+                self._texts.append(Text(text=text['text'],
+                                        kind=text['kind'],
+                                        **text['options']))
         shutil.move(filepath, path)
 
 
@@ -232,9 +220,10 @@ class DataSource(Data):
         path = self._folder + '\\tables'
         files = os.listdir(path=path)
         for file in files:
-            name = file.split('\\')[-1].split('.')[0]
-            table = Table(name, pd.read_csv(path + '\\' + file, index_col=0))
-            self._tables[name] = table
+            if file.endswith('.csv'):
+                name = file.split('\\')[-1].split('.')[0]
+                table = Table(name, path + '\\' + file)
+                self._tables[name] = table
 
     def __form_parameters(self) -> list:
         pass
@@ -268,11 +257,10 @@ class DataResult(Data):
             with open(path + '\\' + file, 'r', encoding='utf8') as f:
                 data = json.load(f)
                 texts_ = data['texts']
-                for name in texts_.keys():
-                    text = Text(text=texts_[name]['text'],
-                                kind=TextKinds[texts_[name]['kind']],
-                                **texts_[name]['options'])
-                    texts.append(text)
+                for text in texts_:
+                    texts.append(Text(text=text['text'],
+                                      kind=text['kind'],
+                                      **text['options']))
         return texts
 
 
@@ -294,3 +282,6 @@ class DataController:
 
         result_folder = f'..\\..\\results\\{self.lab}'
         self.result: DataResult = DataResult(result_folder)
+
+
+dc = DataController('lab_111')
