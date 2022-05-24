@@ -4,7 +4,24 @@
         "value": null,
         "absolute_error": null,
         "category": "length",
-        "unit": "mm",
+        "unit": {
+            "numerator": {
+                "base": [
+                    ["milli", "length", 1]
+                ],
+                "derived": [
+
+                ]
+            },
+            "denominator": {
+                "base": [
+
+                ],
+                "derived": [
+
+                ]
+            }
+        },
         "options": {
             "value": {},
             "absolute_error": {},
@@ -19,7 +36,24 @@
         "value": null,
         "absolute_error": null,
         "category": "length",
-        "unit": "mm",
+        "unit": {
+            "numerator": {
+                "base": [
+                    ["milli", "length", 1]
+                ],
+                "derived": [
+
+                ]
+            },
+            "denominator": {
+                "base": [
+
+                ],
+                "derived": [
+
+                ]
+            }
+        },
         "options": {
             "value": {},
             "absolute_error": {},
@@ -34,7 +68,24 @@
         "value": null,
         "absolute_error": null,
         "category": "length",
-        "unit": "mm",
+        "unit": {
+            "numerator": {
+                "base": [
+                    ["milli", "length", 1]
+                ],
+                "derived": [
+
+                ]
+            },
+            "denominator": {
+                "base": [
+
+                ],
+                "derived": [
+
+                ]
+            }
+        },
         "options": {
             "value": {},
             "absolute_error": {},
@@ -48,7 +99,24 @@
         "symbol": "N",
         "value": null,
         "category": "number",
-        "unit": "unit",
+        "unit": {
+            "numerator": {
+                "base": [
+                    ["", "number", 1]
+                ],
+                "derived": [
+
+                ]
+            },
+            "denominator": {
+                "base": [
+
+                ],
+                "derived": [
+
+                ]
+            }
+        },
         "options": {
             "value": {},
             "unit": {},
@@ -60,7 +128,24 @@
         "symbol": "R_40",
         "value": null,
         "category": "resistance",
-        "unit": "Om",
+        "unit": {
+            "numerator": {
+                "base": [
+                    ["", "resistance", 1]
+                ],
+                "derived": [
+
+                ]
+            },
+            "denominator": {
+                "base": [
+
+                ],
+                "derived": [
+
+                ]
+            }
+        },
         "options": {
             "value": {},
             "unit": {},
@@ -73,7 +158,24 @@
         "value": null,
         "absolute_error": null,
         "category": "length",
-        "unit": "mm",
+        "unit": {
+            "numerator": {
+                "base": [
+                    ["milli", "length", 1]
+                ],
+                "derived": [
+
+                ]
+            },
+            "denominator": {
+                "base": [
+
+                ],
+                "derived": [
+
+                ]
+            }
+        },
         "options": {
             "value": {},
             "absolute_error": {},

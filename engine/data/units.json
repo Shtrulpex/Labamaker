@@ -18,15 +18,39 @@
         "femto": [-15, "ф", "f"],
         "atto": [-18, "а", "a"]
     },
-    "unit": {
+    "base_units": {
         "resistance": ["R", "Om"],
         "number": ["N", "unit"],
         "length": ["L", "m"],
-        "square": ["S", "m^2"],
-        "volume": ["V", "m^3"],
         "mass": ["m", "kg"],
         "time": ["t", "s"],
         "temperature": ["T", "K"],
-        "amperage": ["I", "A"]
+        "amperage": ["I", "A"],
+        "work": ["W", "J"],
+        "force": ["F", "N"]
+    },
+    "derived_units": {
+        "square": ["S", [
+            {"numerator": ["length", 2]}
+        ]],
+        "volume": ["V", [
+            {"numerator": ["length", 3]}
+        ]],
+        "work": ["W", [
+            {"numerator":  [["work", 1]]},
+            {"numerator": [["mass", 1], ["length", 2]],
+            "denominator": [["time", 2]]}
+        ]],
+        "force": ["F", [
+            {"numerator":  [["force", 1]]},
+            {"numerator": [["mass", 1], ["length", 2]],
+            "denominator": [["time", 1]]}
+        ]]
+    },
+    "constants": {
+        "universal_gas_constant": ["R", [
+            {"numerator": [["work", 1]],
+            "denominator": [["mass", 1], ["temperature", 1]]}
+        ]]
     }
 }
