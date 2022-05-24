@@ -6,36 +6,30 @@ import json
 
 
 class Prefix:
+    # load list of prefixes dictionaries from file. Example:
+    # "micro": [-6, "мк", "mk"] etc.
     with open('units.json', 'r', encoding='utf8') as f:
         data = json.load(f)
-        __prefixes = data['prefix']
-
-    @classmethod
-    def all_prefixes(cls, language='en'):
-        if language == 'en':
-            n = 2
-        elif language == 'ru':
-            n = 1
-        else:
-            raise RuntimeError(f"incorrect language: {language}\n"
-                               f"(accessible: 'en' or 'ru', not {language})")
-        prefixes = dict()
-        for prefix in Prefix.__prefixes.keys():
-            prefixes[Prefix.__prefixes[prefix][n]] = prefix
-        return prefixes
+        __prefixes = data['prefix']  # key - full name of prefix
+        __en_prefixes = dict()       # key - short EN name of prefix
+        __ru_prefixes = dict()       # key - short RU name of prefix
+        for current_prefix in data['prefix'].keys():
+            __en_prefixes[data['prefix'][current_prefix][2]] = current_prefix
+            __ru_prefixes[data['prefix'][current_prefix][1]] = current_prefix
 
     def __init__(self, prefix: str):
         # for example:
         # Prefix('mk') or Prefix ('micro')
-        if prefix in Prefix.all_prefixes().keys():
-            self.__prefix = Prefix.__prefixes[Prefix.all_prefixes()[prefix]]
-            tmp = Prefix.all_prefixes()[prefix]
-            self.multiplier = int(Prefix.__prefixes[tmp][0])
+        if prefix in Prefix.__en_prefixes.keys():
+            full_name_of_prefix = Prefix.__en_prefixes[prefix]
+        elif prefix in Prefix.__ru_prefixes.keys():
+            full_name_of_prefix = Prefix.__ru_prefixes[prefix]
         elif prefix in Prefix.__prefixes.keys():
-            self.__prefix = Prefix.__prefixes[prefix]
-            self.multiplier = int(self.__prefix[0])
+            full_name_of_prefix = prefix
         else:
             raise RuntimeError(f'incorrect prefix: {prefix}')
+        self.__prefix = Prefix.__prefixes[full_name_of_prefix]
+        self.multiplier = Prefix.__prefixes[full_name_of_prefix][0]
 
     def get_prefix(self, language='en'):
         if language == 'en':
@@ -209,7 +203,7 @@ class Parameter:
         value='__Si',
         names=si
     )
-        
+
     def __init__(self, name: str,
                  value: float,
                  unit: MeasUnit,
@@ -314,7 +308,7 @@ class Data:
         name = filepath.split('\\')[-1].split('.')[0]
         if name in self._tables.keys():
             raise RuntimeError(f'Table "{name}" also exists!: locates in {path}')
-        table = Table(name, pd.read_csv(filepath, index_col=0))
+        table = Table(name + '.csv', filepath)
         self._tables[name] = table
         shutil.move(filepath, path)
 
@@ -374,7 +368,7 @@ class DataSource(Data):
                 meas_unit,
                 options,
                 absolute_error
-                )
+            )
             self._texts.append(param)
 
     def get_description(self):
@@ -434,4 +428,5 @@ class DataController:
 
 
 dc = DataController('lab_111')
+dc.material.add_table('C:\\Users\\v3531\\Downloads\\measures_1.csv')
 print('All is good')
