@@ -1,0 +1,21 @@
+{
+    "inertia_moment": {
+        "symbol": "I",
+        "value": null,
+        "absolute_error": null,
+        "category": "inertia_moment",
+        "unit": ["derived",
+            "inertia_moment",
+            0,
+            ["", ""]
+        ],
+        "options": {
+            "value": {},
+            "absolute_error": {},
+            "relative_error": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    }
+}

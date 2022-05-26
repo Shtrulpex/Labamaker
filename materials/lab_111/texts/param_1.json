@@ -1,14 +1,21 @@
 {
     "wire_diameter": {
         "symbol": "d",
-        "value": 0.40,
+        "value": 0.4,
         "absolute_error": 0.01,
         "category": "length",
-        "unit": "mm",
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
+            "absolute_error": {},
+            "relative_error": {},
             "unit": {},
-            "name": {}
+            "name": {},
+            "symbol": {}
         }
     },
     "reochord_drum": {
@@ -16,11 +23,18 @@
         "value": 160,
         "absolute_error": 1,
         "category": "length",
-        "unit": "mm",
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
+            "absolute_error": {},
+            "relative_error": {},
             "unit": {},
-            "name": {}
+            "name": {},
+            "symbol": {}
         }
     },
     "length of the drum section with the wire": {
@@ -28,33 +42,50 @@
         "value": 132,
         "absolute_error": 0.5,
         "category": "length",
-        "unit": "mm",
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
+            "absolute_error": {},
+            "relative_error": {},
             "unit": {},
-            "name": {}
+            "name": {},
+            "symbol": {}
         }
     },
     "total number of turns": {
         "symbol": "N",
         "value": 50,
         "category": "number",
-        "unit": "unit",
+        "unit": ["base",
+            "number",
+            "",
+            1
+        ],
         "options": {
             "value": {},
             "unit": {},
-            "name": {}
+            "name": {},
+            "symbol": {}
         }
     },
     "Resistance of 40 turns": {
         "symbol": "R_40",
         "value": 168.84,
         "category": "resistance",
-        "unit": "Om",
+        "unit": ["base",
+            "resistance",
+            "",
+            1
+        ],
         "options": {
             "value": {},
             "unit": {},
-            "name": {}
+            "name": {},
+            "symbol": {}
         }
     },
     "Groove depth": {
@@ -62,11 +93,18 @@
         "value": 0.2,
         "absolute_error": 0.05,
         "category": "length",
-        "unit": "mm",
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
+            "absolute_error": {},
+            "relative_error": {},
             "unit": {},
-            "name": {}
+            "name": {},
+            "symbol": {}
         }
     }
 }

@@ -1,13 +1,39 @@
 MeasUnit:
-    Hard (not simple like a "m^2", "unit" or "kg") MeasUnits must be
+    I. Hard (not simple like "unit" or "kg") MeasUnits must be
     written according to the syntax:
-
-    1)
-    2)
-
+        "unit": ["derived",                 <-- unit type (derived)
+            *category*,                     <-- category in units.json
+            *index*,                        <-- index of kind in this category
+            [*prefix_1*, *prefix_2*, ...],  <-- prefixes of chosen kind
+        ]
 
     Examples:
-            "work": ["A", "work", [                     // the name of unit, its symbol and category
-                    ["mass", 1], ["length", 2],
-                    ["time", 2]
-                    ]],
+        1) (kg*m^2)
+        "unit": ["derived",     <-- unit type
+                "inertia_moment",   <-- category
+                0,                  <-- index of kind in this category
+                ["", ""],           <-- prefixes of chosen kind
+            ]
+        2)  (Om*mm^2)/(m)
+        "unit": ["derived",
+                "resistivity",
+                0,
+                ["", "milli", ""]
+            ]
+    ////////////////////////////////////////////////////////
+    II. Simple MeasUnit must be
+
+    Example:
+        1) (mm)
+        "unit": ["base",            <-- unit type (base)
+            "length",               <-- category
+            "milli",                <-- prefix
+            1                       <-- degree
+        ]
+////////////////////////////////////////////////////////////
+
+to set prefix in DerivedMeasurementUnit you have to take a request
+with using method obj.get_units(), then choose needed unit object
+and use method obj.set_prefix(unit object, prefix)
+
+////////////////////////////////////////////////////////////

@@ -3,25 +3,11 @@
         "symbol": "d",
         "value": null,
         "absolute_error": null,
-        "category": "length",
-        "unit": {
-            "numerator": {
-                "base": [
-                    ["milli", "length", 1]
-                ],
-                "derived": [
-
-                ]
-            },
-            "denominator": {
-                "base": [
-
-                ],
-                "derived": [
-
-                ]
-            }
-        },
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
             "absolute_error": {},
@@ -35,25 +21,11 @@
         "symbol": "D",
         "value": null,
         "absolute_error": null,
-        "category": "length",
-        "unit": {
-            "numerator": {
-                "base": [
-                    ["milli", "length", 1]
-                ],
-                "derived": [
-
-                ]
-            },
-            "denominator": {
-                "base": [
-
-                ],
-                "derived": [
-
-                ]
-            }
-        },
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
             "absolute_error": {},
@@ -67,25 +39,11 @@
         "symbol": "L",
         "value": null,
         "absolute_error": null,
-        "category": "length",
-        "unit": {
-            "numerator": {
-                "base": [
-                    ["milli", "length", 1]
-                ],
-                "derived": [
-
-                ]
-            },
-            "denominator": {
-                "base": [
-
-                ],
-                "derived": [
-
-                ]
-            }
-        },
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
             "absolute_error": {},
@@ -98,25 +56,11 @@
     "total number of turns": {
         "symbol": "N",
         "value": null,
-        "category": "number",
-        "unit": {
-            "numerator": {
-                "base": [
-                    ["", "number", 1]
-                ],
-                "derived": [
-
-                ]
-            },
-            "denominator": {
-                "base": [
-
-                ],
-                "derived": [
-
-                ]
-            }
-        },
+        "unit": ["base",
+            "number",
+            "",
+            1
+        ],
         "options": {
             "value": {},
             "unit": {},
@@ -127,25 +71,11 @@
     "Resistance of 40 turns": {
         "symbol": "R_40",
         "value": null,
-        "category": "resistance",
-        "unit": {
-            "numerator": {
-                "base": [
-                    ["", "resistance", 1]
-                ],
-                "derived": [
-
-                ]
-            },
-            "denominator": {
-                "base": [
-
-                ],
-                "derived": [
-
-                ]
-            }
-        },
+        "unit": ["base",
+            "resistance",
+            "",
+            1
+        ],
         "options": {
             "value": {},
             "unit": {},
@@ -157,25 +87,11 @@
         "symbol": "h",
         "value": null,
         "absolute_error": null,
-        "category": "length",
-        "unit": {
-            "numerator": {
-                "base": [
-                    ["milli", "length", 1]
-                ],
-                "derived": [
-
-                ]
-            },
-            "denominator": {
-                "base": [
-
-                ],
-                "derived": [
-
-                ]
-            }
-        },
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
         "options": {
             "value": {},
             "absolute_error": {},
