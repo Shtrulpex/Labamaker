@@ -16,7 +16,7 @@ class Laba:
 
 class Laba226(Laba):
     def make_laba(self):
-        table1 = self.data.source.get_tables('d2mm') #трубка d = 3 мм
+        table1 = self.data.source.get_tables('d2mm')  #трубка d = 3 мм
         q = np.array([])
         for i in range(len(table1.dV)):
             np.append(q, Division({Data.X: table1.dV[i], Data.Y: table1.dt[i]}).calc())

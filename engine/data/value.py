@@ -2,71 +2,46 @@ from __future__ import annotations
 
 
 class Value:
-    def __init__(self, value: float | None, rel_err: float | None, multiplier: float = 1):
-        self.value = value
-        self.multiplier = multiplier
-        self.abs_err = None
-        self.rel_err = None
+    def __init__(self, value: float | None, rel_err: float | None, multiplier: int = 1):
+        self.__value = value
+        self.__multiplier = 1  # n, when n is degree of 10^n
+        self.__abs_err = None
+        self.__rel_err = None
+        self.set_multiplier(multiplier)
         if rel_err is not None:
-            self.abs_err = value * rel_err
-            self.rel_err = rel_err
+            self.__abs_err = value * rel_err
+            self.__rel_err = rel_err
 
     def get_value(self):
-        return self.value * self.multiplier
+        return self.__value
+
+    def get_multiplier(self):
+        return self.__multiplier
 
     def get_abs_err(self):
-        return self.abs_err
+        return self.__abs_err
 
     def get_rel_err(self):
-        return self.rel_err
-
-    def __bool__(self):
-        return bool(self.rel_err)
-
-    def __mul__(self, other: Value):
-        value = self.value * other.value
-        multiplier = self.multiplier * other.multiplier
-        rel_err = Value.__count_rel_err('*', self, other)
-        return Value(value, rel_err, multiplier=multiplier)
-
-    def __truediv__(self, other: Value):
-        value = self.value / other.value
-        multiplier = self.multiplier / other.multiplier
-        rel_err = Value.__count_rel_err('/', self, other)
-        return Value(value, rel_err, multiplier=multiplier)
-
-    def __add__(self, other: Value):
-        value = self.value * self.multiplier + self.value * self.multiplier
-        rel_err = Value.__count_rel_err('+', self, other, value)
-        return Value(value, rel_err)
-
-    def __sub__(self, other: Value):
-        value = self.value * self.multiplier + self.value * self.multiplier
-        rel_err = Value.__count_rel_err('-', self, other, value)
-        return Value(value, rel_err)
-
-    def __pow__(self, power):
-        value = self.value ** power
-        multiplier = self.multiplier ** power
-        rel_err = Value.__count_rel_err('**', self, power)
-        return Value(value, rel_err, multiplier=multiplier)
-
-    def __str__(self):
-        return self.__get_value_string()
-
-    def __repr__(self):
-        return str(self)
+        return self.__rel_err
+    
+    def set_multiplier(self, n: int):
+        self.__value *= 10 ** self.get_multiplier()
+        if self:
+            self.__abs_err *= 10 ** self.get_multiplier()
+        self.__multiplier = n
+        self.__value /= 10 ** self.get_multiplier()
+        if self:
+            self.__abs_err /= 10 ** self.get_multiplier()
 
     def __get_value_string(self):
-        if self.abs_err:
-            s = f'{self.value} ± {str(self.abs_err)}'
+        if self:  # rel_err is not None
+            s = f'{self.get_value()} ± {str(self.get_abs_err())}'
         else:
-            s = f'{self.value}'
+            s = f'{self.get_value()}'
         return s
 
     @staticmethod
     def __count_rel_err(action: str, first: Value, second: Value | float, *res_value):  # '*', '/', '+', '-', '**'
-        rel_err = None
         if action == '*' or action == '/':
             if not first and not second:
                 rel_err = None
@@ -95,3 +70,57 @@ class Value:
         else:
             raise RuntimeError(f'incorrect action with values: {action}')
         return rel_err
+
+    def __bool__(self):
+        return self.get_rel_err() is not None
+
+    def __mul__(self, other: Value | float):
+        if other is Value:
+            value = self.get_value() * other.get_value()
+            multiplier = self.get_multiplier() * other.get_multiplier()
+            rel_err = Value.__count_rel_err('*', self, other)
+        else:
+            value = self.get_value() * other
+            multiplier = self.get_multiplier()
+            # rel_err = Value.__count_rel_err('*', self, other)
+            rel_err = self.get_rel_err()
+        return Value(value, rel_err, multiplier=multiplier)
+
+    def __truediv__(self, other: Value):
+        value = self.get_value() / other.get_value()
+        multiplier = 10 ** self.get_multiplier() / 10 ** other.get_multiplier()
+        rel_err = Value.__count_rel_err('/', self, other)
+        return Value(value, rel_err, multiplier=multiplier)
+
+    def __add__(self, other: Value):
+        value = self.get_value() * self.get_multiplier() +\
+                self.get_value() * self.get_multiplier()
+        rel_err = Value.__count_rel_err('+', self, other, value)
+        return Value(value, rel_err)
+
+    def __sub__(self, other: Value):
+        value = self.get_value() * self.get_multiplier() + self.get_value() * self.get_multiplier()
+        rel_err = Value.__count_rel_err('-', self, other, value)
+        return Value(value, rel_err)
+
+    def __pow__(self, power):
+        value = self.get_value() ** power
+        multiplier = self.get_multiplier() ** power
+        rel_err = Value.__count_rel_err('**', self, power)
+        return Value(value, rel_err, multiplier=multiplier)
+
+    def __str__(self):
+        return self.__get_value_string()
+
+    def __repr__(self):
+        return str(self)
+
+    # self * 10^n (n > 0)
+    # Example:
+    #   1.3 << 2 -> 0.013 * 10^3
+    def __lshift__(self, n: int):
+        pass
+
+    # self / 10^n (n > 0)
+    def __rshift__(self, n: int):
+        pass

@@ -5,30 +5,25 @@ import enum
 
 # the entity specifying the multiplier and the simple prefix string
 class Prefix:
-    @classmethod
-    def init_from_other_prefix(cls, prefix: Prefix):
-        return cls(prefix.get_multiplier())
-
     def __init__(self, prefix: str | int):
         # for example:
         # Prefix('mk') or Prefix ('micro')
-        if prefix in Prefix.__multipliers.keys():
-            full_name_of_prefix = Prefix.__multipliers[prefix]
-        elif prefix in Prefix.__en_prefixes.keys():
-            full_name_of_prefix = Prefix.__en_prefixes[prefix]
-        elif prefix in Prefix.__ru_prefixes.keys():
-            full_name_of_prefix = Prefix.__ru_prefixes[prefix]
-        elif prefix in Prefix.__prefixes.keys():
-            full_name_of_prefix = prefix
+        if prefix is int:
+            self.__prefix = [prefix, f'10^{prefix} ', f'10^{prefix} ']
+            self.__multiplier = prefix
         else:
-            if prefix is int:
-                self.__prefix = [prefix, f'10^{prefix} ', f'10^{prefix} ']
-                self.__multiplier = prefix
-                return
+            if prefix in Prefix.__multipliers.keys():
+                full_name_of_prefix = Prefix.__multipliers[prefix]
+            elif prefix in Prefix.__en_prefixes.keys():
+                full_name_of_prefix = Prefix.__en_prefixes[prefix]
+            elif prefix in Prefix.__ru_prefixes.keys():
+                full_name_of_prefix = Prefix.__ru_prefixes[prefix]
+            elif prefix in Prefix.__prefixes.keys():
+                full_name_of_prefix = prefix
             else:
                 raise RuntimeError(f'incorrect prefix: {prefix}')
-        self.__prefix = Prefix.__prefixes[full_name_of_prefix]
-        self.__multiplier = Prefix.__prefixes[full_name_of_prefix][0]
+            self.__prefix = Prefix.__prefixes[full_name_of_prefix]
+            self.__multiplier = Prefix.__prefixes[full_name_of_prefix][0]
 
     def get_prefix_string(self, language='en'):
         if language == 'en':
@@ -62,6 +57,22 @@ class Prefix:
 
 
 class MeasUnit:
+    @staticmethod
+    def init_from_file(data):
+        if data[0] == 'base':
+            base_unit = BaseMeasUnit.init_from_tokens(*data[1:])
+            d = {
+                'numerator': [base_unit],
+                'denominator': []
+            }
+            return DerivedMeasUnit(
+                base_unit.get_symbol(),
+                base_unit.get_category(),
+                **d
+            )
+        elif data[0] == 'derived':
+            return DerivedMeasUnit.init_from_tokens(*data[1:])
+
     def __init__(self, category: str):
         self.__multiplier = None
         self.__symbol = None
@@ -75,9 +86,6 @@ class MeasUnit:
 
     def get_category(self):
         return self.__category
-
-    def __get_unit_string(self):
-        pass
     
     def to_si(self):
         pass
@@ -91,32 +99,19 @@ class MeasUnit:
     with open('units.json', 'r', encoding='utf8') as f:
         _constants = json.load(f)['constants']
 
-    @staticmethod
-    def init_from_file(data):
-        if data[0] == 'base':
-            base_unit = BaseMeasUnit.init_base_from_tokens(*data[1:])
-            d = {
-                'numerator': [base_unit],
-                'denominator': []
-            }
-            return DerivedMeasUnit(
-                base_unit.get_symbol(),
-                base_unit.get_category(),
-                **d
-            )
-        elif data[0] == 'derived':
-            return DerivedMeasUnit.init_derived_from_tokens(*data[1:])
-
     def __multiply(self, other: MeasUnit):
         pass
 
     def __divide(self, other: MeasUnit):
         pass
     
-    def __flip(self):
+    def __get_flipped(self):
         pass
     
     def __pow(self, power: float):
+        pass
+
+    def __get_unit_string(self):
         pass
 
     def __str__(self):
@@ -141,14 +136,13 @@ class MeasUnit:
         return not self == other
 
 
-# the unit of derived_unit
-# with particular prefixes
+# the unit of derived_unit with particular prefixes and degree
 # Examples:
-#   (m) || (mm) || (s)
+#   (m) || (mm) || (s) || (sm)^2
 # P.S. you can see list of base_units in "units.json\base_units"
 class BaseMeasUnit(MeasUnit):
     @classmethod
-    def init_base_from_tokens(
+    def init_from_tokens(
             cls,
             category: str,
             prefix: str,
@@ -175,12 +169,6 @@ class BaseMeasUnit(MeasUnit):
         self.__prefix = None
         self.__multiplier = None
         self.set_prefix(prefix)
-
-    def __get_unit_string(self):
-        s = f'{self.__prefix.get_prefix_string()}{self.__unit}'
-        if self.get_degree() == 1:
-            return s
-        return f'{s}^{self.get_degree()}'
     
     def get_degree(self):
         return self.__degree
@@ -196,14 +184,14 @@ class BaseMeasUnit(MeasUnit):
         self.__degree = n
         self.__update_multiplier()
 
-    def inc_degree(self, n: float):
-        self.set_degree(self.get_degree() + n)
-
-    def dec_degree(self, n: float):
-        self.set_degree(self.get_degree() - n)
-
     def to_si(self):
         self.set_prefix("")
+
+    def __get_unit_string(self):
+        s = f'{self.__prefix.get_prefix_string()}{self.__unit}'
+        if self.get_degree() == 1:
+            return s
+        return f'{s}^[{self.get_degree()}]'
 
     def __update_multiplier(self):
         self.__multiplier = 10 ** (self.__prefix.get_multiplier() * self.__degree)
@@ -219,13 +207,13 @@ class BaseMeasUnit(MeasUnit):
         prefix = self.__prefix * other.__prefix
         return BaseMeasUnit(prefix, category, degree)
 
-    def __flip(self):
+    def __get_flipped(self):
         unit = BaseMeasUnit.init_from_other_base(self)
         unit.set_degree(-unit.get_degree())
         return unit
 
     def __divide(self, other: BaseMeasUnit):
-        other = other.__flip()
+        other = other.__get_flipped()
         return self.__multiply(other)
     
     def __pow(self, power: float):
@@ -236,14 +224,13 @@ class BaseMeasUnit(MeasUnit):
         return unit
 
 
-# the unit of derived_unit
-# with particular prefixes
+# the unit of derived_unit with particular prefixes
 # Examples:
 #   (m)/(s^2) || (mm)/(s^2),
 #   (J) || (kg*m^2)/(s^2) <- physical work бирююююк
 class DerivedMeasUnit(MeasUnit):
     @classmethod
-    def init_derived_from_tokens(
+    def init_from_tokens(
             cls,
             category: str,
             index: int,
@@ -297,11 +284,6 @@ class DerivedMeasUnit(MeasUnit):
         self.__multiplier = None
         self.__update_multiplier()
 
-    def __get_unit_string(self):
-        s1 = '*'.join(str(i) for i in self.get_numerator())
-        s2 = '*'.join(str(i) for i in self.get_denominator())
-        return f'({s1})/({s2})'
-
     def get_units(self):
         numerator = DerivedMeasUnit.Fraction.numerator.value
         denominator = DerivedMeasUnit.Fraction.denominator.value
@@ -333,6 +315,11 @@ class DerivedMeasUnit(MeasUnit):
         for unit in self.__denominator:
             unit.to_si()
         self.__update_multiplier()
+
+    def __get_unit_string(self):
+        s1 = '*'.join(str(i) for i in self.get_numerator())
+        s2 = '*'.join(str(i) for i in self.get_denominator())
+        return f'({s1})/({s2})'
 
     def __multiply(self, other: DerivedMeasUnit):
         new_unit = DerivedMeasUnit.init_from_other_derived(self)
@@ -368,14 +355,14 @@ class DerivedMeasUnit(MeasUnit):
         new_unit.__update_multiplier()
         return new_unit
 
-    def __flip(self):
+    def __get_flipped(self):
         unit = DerivedMeasUnit.init_from_other_derived(self)
         unit.__denominator, unit__numerator\
             = unit.get_numerator(), unit.get_denominator()
         return unit
 
     def __divide(self, other: DerivedMeasUnit):
-        other = other.__flip()
+        other = other.__get_flipped()
         return self.__multiplier(other)
         
     def __pow(self, power: float):
@@ -413,7 +400,7 @@ class DerivedMeasUnit(MeasUnit):
         for unit in self.get_numerator():
             multiplier *= unit.get_multiplier()
         for unit in self.get_denominator():
-            multiplier *= unit.get_multiplier()
+            multiplier /= unit.get_multiplier()
         self.__multiplier = multiplier
 
     class Fraction(enum.Enum):

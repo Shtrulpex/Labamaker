@@ -8,7 +8,7 @@ from table import *
 class Data:
     def __init__(self, folder: str):
         self._folder = folder
-        self._tables = dict()  # dict of tables: {name: table_obj}
+        self._tables = []  # list of tables:
         self._texts = []  # list of texts (titles, lists, simple texts or formulas)
 
     def get_tables(self, *name):
