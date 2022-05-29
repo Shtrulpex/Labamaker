@@ -1,86 +1,72 @@
 {
     "wire_diameter": {
         "symbol": "d",
-        "value": null,
-        "absolute_error": null,
+        "value": 0.40,
+        "absolute_error": 0.01,
         "category": "length",
         "unit": "mm",
         "options": {
             "value": {},
-            "absolute_error": {},
-            "relative_error": {},
             "unit": {},
-            "name": {},
-            "symbol": {}
+            "name": {}
         }
     },
     "reochord_drum": {
         "symbol": "D",
-        "value": null,
-        "absolute_error": null,
+        "value": 160,
+        "absolute_error": 1,
         "category": "length",
         "unit": "mm",
         "options": {
             "value": {},
-            "absolute_error": {},
-            "relative_error": {},
             "unit": {},
-            "name": {},
-            "symbol": {}
+            "name": {}
         }
     },
     "length of the drum section with the wire": {
         "symbol": "L",
-        "value": null,
-        "absolute_error": null,
+        "value": 132,
+        "absolute_error": 0.5,
         "category": "length",
         "unit": "mm",
         "options": {
             "value": {},
-            "absolute_error": {},
-            "relative_error": {},
             "unit": {},
-            "name": {},
-            "symbol": {}
+            "name": {}
         }
     },
     "total number of turns": {
         "symbol": "N",
-        "value": null,
+        "value": 50,
         "category": "number",
         "unit": "unit",
         "options": {
             "value": {},
             "unit": {},
-            "name": {},
-            "symbol": {}
+            "name": {}
         }
     },
     "Resistance of 40 turns": {
         "symbol": "R_40",
-        "value": null,
+        "value": 168.84,
         "category": "resistance",
         "unit": "Om",
         "options": {
             "value": {},
             "unit": {},
-            "name": {},
-            "symbol": {}
+            "name": {}
         }
     },
     "Groove depth": {
         "symbol": "h",
-        "value": null,
-        "absolute_error": null,
+        "value": 0.2,
+        "absolute_error": 0.05,
         "category": "length",
         "unit": "mm",
         "options": {
             "value": {},
-            "absolute_error": {},
-            "relative_error": {},
             "unit": {},
-            "name": {},
-            "symbol": {}
+            "name": {}
         }
     }
 }
