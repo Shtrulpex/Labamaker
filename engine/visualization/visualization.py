@@ -37,3 +37,4 @@ class MLSLine(Graph):
         ax.plot(x, k*x + b)
         ax.scatter(x, y)
         return fig
+a
