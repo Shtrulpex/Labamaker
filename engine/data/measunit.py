@@ -192,8 +192,10 @@ class BaseMeasUnit:
         # else:
         #     s = f'10^[{self.get_multiplier()}] * '
         s = f'{s}{self.__prefix.get_prefix_string()}{self.__unit}'
-        if self.get_degree() in (0, 1):
+        if self.get_degree() == 1:
             return s
+        elif self.get_degree() == 0:
+            return 'unit'
         return f'{s}^[{self.get_degree()}]'
 
     def __repr__(self):
@@ -203,10 +205,7 @@ class BaseMeasUnit:
         if self != other:
             raise RuntimeError(f'incorrect categories of multipliers')
         degree = self.get_degree() + other.get_degree()
-        if degree == 0:
-            category = 'number'
-        else:
-            category = self.get_category()
+        category = self.get_category()
         multiplier = self.get_multiplier() + other.get_multiplier()
         return BaseMeasUnit(Prefix(''), category, degree, multiplier)
 
@@ -421,7 +420,11 @@ class DerivedMeasUnit:
         return self * other
 
     def __eq__(self, other: DerivedMeasUnit):
-        return str(self) == str(other)
+        numer_1 = set(unit.get_category for unit in self.get_numerator())
+        denom_1 = set(unit.get_category for unit in self.get_denominator())
+        numer_2 = set(unit.get_category for unit in other.get_numerator())
+        denom_2 = set(unit.get_category for unit in other.get_denominator())
+        return numer_1 == numer_2 and denom_1 == denom_2
 
     def __ne__(self, other: DerivedMeasUnit):
         return not self == other
