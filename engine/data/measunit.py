@@ -166,8 +166,8 @@ class BaseMeasUnit(MeasUnit):
         self.__unit = data[1]
         self.__degree = degree * data[2]
         
-        self.__prefix = None
-        self.__multiplier = None
+        self.__prefix = Prefix('')
+        self.__multiplier = 1
         self.set_prefix(prefix)
     
     def get_degree(self):
@@ -281,7 +281,7 @@ class DerivedMeasUnit(MeasUnit):
         self.__numerator = units[numerator]  # list if Kinds
         self.__denominator = units[denominator]  # list if Kinds
         self.__symbol = symbol
-        self.__multiplier = None
+        self.__multiplier = 1
         self.__update_multiplier()
 
     def get_units(self):
@@ -363,7 +363,7 @@ class DerivedMeasUnit(MeasUnit):
 
     def __divide(self, other: DerivedMeasUnit):
         other = other.__get_flipped()
-        return self.__multiplier(other)
+        return self.__multiply(other)
         
     def __pow(self, power: float):
         numer = self.get_numerator()

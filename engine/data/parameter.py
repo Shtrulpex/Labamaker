@@ -31,7 +31,7 @@ class Parameter:
         return parameter
 
     @classmethod
-    def init_from_file(cls, **data):
+    def init_from_file(cls, name: str, data: dict):
         name = data['name']
         symbol = data['symbol']
         value = data['value']
@@ -99,6 +99,9 @@ class Parameter:
     def to_si(self):
         self.__unit.to_si()
         self.__update_multiplier()
+
+    def to_json(self, file: str):
+        pass
 
     def __get_param_string(self):
         return f'{self.get_symbol()} = {self.get_value()} *' \

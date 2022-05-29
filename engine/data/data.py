@@ -1,5 +1,5 @@
 import os
-import shutil
+from matplotlib.pyplot import figure as fig
 
 from parameter import *
 from table import *
@@ -9,118 +9,81 @@ class Data:
     def __init__(self, folder: str):
         self._folder = folder
         self._tables = []  # list of tables:
-        self._texts = []  # list of texts (titles, lists, simple texts or formulas)
+        self._parameters = []  # list of parameters
 
-    def get_tables(self, *name):
-        if name:
-            return self._tables[name]
+    def get_tables(self):
         return self._tables
 
-    def get_texts(self):
-        return self._texts
+    def get_parameters(self):
+        return self._parameters
 
-    def add_table(self, filepath: str):
-        path = self._folder + '\\tables'
-        name = filepath.split('\\')[-1].split('.')[0]
-        if name in self._tables.keys():
-            raise RuntimeError(f'Table "{name}" also exists!: locates in {path}')
-        table = Table(name + '.csv', filepath)
-        self._tables[name] = table
-        shutil.move(filepath, path)
+    def folder(self):
+        return self._folder
 
-    def add_text(self, filepath: str):
-        path = self._folder + '\\texts'
-        with open(filepath, 'r', encoding='utf8') as f:
-            data = json.load(f)
-            texts_ = data['texts']
-            for text in texts_:
-                self._texts.append(Text(text=text['text'],
-                                        kind=text['kind'],
-                                        **text['options']))
-        shutil.move(filepath, path)
+    def table_folder(self):  # returns path to tables
+        return f'{self.folder()}\\tables'
+
+    def parameter_folder(self):   # returns path to tables
+        return f'{self.folder()}\\parameters'
+
+    def add_table(self, table: Table):
+        self._tables.append(table)
+        table.to_csv(self.table_folder())
+
+    def add_parameter(self, parameter: Parameter):
+        self._parameters.append(parameter)
+        parameter.to_json(self.parameter_folder())
 
 
 class DataSource(Data):
     def __init__(self, folder: str):
         super(DataSource, self).__init__(folder)
-        self.__form_tables()  # self._tables = dict of tables: {name: table_obj}
-        self.__form_parameters()  # list of texts (titles, lists, simple texts or formulas)
+        self.__read_tables()
+        self.__read_parameters()
 
-    def __form_tables(self):
-        path = self._folder + '\\tables'
+    def __read_tables(self):
+        path = self.table_folder()
         files = os.listdir(path=path)
+        os.chdir(path)
         for file in files:
-            table = Table(file.split('\\')[-1], path + '\\' + file)
-            if table.name not in self._tables.keys():
-                self._tables[table.name] = table
+            with open(file, 'r', encoding='utf8') as f:
+                data = json.load(f)
+            for name in data.keys():
+                self._tables.append(
+                    Table.init_from_file(name, data[name])
+                )
 
-    def __form_parameters(self):
-        path = self._folder + '\\texts'
+    def __read_parameters(self):
+        path = self.parameter_folder()
         files = os.listdir(path=path)
+        os.chdir(path)
         for file in files:
-            if file.startswith('param'):
-                with open(path + '\\' + file, 'r', encoding='utf8') as f:
-                    data = json.load(f)
-                    self.__set_file_parameters(data)
-
-    def __set_file_parameters(self, data: dict):
-        for parameter in data.keys():
-            options = ParamOptions(**data[parameter]['options'])
-            category = data[parameter]['category']
-            prefix, name = DataSource._parser.parse(
-                data[parameter]['unit']
-            )
-            meas_unit = MeasUnit(
-                category,
-                Kind(name, prefix)
-            )
-            value = data[parameter]['value']
-            absolute_error = None
-            if 'absolute_error' in data[parameter].keys():
-                absolute_error = data[parameter]['absolute_error']
-            param = Parameter(
-                parameter,
-                value,
-                meas_unit,
-                options,
-                absolute_error
-            )
-            self._texts.append(param)
-
-    def get_description(self):
-        return self._folder + '\\description.pdf'
+            with open(file, 'r', encoding='utf8') as f:
+                data = json.load(f)
+            for name in data.keys():
+                self._parameters.append(
+                    Parameter.init_from_file(name, data[name])
+                )
 
 
 class DataResult(Data):
     def __init__(self, folder: str):
         super().__init__(folder)
         self._images = []
-        self._texts = self.__form_texts()
+        self._texts = []
+        self.__read_texts()
 
-    def add_image(self, filepath: str):
-        path = self._folder + '\\images'
-        name = filepath.split('\\')[-1]  # !!! name with file extension (for example: .png)
-        if name in self._images:
-            raise RuntimeError(f'Image "{name}" also exists!: locates in {path}')
-        self._images.append(name)
-        shutil.move(filepath, path)
+    def image_folder(self):
+        return f'{self.folder()}\\images'
 
     def get_images(self):
         return self._images
 
-    def __form_texts(self) -> list:
-        path = self._folder + '\\texts'
-        files = os.listdir(path=path)
-        texts = []
-        for file in files:
-            with open(path + '\\' + file, 'r', encoding='utf8') as f:
-                data = json.load(f)
-                texts_ = data['texts']
-                for text in texts_:
-                    texts.append(Text(text=text['text'],
-                                      kind=text['kind'],
-                                      **text['options']))
-        return texts
+    def add_image(self, image: fig):
+        pass
+
+    def __read_texts(self):
+        pass
 
 
 class DataMaterial(Data):
@@ -144,5 +107,4 @@ class DataController:
 
 
 dc = DataController('lab_111')
-dc.material.add_table('C:\\Users\\v3531\\Downloads\\measures_1.csv')
 print('All is good')

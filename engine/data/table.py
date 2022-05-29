@@ -1,20 +1,17 @@
 from __future__ import annotations
 import pandas as pd
 import numpy as np
-import json
 
 from measunit import MeasUnit
 
 
 class Table:
     @classmethod
-    def init_from_file(cls, file: str):
-        with open(file, 'r', encoding='utf8') as f:
-            data = json.load(f)
-        name = data['name']
+    def init_from_file(cls, name: str, data: dict):
         row_headers = data['row_headers']
         column_headers = data['column_headers']
         table = np.array(data['table'])
+        table = np.insert(table, 0, values=column_headers, axis=1)
         df = pd.DataFrame(table,
                           columns=row_headers,
                           index=column_headers)
