@@ -11,7 +11,7 @@ class Laba:
         pass
 
     def get_userdata(self):
-        return self.data.source  # хрень какая-то чтобы принять данные
+        return self.data.source.get_tables()
 
 
 class Laba226(Laba):
