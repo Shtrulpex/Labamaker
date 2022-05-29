@@ -4,7 +4,7 @@ from __future__ import annotations
 class Value:
     def __init__(self, value: float | None, rel_err: float | None, multiplier: int = 1):
         self.__value = value
-        self.__multiplier = 1  # n, when n is degree of 10^n
+        self.__multiplier = 0  # n, when n is degree of 10^n
         self.__abs_err = None
         self.__rel_err = None
         self.set_multiplier(multiplier)

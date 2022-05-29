@@ -22,12 +22,10 @@
         "resistance": ["R", "Om", 1],
         "number": ["N", "unit", 1],
         "length": ["L", "m", 1],
-        "mass": ["m", "kg", 1],
+        "mass": ["m", "g", 1],
         "time": ["t", "s", 1],
         "temperature": ["T", "K", 1],
         "amperage": ["I", "A", 1],
-        "square": ["S", "m^2", 2],
-        "volume": ["V", "m^3", 3],
         "work": ["W", "J", 1],
         "force": ["F", "N", 1]
     },
@@ -46,14 +44,14 @@
         ]],
         "density": ["ρ", [
             {"numerator": [["mass", 1]],
-            "denominator":  [["volume", 1]]}
+            "denominator":  [["length", 3]]}
         ]],
         "inertia_moment": ["I", [
             {"numerator": [["mass", 1], ["length", 2]],
             "denominator": []}
         ]],
         "resistivity": ["ρ", [
-            {"numerator": [["resistance", 1], ["square", 1]],
+            {"numerator": [["resistance", 1], ["length", 2]],
             "denominator": [["length", 1]]}
         ]]
     },

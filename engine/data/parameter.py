@@ -32,7 +32,6 @@ class Parameter:
 
     @classmethod
     def init_from_file(cls, name: str, data: dict):
-        name = data['name']
         symbol = data['symbol']
         value = data['value']
         unit = data['unit']
@@ -44,7 +43,6 @@ class Parameter:
             abs_err = data['absolute_error']
             rel_err = abs_err / value
         else:
-            abs_err = None
             rel_err = None
         return cls(
             Value(value, rel_err, multiplier=multiplier),
@@ -56,7 +54,7 @@ class Parameter:
 
     def __init__(self,
                  value: Value,
-                 unit: MeasUnit,
+                 unit: BaseMeasUnit | DerivedMeasUnit,
                  options: ParamOptions,
                  symbol,
                  *name
