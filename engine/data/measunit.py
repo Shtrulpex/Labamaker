@@ -1,4 +1,8 @@
 from __future__ import annotations
+import json
+import enum
+
+
 # the entity specifying the multiplier and the simple prefix string
 class Prefix:
     def __init__(self, prefix: str | int | Prefix):
