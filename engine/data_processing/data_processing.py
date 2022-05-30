@@ -1,3 +1,7 @@
+import numpy as np
+from enums import *
+
+
 class Method:
     def __init__(self, result, arguments, sequence):
         self.result = result

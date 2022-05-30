@@ -1,3 +1,8 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from enums import *
+
+
 class Visualizator:
     @staticmethod
     def illustrate(arguments, graph_type):

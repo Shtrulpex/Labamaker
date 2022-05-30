@@ -25,7 +25,7 @@ class Value:
 
     def get_rel_err(self):
         return self.__rel_err
-
+    
     def set_multiplier(self, n: int):
         self.__value *= 10 ** self.get_multiplier()
         if self:

@@ -1,3 +1,9 @@
+from engine.data.data import *
+from engine.data_processing.data_processing import *
+from engine.visualization.visualization import *
+from math import pi
+
+
 class Laba:
     def __init__(self, data_controller: DataController):
         self.data = data_controller
