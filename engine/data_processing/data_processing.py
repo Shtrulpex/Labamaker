@@ -1,5 +1,4 @@
-import numpy as np
-from ..enums import *
+
 
 
 class Method:

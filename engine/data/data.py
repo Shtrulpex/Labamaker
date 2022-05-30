@@ -1,7 +1,4 @@
-import os
-from matplotlib.pyplot import figure as fig
 
-from table import *
 
 
 class Data:

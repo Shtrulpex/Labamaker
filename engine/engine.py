@@ -1,7 +1,6 @@
-from data.data import *
-from data_processing.data_processing import *
+
 from visualization.visualization import *
-from math import pi
+
 
 
 class Laba:
