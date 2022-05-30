@@ -1,7 +1,6 @@
 import os
 from matplotlib.pyplot import figure as fig
 
-from parameter import *
 from table import *
 
 
@@ -26,9 +25,9 @@ class Data:
     def parameter_folder(self):   # returns path to tables
         return f'{self.folder()}\\parameters'
 
-    def add_table(self, table: Table):
-        self._tables.append(table)
-        table.to_csv(self.table_folder())
+    def add_table(self, table_: Table):
+        self._tables.append(table_)
+        table_.to_csv(self.table_folder())
 
     def add_parameter(self, parameter: Parameter):
         self._parameters.append(parameter)

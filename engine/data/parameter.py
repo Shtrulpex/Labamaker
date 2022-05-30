@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from value import *
 from measunit import *
 from option import *
-from value import *
 
 
 class Parameter:
@@ -56,17 +56,17 @@ class Parameter:
         return cls(
             Value(value, rel_err, multiplier=multiplier),
             MeasUnit.init_from_file(unit),
-            ParamOptions(**options),
             symbol,
-            name
+            name,
+            options=ParamOptions(**options)
         )
 
     def __init__(self,
                  value: Value,
                  unit: DerivedMeasUnit,
-                 options: ParamOptions,
                  symbol,
-                 *name
+                 *name,
+                 options: ParamOptions = ParamOptions.default_init(bool(Value))
                  ):
         self.__name = ''
         if name:
@@ -106,6 +106,9 @@ class Parameter:
     def set_name(self, name: str):
         self.__name = name
 
+    def set_symbol(self, symbol: str):
+        self.__symbol = symbol
+
     def set_prefix(self, unit: BaseMeasUnit, prefix: str):
         self.__unit.set_prefix(unit, prefix)
         self.__update_multiplier()
@@ -122,7 +125,7 @@ class Parameter:
         unit = self.get_unit() ** -1
         options = self.get_options()
         symbol = self.get_symbol() + '^[-1]'
-        parameter = Parameter(value, unit, options, symbol, symbol)
+        parameter = Parameter(value, unit, symbol, symbol, options=options)
         return parameter
 
     def __update_multiplier(self):
@@ -141,7 +144,7 @@ class Parameter:
             unit = first.get_unit()
             options = first.get_options()
             symbol = first.get_symbol()
-            parameter = Parameter(value, unit, options, symbol, symbol)
+            parameter = Parameter(value, unit, symbol, symbol, options=options)
             return parameter
         elif action == '*':
             if type(second) == Parameter:
@@ -156,7 +159,7 @@ class Parameter:
                 raise RuntimeError(f'Incorrect operators of mul:'
                                    f'Parameter and {type(second)}')
             options = first.get_options()
-            parameter = Parameter(value, unit, options, symbol, symbol)
+            parameter = Parameter(value, unit, symbol, symbol, options=options)
             return parameter
         elif action == '**':
             power = second
@@ -164,7 +167,7 @@ class Parameter:
             unit = first.get_unit() ** power
             options = first.get_options()
             symbol = f'{first.get_symbol()}^[{power}]'
-            parameter = Parameter(value, unit, options, symbol, symbol)
+            parameter = Parameter(value, unit, symbol, symbol, options=options)
             return parameter
         else:
             raise RuntimeError(f'Incorrect action to do: {action}')
@@ -178,10 +181,10 @@ class Parameter:
     def __repr__(self):
         return f'{self.get_name()}: [{self}]'
 
-    def __mul__(self, other: Parameter | float) -> Parameter:
+    def __mul__(self, other: Parameter | float | int) -> Parameter:
         return Parameter.__action(self, other, '*')
 
-    def __truediv__(self, other: Parameter):
+    def __truediv__(self, other: Parameter | float | int):
         other = other.__get_flipped()
         return self * other
 

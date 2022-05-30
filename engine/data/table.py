@@ -2,10 +2,8 @@ from __future__ import annotations
 import pandas as pd
 import numpy as np
 
-from measunit import MeasUnit
-from parameter import Parameter
-from option import ParamOptions
-from value import Value
+from parameter import *
+from value import *
 
 
 class Table:
@@ -23,8 +21,7 @@ class Table:
             a = []
             for j in range(len(table[i])):
                 value = Value(table[i][j])
-                options = ParamOptions.default_init()
-                parameter = Parameter(value, units[j], options, row_headers[j + 1])
+                parameter = Parameter(value, units[j], row_headers[j + 1])
                 a.append(parameter)
             sp.append(a)
         table = np.array(sp)
