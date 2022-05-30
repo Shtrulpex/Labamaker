@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class Value:
     def __init__(self, value: float | None = None, rel_err: float | None = None, multiplier: int = 0):
         self.__value = None
@@ -24,7 +25,7 @@ class Value:
 
     def get_rel_err(self):
         return self.__rel_err
-    
+
     def set_multiplier(self, n: int):
         self.__value *= 10 ** self.get_multiplier()
         if self:

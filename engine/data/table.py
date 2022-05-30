@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 
-
-
 class Table:
     @classmethod
     def init_from_file(cls, name: str, data: dict):

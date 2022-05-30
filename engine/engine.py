@@ -1,8 +1,3 @@
-
-from visualization.visualization import *
-
-
-
 class Laba:
     def __init__(self, data_controller: DataController):
         self.data = data_controller
