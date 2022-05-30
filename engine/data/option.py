@@ -54,6 +54,17 @@ class Text:
 
 
 class ParamOptions(Option):
+    @classmethod
+    def default_init(cls, rel_err=False):
+        kwargs = {'value': dict(),
+                  'unit': dict(),
+                  'name': dict(),
+                  'symbol': dict()}
+        if rel_err:
+            kwargs['absolute_error'] = dict()
+            kwargs['relative_error'] = dict()
+        return cls(**kwargs)
+
     def __init__(self, **kwargs):
         for option in kwargs.keys():
             kwargs[option] = ParamOptions._fill_options(

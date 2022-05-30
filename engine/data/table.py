@@ -2,7 +2,8 @@ from __future__ import annotations
 import pandas as pd
 import numpy as np
 
-from measunit import MeasUnit
+from parameter import *
+from value import *
 
 
 class Table:
@@ -10,15 +11,24 @@ class Table:
     def init_from_file(cls, name: str, data: dict):
         row_headers = data['row_headers']
         column_headers = data['column_headers']
-        table = np.array(data['table'])
-        table = np.insert(table, 0, values=column_headers, axis=1)
-        df = pd.DataFrame(table,
-                          columns=row_headers,
-                          index=column_headers)
         units = []
         for unit in data['units']:
             if unit:
                 units.append(MeasUnit.init_from_file(unit))
+        table = np.array(data['table'])
+        sp = []
+        for i in range(len(table)):
+            a = []
+            for j in range(len(table[i])):
+                value = Value(table[i][j])
+                parameter = Parameter(value, units[j], row_headers[j + 1])
+                a.append(parameter)
+            sp.append(a)
+        table = np.array(sp)
+        table = np.insert(table, 0, values=column_headers, axis=1)
+        df = pd.DataFrame(table,
+                          columns=row_headers,
+                          index=column_headers)
         return cls(name, units, df)
 
     def __init__(self,
@@ -28,11 +38,12 @@ class Table:
         self.__name = name
         self.__table = data_frame  # dataframe of Parameters
         self.__units = units  # list of Units
+        self.iloc = self.__table.iloc
 
-    def get_name(self):
+    def name(self):
         return self.__name
 
-    def get_table(self):
+    def table(self):
         return self.__table
 
     def to_csv(self, file: str):
@@ -50,8 +61,20 @@ class Table:
     def width(self):
         return self.shape()[1]
 
+    def keys(self):
+        return self.__table.keys()
+
+    def insert(self, *args, **kwargs):
+        self.__table.insert(*args, **kwargs)
+
     def __getitem__(self, key: str | int):
         return self.__table[key]
 
     def __setitem__(self, key: str | int, value: pd.Series):
         self.__table[key] = value
+
+    def __str__(self):
+        return str(self.__table)
+
+    def __repr__(self):
+        return f'{self.name()}: [{self.shape()}]'
