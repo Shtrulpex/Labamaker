@@ -195,7 +195,7 @@ class BaseMeasUnit:
         if self.get_degree() == 1:
             return s
         elif self.get_degree() == 0:
-            return 'unit'
+            return ''
         return f'{s}^[{self.get_degree()}]'
 
     def __repr__(self):
@@ -291,25 +291,30 @@ class DerivedMeasUnit:
         self.__numerator = units[numerator]  # list if Kinds
         self.__denominator = units[denominator]  # list if Kinds
         self.__symbol = symbol
-        self.__update_multiplier()
+        self.__multiplier = 0
+        self.__rel_multiplier = 0
+        self.__update_multipliers(save_rel_multiplier=True)
 
     def get_units(self):
         numerator = MeasUnit.Fraction.numerator.value
         denominator = MeasUnit.Fraction.denominator.value
         d = {
-            numerator: self.get_numerator(),
-            denominator: self.get_denominator()
+            numerator: self.numerator(),
+            denominator: self.denominator()
         }
         return d
 
-    def get_numerator(self):
+    def numerator(self):
         return self.__numerator
 
-    def get_denominator(self):
+    def denominator(self):
         return self.__denominator
 
     def get_multiplier(self):
         return self.__multiplier
+
+    def get_rel_multiplier(self):
+        return self.__rel_multiplier
 
     def get_symbol(self):
         return self.__symbol
@@ -318,22 +323,22 @@ class DerivedMeasUnit:
         return self.__category
 
     def set_prefix(self, unit: BaseMeasUnit, prefix: str):
-        if unit in self.get_numerator():
-            i = self.get_numerator().index(unit)
+        if unit in self.numerator():
+            i = self.numerator().index(unit)
             self.__numerator[i].set_prefix(prefix)
-        elif unit in self.get_denominator():
-            i = self.get_denominator().index(unit)
+        elif unit in self.denominator():
+            i = self.denominator().index(unit)
             self.__denominator[i].set_prefix(prefix)
         else:
             raise RuntimeError(f"""No such unit ({str(unit)}) in {str(self)}""")
-        self.__update_multiplier()
+        self.__update_multipliers()
 
     def to_si(self):
-        for unit in self.get_numerator():
+        for unit in self.numerator():
             unit.to_si()
         for unit in self.__denominator:
             unit.to_si()
-        self.__update_multiplier()
+        self.__update_multipliers()
 
     def __get_flipped(self):
         unit = DerivedMeasUnit.copy(self)
@@ -343,8 +348,8 @@ class DerivedMeasUnit:
     def __find_unit_in_fraction(self, unit: BaseMeasUnit):
         numerator = MeasUnit.Fraction.numerator.value
         denominator = MeasUnit.Fraction.denominator.value
-        numer = self.get_numerator()
-        denom = self.get_denominator()
+        numer = self.numerator()
+        denom = self.denominator()
         for i in range(len(numer)):
             if numer[i].get_category() == unit.get_category():
                 return numerator, i
@@ -353,23 +358,26 @@ class DerivedMeasUnit:
                 return denominator, i
         return False
 
-    def __update_multiplier(self):
+    def __update_multipliers(self, save_rel_multiplier=False):
         multiplier = 0
-        for unit in self.get_numerator():
+        for unit in self.numerator():
             multiplier += unit.get_multiplier()
-        for unit in self.get_denominator():
+        for unit in self.denominator():
             multiplier -= unit.get_multiplier()
+        if not save_rel_multiplier:
+            self.__rel_multiplier += multiplier - self.__multiplier
         self.__multiplier = multiplier
 
     def __str__(self):
-        s1 = '*'.join(str(i) for i in self.get_numerator())
-        s2 = '*'.join(str(i) for i in self.get_denominator())
-        if self.get_multiplier() == 0:
-            s0 = ''
-        elif self.get_multiplier() == 1:
-            s0 = '10  * '
-        else:
-            s0 = f'10^[{self.get_multiplier()}] * '
+        s1 = '*'.join(str(i) for i in self.numerator())
+        s2 = '*'.join(str(i) for i in self.denominator())
+        s0 = ''
+        # if self.get_multiplier() == 0:
+        #     s0 = ''
+        # elif self.get_multiplier() == 1:
+        #     s0 = '10  * '
+        # else:
+        #     s0 = f'10^[{self.get_multiplier()}] * '
         return f'{s0}({s1})/({s2})'
 
     def __repr__(self):
@@ -378,8 +386,8 @@ class DerivedMeasUnit:
     def __mul__(self, other: DerivedMeasUnit):
         new_unit = DerivedMeasUnit.copy(self)
         numerator = MeasUnit.Fraction.numerator.value
-        other_numer = other.get_numerator()
-        other_denom = other.get_denominator()
+        other_numer = other.numerator()
+        other_denom = other.denominator()
         for i in range(len(other_numer)):
             find = new_unit.__find_unit_in_fraction(other_numer[i])
             if find:
@@ -401,18 +409,34 @@ class DerivedMeasUnit:
                 else:
                     new_unit.__denominator[index] = new_unit.__denominator[index] * other_denom[i]
             else:
-                new_unit.__numerator.append(other_denom[i])
-        new_unit.__update_multiplier()
+                new_unit.__denominator.append(other_denom[i])
+        new_unit.__update_multipliers(save_rel_multiplier=True)
         return new_unit
 
     def __pow__(self, power: float):
         unit = DerivedMeasUnit.copy(self)
-        numer = unit.get_numerator()
-        denom = unit.get_denominator()
+        numer = unit.numerator()
+        denom = unit.denominator()
+        numer_buf = []
+        denom_buf = []
         for i in range(len(numer)):
-            numer[i] = numer[i] ** power
+            new_unit = numer[i] ** power
+            if new_unit.get_degree() < 0:
+                new_unit.set_degree(-new_unit.get_degree())
+                del numer[i]
+                denom_buf.append(new_unit)
+            else:
+                numer[i] = new_unit
         for i in range(len(denom)):
-            denom[i] = denom[i] ** power
+            new_unit = denom[i] ** power
+            if new_unit.get_degree() < 0:
+                new_unit.set_degree(-new_unit.get_degree())
+                del denom[i]
+                numer_buf.append(new_unit)
+            else:
+                denom[i] = new_unit
+        numer.extend(numer_buf)
+        denom.extend(denom_buf)
         return unit
 
     def __truediv__(self, other: DerivedMeasUnit):
@@ -420,10 +444,10 @@ class DerivedMeasUnit:
         return self * other
 
     def __eq__(self, other: DerivedMeasUnit):
-        numer_1 = set(unit.get_category for unit in self.get_numerator())
-        denom_1 = set(unit.get_category for unit in self.get_denominator())
-        numer_2 = set(unit.get_category for unit in other.get_numerator())
-        denom_2 = set(unit.get_category for unit in other.get_denominator())
+        numer_1 = set(unit.get_category for unit in self.numerator())
+        denom_1 = set(unit.get_category for unit in self.denominator())
+        numer_2 = set(unit.get_category for unit in other.numerator())
+        denom_2 = set(unit.get_category for unit in other.denominator())
         return numer_1 == numer_2 and denom_1 == denom_2
 
     def __ne__(self, other: DerivedMeasUnit):

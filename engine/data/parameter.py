@@ -30,18 +30,27 @@ class Parameter:
         parameter.set_name(name)
         return parameter
 
+    @staticmethod
+    def pow(first: Parameter, power: float, name: str):
+        parameter = first ** power
+        parameter.set_name(name)
+        return parameter
+
     @classmethod
     def init_from_file(cls, name: str, data: dict):
         symbol = data['symbol']
         value = data['value']
         unit = data['unit']
         options = data['options']
-        multiplier = 1
+        multiplier = 0
         if 'multiplier' in data.keys():
             multiplier = data['multiplier']
         if 'absolute_error' in data.keys():
             abs_err = data['absolute_error']
-            rel_err = abs_err / value
+            if abs_err is None:
+                rel_err = None
+            else:
+                rel_err = abs_err / value
         else:
             rel_err = None
         return cls(
@@ -54,7 +63,7 @@ class Parameter:
 
     def __init__(self,
                  value: Value,
-                 unit: BaseMeasUnit | DerivedMeasUnit,
+                 unit: DerivedMeasUnit,
                  options: ParamOptions,
                  symbol,
                  *name
@@ -82,6 +91,12 @@ class Parameter:
     def get_unit(self):
         return self.__unit
 
+    def get_unit_numerator(self):
+        return self.__unit.numerator()
+
+    def get_unit_denominator(self):
+        return self.__unit.denominator()
+
     def get_multiplier(self):
         return self.__multiplier
 
@@ -91,8 +106,9 @@ class Parameter:
     def set_name(self, name: str):
         self.__name = name
 
-    def set_prefix(self, prefix: str):
-        pass
+    def set_prefix(self, unit: BaseMeasUnit, prefix: str):
+        self.__unit.set_prefix(unit, prefix)
+        self.__update_multiplier()
 
     def to_si(self):
         self.__unit.to_si()
@@ -100,10 +116,6 @@ class Parameter:
 
     def to_json(self, file: str):
         pass
-
-    def __get_param_string(self):
-        return f'{self.get_symbol()} = {self.get_value()} *' \
-               f' 10^[{self.get_multiplier()}] {self.get_unit()}'
 
     def __get_flipped(self):
         value = self.get_value() ** -1
@@ -115,66 +127,77 @@ class Parameter:
 
     def __update_multiplier(self):
         self.__multiplier = self.get_value().get_multiplier() +\
-                            self.get_unit().get_multiplier()
+                            self.get_unit().get_rel_multiplier()
+
+    @staticmethod
+    def __action(first: Parameter, second: Parameter | float, action: str):  # '+', '-', '*', '**'
+        if action in ('+', '-'):
+            if bool(first.get_unit()) != bool(second.get_unit()):
+                raise RuntimeError(f'incorrect units to add')
+            if action == '+':
+                value = first.get_value() + second.get_value()
+            else:
+                value = first.get_value() - second.get_value()
+            unit = first.get_unit()
+            options = first.get_options()
+            symbol = first.get_symbol()
+            parameter = Parameter(value, unit, options, symbol, symbol)
+            return parameter
+        elif action == '*':
+            if type(second) == Parameter:
+                value = first.get_value() * second.get_value()
+                unit = first.get_unit() * second.get_unit()
+                symbol = first.get_symbol() + second.get_symbol()
+            elif type(second) == float:
+                value = first.get_value() * second
+                unit = first.get_unit()
+                symbol = first.get_symbol()
+            else:
+                raise RuntimeError(f'Incorrect operators of mul:'
+                                   f'Parameter and {type(second)}')
+            options = first.get_options()
+            parameter = Parameter(value, unit, options, symbol, symbol)
+            return parameter
+        elif action == '**':
+            power = second
+            value = first.get_value() ** power
+            unit = first.get_unit() ** power
+            options = first.get_options()
+            symbol = f'{first.get_symbol()}^[{power}]'
+            parameter = Parameter(value, unit, options, symbol, symbol)
+            return parameter
+        else:
+            raise RuntimeError(f'Incorrect action to do: {action}')
 
     def __str__(self):
-        return self.__get_param_string()
+        s = ' '
+        if self.get_multiplier() != 0:
+            s = f' * 10^[{self.get_multiplier()}] '
+        return f'{self.get_symbol()} = {self.get_value()}{s}{self.get_unit()}'
 
     def __repr__(self):
         return f'{self.get_name()}: [{self}]'
 
     def __mul__(self, other: Parameter | float) -> Parameter:
-        if other is Parameter:
-            value = self.get_value() * other.get_value()
-            unit = self.get_unit() * other.get_unit()
-            options = self.get_options()
-            symbol = self.get_symbol() + other.get_symbol()
-            parameter = Parameter(value, unit, options, symbol, symbol)
-        elif other is float:
-            value = self.get_value() * other
-            unit = self.get_unit()
-            options = self.get_options()
-            symbol = self.get_symbol()
-            parameter = Parameter(value, unit, options, symbol, symbol)
-        else:
-            raise RuntimeError(f'Incorrect operators of mul:'
-                               f'Parameter and {type(other)}')
-        return parameter
+        return Parameter.__action(self, other, '*')
 
     def __truediv__(self, other: Parameter):
         other = other.__get_flipped()
         return self * other
 
     def __add__(self, other: Parameter):
-        if self.get_unit() != other.get_unit():
-            raise RuntimeError(f'incorrect units to add')
-        value = self.get_value() + other.get_value()
-        unit = self.get_unit()
-        options = self.get_options()
-        symbol = self.get_symbol()
-        parameter = Parameter(value, unit, options, symbol, symbol)
-        return parameter
+        return Parameter.__action(self, other, '+')
 
     def __sub__(self, other: Parameter):
-        if self.get_unit() != other.get_unit():
-            raise RuntimeError(f'incorrect units to add')
-        value = self.get_value() - other.get_value()
-        unit = self.get_unit()
-        options = self.get_options()
-        symbol = self.get_symbol()
-        parameter = Parameter(value, unit, options, symbol, symbol)
-        return parameter
+        return Parameter.__action(self, other, '-')
 
     def __pow__(self, power: float):
-        value = self.get_value() ** power
-        unit = self.get_unit() ** power
-        options = self.get_options()
-        symbol = f'{self.get_symbol()}^[{power}]'
-        parameter = Parameter(value, unit, options, symbol, symbol)
-        return parameter
+        return Parameter.__action(self, power, '**')
 
     def __rshift__(self, n: int):
         self.__value >> n
+        self.__update_multiplier()
 
     def __lshift__(self, n: int):
         self.__value << n
+        self.__update_multiplier()

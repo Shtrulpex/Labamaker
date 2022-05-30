@@ -34,28 +34,26 @@ class Data:
         self._parameters.append(parameter)
         parameter.to_json(self.parameter_folder())
 
-
-class DataSource(Data):
-    def __init__(self, folder: str):
-        super(DataSource, self).__init__(folder)
-        self.__read_tables()
-        self.__read_parameters()
-
-    def __read_tables(self):
+    def _read_tables(self):
         path = self.table_folder()
         files = os.listdir(path=path)
+        current_directory = os.getcwd()
         os.chdir(path)
         for file in files:
+            if not file.endswith('.json'):
+                continue
             with open(file, 'r', encoding='utf8') as f:
                 data = json.load(f)
             for name in data.keys():
                 self._tables.append(
                     Table.init_from_file(name, data[name])
                 )
+        os.chdir(current_directory)
 
-    def __read_parameters(self):
+    def _read_parameters(self):
         path = self.parameter_folder()
         files = os.listdir(path=path)
+        current_directory = os.getcwd()
         os.chdir(path)
         for file in files:
             with open(file, 'r', encoding='utf8') as f:
@@ -64,6 +62,14 @@ class DataSource(Data):
                 self._parameters.append(
                     Parameter.init_from_file(name, data[name])
                 )
+        os.chdir(current_directory)
+
+
+class DataSource(Data):
+    def __init__(self, folder: str):
+        super(DataSource, self).__init__(folder)
+        self._read_tables()
+        self._read_parameters()
 
 
 class DataResult(Data):
@@ -87,7 +93,10 @@ class DataResult(Data):
 
 
 class DataMaterial(Data):
-    pass
+    def __init__(self, folder: str):
+        super(DataMaterial, self).__init__(folder)
+        self._read_tables()
+        self._read_parameters()
 
 
 class DataController:
@@ -104,7 +113,3 @@ class DataController:
 
         result_folder = f'..\\..\\results\\{self.lab}'
         self.result: DataResult = DataResult(result_folder)
-
-
-dc = DataController('lab_111')
-print('All is good')

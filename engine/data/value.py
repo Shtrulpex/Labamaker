@@ -4,12 +4,12 @@ from __future__ import annotations
 class Value:
     def __init__(self, value: float | None, rel_err: float | None, multiplier: int = 0):
         self.__value = None
-        if value is not None:
-            self.__value = value
         self.__abs_err = None
         self.__rel_err = None
         self.__multiplier = multiplier
-        self.set_multiplier(multiplier)
+        if value is not None:
+            self.__value = value
+            self.set_multiplier(multiplier)
         if rel_err is not None:
             self.__abs_err = value * rel_err
             self.__rel_err = rel_err
@@ -61,7 +61,7 @@ class Value:
             if not first:
                 rel_err = None
             else:
-                rel_err = power * first.get_rel_err()
+                rel_err = abs(power) * first.get_rel_err()
         else:
             raise RuntimeError(f'incorrect action with values: {action}')
         return rel_err
@@ -120,6 +120,6 @@ class Value:
 
     def __pow__(self, power: float):
         value = self.get_value() ** power
-        multiplier = int(self.get_multiplier() ** power)
+        multiplier = -self.get_multiplier()
         rel_err = Value.__count_rel_err('**', self, power)
         return Value(value, rel_err, multiplier=multiplier)
