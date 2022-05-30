@@ -120,17 +120,25 @@ class Parameter:
     def to_json(self, file: str):
         pass
 
-    def __get_flipped(self):
-        value = self.get_value() ** -1
-        unit = self.get_unit() ** -1
-        options = self.get_options()
-        symbol = self.get_symbol() + '^[-1]'
-        parameter = Parameter(value, unit, symbol, symbol, options=options)
-        return parameter
-
     def __update_multiplier(self):
         self.__multiplier = self.get_value().get_multiplier() +\
                             self.get_unit().get_rel_multiplier()
+
+    @staticmethod
+    def __get_flipped(obj):
+        if type(obj) == Parameter:
+            if obj.get_value() == 0:
+                raise RuntimeError(f'Division by zero: {obj.get_name()}: {obj.get_symbol()} = 0')
+            value = obj.get_value() ** -1
+            unit = obj.get_unit() ** -1
+            options = obj.get_options()
+            symbol = obj.get_symbol() + '^[-1]'
+            parameter = Parameter(value, unit, symbol, symbol, options=options)
+            return parameter
+        elif type(obj) in (int, float):
+            if obj == 0:
+                raise RuntimeError(f'Division by zero')
+            return 1 / obj
 
     @staticmethod
     def __action(first: Parameter, second: Parameter | float | int, action: str):  # '+', '-', '*', '**'
@@ -185,7 +193,7 @@ class Parameter:
         return Parameter.__action(self, other, '*')
 
     def __truediv__(self, other: Parameter | float | int):
-        other = other.__get_flipped()
+        other = Parameter.__get_flipped(other)
         return self * other
 
     def __add__(self, other: Parameter):

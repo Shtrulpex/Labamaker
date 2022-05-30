@@ -137,6 +137,8 @@ print(D)
 DN = N / D ** 2
 DN >> 5
 print(DN)
+k = N / 5
+print(k)
 print('All is good')
 
 
