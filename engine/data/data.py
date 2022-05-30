@@ -1,7 +1,7 @@
 import os
 from matplotlib.pyplot import figure as fig
 
-from table import *
+from engine.data.table import *
 
 
 class Data:

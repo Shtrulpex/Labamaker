@@ -1,6 +1,6 @@
-from data.data import *
-from data_processing.data_processing import *
-from visualization.visualization import *
+from engine.data.data import *
+from engine.data_processing.data_processing import *
+from engine.visualization.visualization import *
 from math import pi
 
 

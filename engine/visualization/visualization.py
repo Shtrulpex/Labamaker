@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..enums import *
+from enums import *
 
 
 class Visualizator:
