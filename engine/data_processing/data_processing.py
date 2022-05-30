@@ -1,5 +1,5 @@
 import numpy as np
-from ..enums import *
+from enums import *
 
 
 class Method:

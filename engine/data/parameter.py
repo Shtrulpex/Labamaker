@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from value import *
-from measunit import *
-from option import *
+from engine.data.value import *
+from engine.data.measunit import *
+from engine.data.option import *
 
 
 class Parameter:
