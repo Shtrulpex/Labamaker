@@ -1,0 +1,104 @@
+{
+    "wire_diameter": {
+        "symbol": "d",
+        "value": null,
+        "absolute_error": null,
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
+        "options": {
+            "value": {},
+            "absolute_error": {},
+            "relative_error": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    },
+    "reochord_drum": {
+        "symbol": "D",
+        "value": null,
+        "absolute_error": null,
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
+        "options": {
+            "value": {},
+            "absolute_error": {},
+            "relative_error": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    },
+    "length of the drum section with the wire": {
+        "symbol": "L",
+        "value": null,
+        "absolute_error": null,
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
+        "options": {
+            "value": {},
+            "absolute_error": {},
+            "relative_error": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    },
+    "total number of turns": {
+        "symbol": "N",
+        "value": null,
+        "unit": ["base",
+            "number",
+            "",
+            1
+        ],
+        "options": {
+            "value": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    },
+    "Resistance of 40 turns": {
+        "symbol": "R_40",
+        "value": null,
+        "unit": ["base",
+            "resistance",
+            "",
+            1
+        ],
+        "options": {
+            "value": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    },
+    "Groove depth": {
+        "symbol": "h",
+        "value": null,
+        "absolute_error": null,
+        "unit": ["base",
+            "length",
+            "milli",
+            1
+        ],
+        "options": {
+            "value": {},
+            "absolute_error": {},
+            "relative_error": {},
+            "unit": {},
+            "name": {},
+            "symbol": {}
+        }
+    }
+}

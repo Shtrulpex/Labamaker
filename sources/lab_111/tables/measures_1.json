@@ -1,0 +1,25 @@
+{
+    "table_1":
+    {
+        "name": "measures_1",
+        "row_headers": ["№", "N, unit", "R_ev, Om", "R, Om"],
+        "column_headers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "units": [null,
+            ["base", "number", "", 1],
+            ["base", "resistance", "", 1],
+            ["base", "resistance", "", 1]],
+        "table":
+            [
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null],
+                [null, null, null]
+            ]
+    }
+}
