@@ -1,6 +1,3 @@
-
-
-
 class Data:
     def __init__(self, folder: str):
         self._folder = folder

@@ -1,6 +1,3 @@
-
-
-
 class Method:
     def __init__(self, result, arguments, sequence):
         self.result = result
