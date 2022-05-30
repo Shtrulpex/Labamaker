@@ -1,7 +1,3 @@
-import json
-import enum
-
-
 class TextKinds(enum.Enum):
     text = 'text'
     formula = 'formula'

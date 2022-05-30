@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from value import *
-from measunit import *
-from option import *
-
 
 class Parameter:
     @staticmethod
@@ -121,7 +117,7 @@ class Parameter:
         pass
 
     def __update_multiplier(self):
-        self.__multiplier = self.get_value().get_multiplier() +\
+        self.__multiplier = self.get_value().get_multiplier() + \
                             self.get_unit().get_rel_multiplier()
 
     @staticmethod
