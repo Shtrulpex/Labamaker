@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 class Value:
     def __init__(self, value: float | None = None, rel_err: float | None = None, multiplier: int = 0):
         self.__value = None
