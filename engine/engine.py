@@ -16,7 +16,7 @@ class Laba:
 
 class Laba226(Laba):
     def make_laba(self):
-        table1 = self.data.source.get_tables('d2mm')  #трубка d = 3 мм
+        table1 = self.data.source.get_tables('d2mm')  # трубка d = 3 мм
         q = np.array([])
         for i in range(len(table1.dV)):
             np.append(q, Division({Data.X: table1.dV[i], Data.Y: table1.dt[i]}).calc())
@@ -27,3 +27,14 @@ class Laba226(Laba):
         fig = Visualizator.illustrate(mls_args, GraphType.MLS)
         fig.savefig('q(dp)_d2mm.pdf')
         self.data.result.add_image('q(dp)_d2mm.pdf')
+
+
+class Laba111(Laba):
+    def make_laba(self):
+        table = self.data.source.get_tables('measures_1')
+        mls_args = MLS({Data.X: np.array(list(map(lambda x: x.get_value(), table.get_table().N))),
+                        Data.Y: np.array(list(map(lambda x: x.get_value(), table.get_table().R)))})
+        figure = Visualizator.illustrate(mls_args, GraphType.MLS)
+        self.data.result.add_image(figure)
+        #кинуть итоги мнк в параметры резалта
+
