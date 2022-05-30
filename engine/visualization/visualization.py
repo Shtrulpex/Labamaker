@@ -30,10 +30,10 @@ class MLSLine(Graph):
         fig, ax = plt.subplots(1, 1, figsize=(self.size_x, self.size_y), dpi=self.dpi)
         if self.grid:
             ax.grid()
-        x = np.array(self.args[Data.X])
-        y = np.array(self.args[Data.Y])
-        k = np.array(self.args[Data.K])
-        b = np.array(self.args[Data.B])
+        x = np.array(list(map(lambda x: x.get_value(), self.args[Data.X])))
+        y = np.array(list(map(lambda x: x.get_value(), self.args[Data.Y])))
+        k = self.args[Data.K].get_value()
+        b = self.args[Data.B].get_value()
         ax.plot(x, k*x + b)
         ax.scatter(x, y)
         return fig
