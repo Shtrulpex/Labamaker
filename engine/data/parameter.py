@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 
-
 class Parameter:
     @staticmethod
     def mul(first: Parameter, second: Parameter | float, name: str):
@@ -118,7 +117,7 @@ class Parameter:
         pass
 
     def __update_multiplier(self):
-        self.__multiplier = self.get_value().get_multiplier() +\
+        self.__multiplier = self.get_value().get_multiplier() + \
                             self.get_unit().get_rel_multiplier()
 
     @staticmethod

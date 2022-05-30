@@ -1,6 +1,3 @@
-
-
-
 class Data(Enum):
     X = auto()
     Y = auto()

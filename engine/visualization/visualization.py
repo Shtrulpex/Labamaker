@@ -1,7 +1,3 @@
-
-
-
-
 class Visualizator:
     @staticmethod
     def illustrate(arguments, graph_type):
