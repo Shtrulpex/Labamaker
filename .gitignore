@@ -1,2 +1,4 @@
 
-engine/data/__pycache__/
+engine/__pycache__/
+
+*.pyc

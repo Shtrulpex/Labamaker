@@ -1,3 +1,6 @@
+from enum import Enum, auto
+
+
 class Data(Enum):
     X = auto()
     Y = auto()

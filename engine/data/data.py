@@ -1,3 +1,9 @@
+import os
+from matplotlib.pyplot import figure as fig
+
+from engine.data.table import *
+
+
 class Data:
     def __init__(self, folder: str):
         self._folder = folder
