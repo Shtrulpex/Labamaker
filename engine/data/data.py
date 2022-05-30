@@ -84,7 +84,9 @@ class DataResult(Data):
         return self._images
 
     def add_image(self, image: fig):
-        pass
+        self._images.append(image)
+        image.savefig(f'{self.image_folder()}/graph.pdf')
+
 
     def __read_texts(self):
         pass
