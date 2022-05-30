@@ -113,3 +113,29 @@ class DataController:
 
         result_folder = f'..\\..\\results\\{self.lab}'
         self.result: DataResult = DataResult(result_folder)
+
+
+dc = DataController('lab_111')
+d = dc.material.get_parameters()[0]
+D = dc.material.get_parameters()[1]
+N = dc.material.get_parameters()[3]
+print(d)
+print(D)
+print(N)
+dDd = d * D * d
+print(dDd)
+dDd >> 3
+print(dDd)
+unit = dDd.get_unit_numerator()[0]
+dDd.set_prefix(unit, 'm')
+print(dDd)
+dDd.set_prefix(unit, 'M')
+print(dDd)
+dDd << 2
+print(dDd)
+print(d)
+print(D)
+DN = N / D ** 2
+DN >> 5
+print(DN)
+print('All is good')
