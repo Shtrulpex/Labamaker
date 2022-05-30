@@ -1,5 +1,5 @@
 import numpy as np
-from enums import *
+from engine.enums import *
 
 
 class Method:
@@ -25,11 +25,11 @@ class CalcK(CalcData):
     def do(d):
         xy_ = (d[Data.X] * d[Data.Y]).mean()
         x_ = d[Data.X].mean()
-        y_ = d(Data.Y).mean()
+        y_ = d[Data.Y].mean()
         k = xy_ - x_ * y_
-        y2_ = (d[Data.Y] ** 2).mean()
-        y_2 = (d[Data.Y]).mean() ** 2
-        k = k / (y2_ - y_2)
+        x2_ = (d[Data.X] ** 2).mean()
+        x_2 = (d[Data.X]).mean() ** 2
+        k = k / (x2_ - x_2)
         k.set_symbol('k')
         k.set_name('mls_koef_k')
         d[Data.K] = k
@@ -57,7 +57,7 @@ class CalcDK(CalcData):
         y2_ = (d[Data.Y] ** 2).mean()
         dk = (y2_ - y_2) / (x2_ - x_2) - d[Data.B] ** 2
         dk = dk ** 0.5
-        dk = dk / len(d[Data.X]) ** 0.5
+        dk = dk / (len(d[Data.X]) ** 0.5)
         d[Data.DK] = dk
         dk.set_symbol('dk')
         dk.set_name('k_error')
@@ -82,9 +82,9 @@ class Divide(CalcData):
         x = 1
         y = 1
         for i in d[Data.X]:
-            x = x * i
+            x = i * x
         for i in d[Data.Y]:
-            y = y * i
+            y = i * y
         d[Data.RESULT] = x / y
         return d
 

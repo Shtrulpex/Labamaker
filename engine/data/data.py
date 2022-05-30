@@ -1,4 +1,3 @@
-import os
 from matplotlib.pyplot import figure as fig
 
 from engine.data.table import *
@@ -20,10 +19,10 @@ class Data:
         return self._folder
 
     def table_folder(self):  # returns path to tables
-        return f'{self.folder()}\\tables'
+        return f'{self.folder()}/tables'
 
     def parameter_folder(self):   # returns path to tables
-        return f'{self.folder()}\\parameters'
+        return f'{self.folder()}/parameters'
 
     def add_table(self, table_: Table):
         self._tables.append(table_)
@@ -104,62 +103,11 @@ class DataController:
         self.__generate_data()
 
     def __generate_data(self):
-        source_folder = f'..\\..\\sources\\{self.lab}'
+        source_folder = f'sources/{self.lab}'
         self.source = DataSource(source_folder)
 
-        material_folder = f'..\\..\\materials\\{self.lab}'
+        material_folder = f'materials/{self.lab}'
         self.material = DataMaterial(material_folder)
 
-        result_folder = f'..\\..\\results\\{self.lab}'
+        result_folder = f'results/{self.lab}'
         self.result: DataResult = DataResult(result_folder)
-
-
-dc = DataController('lab_111')
-d = dc.material.get_parameters()[0]
-D = dc.material.get_parameters()[1]
-N = dc.material.get_parameters()[3]
-print(d)
-print(D)
-print(N)
-dDd = d * D * d
-print(dDd)
-dDd >> 3
-print(dDd)
-unit = dDd.get_unit_numerator()[0]
-dDd.set_prefix(unit, 'm')
-print(dDd)
-dDd.set_prefix(unit, 'M')
-print(dDd)
-dDd << 2
-print(dDd)
-print(d)
-print(D)
-DN = N / D ** 2
-DN >> 5
-print(DN)
-k = N / 5
-print(k)
-print('All is good')
-
-
-# testing Tables:
-table = dc.source.get_tables()[0]
-
-print(table)
-print(table.keys())
-table['R_ev'] = d
-table['R'][3] = D
-table['R_ev'][3] *= 2
-table['R_ev'] *= table['R'][3]
-print(table)
-print()
-print(table.iloc[2])
-print()
-
-
-table1 = dc.material.get_tables()[0]
-print(table1)
-table1.insert(2, '12321', table['R_ev'])
-print(table1)
-
-print('All is good')

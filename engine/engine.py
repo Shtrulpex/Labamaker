@@ -32,16 +32,16 @@ class Laba226(Laba):
 
 class Laba111(Laba):
     def make_laba(self):
-        params = self.data.source.get_parameters()
-        tables = self.data.source.get_tables()
-        resistance_table = 0
+        params = self.data.material.get_parameters()
+        tables = self.data.material.get_tables()
+        resistance_table = tables[0]
         for i in tables:
-            if i.get_name() == 'measure_1':
+            if i.name() == 'measures_1':
                 resistance_table = i
                 break
 
-        mls_args = MLS({Data.X: np.array(resistance_table.get_table().N),
-                        Data.Y: np.array(resistance_table.get_table().R)}).calc()
+        mls_args = MLS({Data.X: resistance_table['N'].to_numpy(),
+                        Data.Y: resistance_table['R'].to_numpy()}).calc()
         figure = Visualizator.illustrate(mls_args, GraphType.MLS)
         self.data.result.add_image(figure)
         self.data.result.add_parameter(mls_args[Data.K])
@@ -63,8 +63,12 @@ class Laba111(Laba):
         step.set_name('step')
         p[Data.RESULT].set_symbol('ρ')
         p[Data.RESULT].set_name('resistivity')
+        s.set_symbol('s')
+        s.set_name('square_wire')
+        self.data.result.add_parameter(s)
         self.data.result.add_parameter(step)
         self.data.result.add_parameter(l)
         self.data.result.add_parameter(p[Data.RESULT])
 
-        # кинуть итоги мнк в параметры резалта
+        for i in self.data.result.get_parameters():
+            print(i)
