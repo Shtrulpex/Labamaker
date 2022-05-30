@@ -78,7 +78,7 @@ class DataResult(Data):
         self.__read_texts()
 
     def image_folder(self):
-        return f'{self.folder()}\\images'
+        return f'{self.folder()}/images'
 
     def get_images(self):
         return self._images
