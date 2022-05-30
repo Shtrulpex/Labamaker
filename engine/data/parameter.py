@@ -130,7 +130,7 @@ class Parameter:
                             self.get_unit().get_rel_multiplier()
 
     @staticmethod
-    def __action(first: Parameter, second: Parameter | float, action: str):  # '+', '-', '*', '**'
+    def __action(first: Parameter, second: Parameter | float | int, action: str):  # '+', '-', '*', '**'
         if action in ('+', '-'):
             if bool(first.get_unit()) != bool(second.get_unit()):
                 raise RuntimeError(f'incorrect units to add')
@@ -148,7 +148,7 @@ class Parameter:
                 value = first.get_value() * second.get_value()
                 unit = first.get_unit() * second.get_unit()
                 symbol = first.get_symbol() + second.get_symbol()
-            elif type(second) == float:
+            elif type(second) in (float, int):
                 value = first.get_value() * second
                 unit = first.get_unit()
                 symbol = first.get_symbol()

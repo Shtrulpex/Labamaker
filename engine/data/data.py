@@ -139,3 +139,26 @@ DN = N / D ** 2
 DN >> 5
 print(DN)
 print('All is good')
+
+
+# testing Tables:
+table = dc.source.get_tables()[0]
+
+print(table)
+print(table.keys())
+table['R_ev'] = d
+table['R'][3] = D
+table['R_ev'][3] *= 2
+table['R_ev'] *= table['R'][3]
+print(table)
+print()
+print(table.iloc[2])
+print()
+
+
+table1 = dc.material.get_tables()[0]
+print(table1)
+table1.insert(2, '12321', table['R_ev'])
+print(table1)
+
+print('All is good')

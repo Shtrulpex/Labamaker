@@ -369,16 +369,15 @@ class DerivedMeasUnit:
         self.__multiplier = multiplier
 
     def __str__(self):
+        if not self.numerator() and not self.denominator():
+            return 'unit'
+        if not self.denominator():
+            return '*'.join(str(i) for i in self.numerator())
+        if not self.numerator():
+            return '[-1]*'.join(str(i) for i in self.numerator()) + '[-1]'
         s1 = '*'.join(str(i) for i in self.numerator())
         s2 = '*'.join(str(i) for i in self.denominator())
-        s0 = ''
-        # if self.get_multiplier() == 0:
-        #     s0 = ''
-        # elif self.get_multiplier() == 1:
-        #     s0 = '10  * '
-        # else:
-        #     s0 = f'10^[{self.get_multiplier()}] * '
-        return f'{s0}({s1})/({s2})'
+        return f'({s1})/({s2})'
 
     def __repr__(self):
         return str(self)
