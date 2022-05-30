@@ -18,7 +18,7 @@ class TextKinds(enum.Enum):
 
 
 class Option:
-    with open('text_options.json', 'r', encoding='utf8') as f:
+    with open('engine/data/text_options.json', 'r', encoding='utf8') as f:
         data = json.load(f)
         _options = data['options']
         _kinds_options = data['kinds_options']

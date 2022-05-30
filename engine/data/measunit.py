@@ -45,7 +45,7 @@ class Prefix:
 
     # load list of prefixes dictionaries from file. Example:
     # "micro": [-6, "мк", "mk"] etc.
-    with open('units.json', 'r', encoding='utf8') as f:
+    with open('engine/data/units.json', 'r', encoding='utf8') as f:
         data = json.load(f)
         __prefixes = data['prefix']  # key - full name of prefix
         __en_prefixes = dict()  # key - short EN name of prefix
@@ -95,13 +95,13 @@ class MeasUnit:
         else:
             raise RuntimeError(f'incorrect type of unit to init: {type_of_unit}')
 
-    with open('units.json', 'r', encoding='utf8') as f:
+    with open('engine/data/units.json', 'r', encoding='utf8') as f:
         derived_units = json.load(f)['derived_units']
 
-    with open('units.json', 'r', encoding='utf8') as f:
+    with open('engine/data/units.json', 'r', encoding='utf8') as f:
         base_units = json.load(f)['base_units']
 
-    with open('units.json', 'r', encoding='utf8') as f:
+    with open('engine/data/units.json', 'r', encoding='utf8') as f:
         constants = json.load(f)['constants']
 
     class Fraction(enum.Enum):
