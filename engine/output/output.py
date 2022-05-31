@@ -12,27 +12,25 @@ def to_fixed(num: float, digits=3):
 class Template:
     def __init__(self,
                  lab: str,
-                 data_result: DataResult,
                  geometry_options=None
                  ):
         if geometry_options is None:
             geometry_options = {"tmargin": "1.5cm", "lmargin": "2cm", "rmargin": "2cm"}
         self.__geomytry_options = geometry_options
         self.__doc = Document(geometry_options=geometry_options)
-        self.data_result = data_result
         self.result_path = None
         self.result_filename = None
         self.__load_template(lab)
 
-    def write_pdf(self):
-        self.__fill()
+    def write_pdf(self, **kwargs):
+        self.__fill(**kwargs)
         self.__generate_pdf()
 
-    def __fill(self):
+    def __fill(self, **kwargs):
         doc = self.__doc
-        images = self.data_result.get_images_dict()
-        parameters = self.data_result.get_parameters_dict()
-        tables = self.data_result.get_tables_dict()
+        images = kwargs['images']
+        parameters = kwargs['parameters']
+        tables = kwargs['tables']
 
         def write_res(alignant, parameter: Parameter, digit=3, shift=True, abs_err=0):
             if shift:
