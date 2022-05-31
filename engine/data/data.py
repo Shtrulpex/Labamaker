@@ -1,6 +1,8 @@
 from matplotlib.pyplot import figure as fig
 import os
+
 from engine.data.table import *
+from engine.output.output import *
 
 
 class Data:
@@ -73,7 +75,8 @@ class DataResult(Data):
     def __init__(self, folder: str):
         super().__init__(folder)
         self._images = []
-        self.__read_texts()
+        self._template: Template = None
+        self.__read_template()
 
     def get_parameters_dict(self) -> dict:
         d = dict()
@@ -90,15 +93,8 @@ class DataResult(Data):
             d[i.name()] = i
         return d
 
-    def image_folder(self):
-        return f'{self.folder()}/images'
-
-    def get_images(self):
-        return self._images
-
-    def add_image(self, image: fig):
-        self._images.append(image)
-        image.savefig(f'{self.image_folder()}/graph.png')
+    def write_pdf(self):
+        return self._template.write_pdf()
 
     def write_json(self):
         d = {}
@@ -109,8 +105,18 @@ class DataResult(Data):
         f.write(json_text)
         f.close()
 
-    def __read_texts(self):
-        pass
+    def image_folder(self):
+        return f'{self.folder()}/images'
+
+    def get_images(self):
+        return self._images
+
+    def add_image(self, image: fig):
+        self._images.append(image)
+        image.savefig(f'{self.image_folder()}/graph.png')
+
+    def __read_template(self):
+        self._template = Template('lab_111', self)
 
 
 class DataMaterial(Data):
