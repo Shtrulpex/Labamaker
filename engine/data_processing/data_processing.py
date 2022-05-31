@@ -113,7 +113,7 @@ class CalcStep(CalcData):
 class CalcCircleL(CalcData):
     @staticmethod
     def do(d):
-        l = d[Data.D] * pi
+        l = (d[Data.D] - d[Data.h] * 2) * pi
         l.set_symbol('l')
         l.set_name('circle_length')
         d[Data.l] = l
