@@ -82,6 +82,12 @@ class Parameter:
     def get_value(self):
         return self.__value
 
+    def get_abs_err(self):
+        return self.get_value().get_abs_err()
+
+    def get_rel_err(self):
+        return self.get_value().get_rel_err()
+
     def get_number(self):
         return self.get_value().get_value() * 10 ** self.get_multiplier()
 
@@ -188,7 +194,7 @@ class Parameter:
     def __str__(self):
         s = ' '
         if self.get_multiplier() != 0:
-            s = f' * 10^[{self.get_multiplier()}] '
+            s = f' * 10^{self.get_multiplier()} '
         return f'{self.get_symbol()} = {self.get_value()}{s}{self.get_unit()}'
 
     def __repr__(self):

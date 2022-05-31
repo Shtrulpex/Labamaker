@@ -1,7 +1,6 @@
 from __future__ import annotations
 import json
 import enum
-import os
 
 
 # the entity specifying the multiplier and the simple prefix string
@@ -200,7 +199,7 @@ class BaseMeasUnit:
             return s
         elif self.get_degree() == 0:
             return ''
-        return f'{s}^[{self.get_degree()}]'
+        return f'{s}^{self.get_degree()}'
 
     def __repr__(self):
         return str(self)
@@ -383,7 +382,7 @@ class DerivedMeasUnit:
         if not self.denominator():
             return '*'.join(str(i) for i in self.numerator())
         if not self.numerator():
-            return '[-1]*'.join(str(i) for i in self.numerator()) + '[-1]'
+            return '^-1*'.join(str(i) for i in self.numerator()) + '[-1]'
         s1 = '*'.join(str(i) for i in self.numerator())
         s2 = '*'.join(str(i) for i in self.denominator())
         return f'({s1})/({s2})'

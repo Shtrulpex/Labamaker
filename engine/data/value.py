@@ -129,3 +129,6 @@ class Value:
         multiplier = -self.get_multiplier()
         rel_err = Value.__count_rel_err('**', self, power)
         return Value(value, rel_err, multiplier=multiplier)
+
+    def __format__(self, format_spec):
+        return (self.get_value() * 10 ** self.get_multiplier()).__format__(format_spec)

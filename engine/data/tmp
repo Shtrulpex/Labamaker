@@ -8,7 +8,7 @@ circle_length - просто длина окружности
 
     "wire_diameter"
     "reochord_drum"
-    "length of the drum section with the wire"
-    "total number of turns":
-    "Resistance of 40 turns"
-    "Groove depth"
+    "length_of_the_drum_section_with_the_wire"
+    "total_number_of_turns":
+    "resistance_of_40_turns"
+    "groove_depth"

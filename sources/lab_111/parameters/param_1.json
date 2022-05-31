@@ -35,7 +35,7 @@
             "symbol": {}
         }
     },
-    "length of the drum section with the wire": {
+    "length_of_the_drum_section_with_the_wire": {
         "symbol": "L",
         "value": null,
         "absolute_error": null,
@@ -53,7 +53,7 @@
             "symbol": {}
         }
     },
-    "total number of turns": {
+    "total_number_of_turns": {
         "symbol": "N",
         "value": null,
         "unit": ["base",
@@ -68,7 +68,7 @@
             "symbol": {}
         }
     },
-    "Resistance of 40 turns": {
+    "resistance_of_40_turns": {
         "symbol": "R_40",
         "value": null,
         "unit": ["base",
@@ -83,7 +83,7 @@
             "symbol": {}
         }
     },
-    "Groove depth": {
+    "groove_depth": {
         "symbol": "h",
         "value": null,
         "absolute_error": null,

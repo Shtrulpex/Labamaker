@@ -4,7 +4,7 @@
         "value": 4.217666666666666,
         "absolute_error": null,
         "category": "number",
-        "unit": "unit^[-1]*Om"
+        "unit": "unit^-1*Om"
     },
     "mls_koef_b": {
         "symbol": "b",
@@ -32,7 +32,7 @@
         "value": 0.12566370614359174,
         "absolute_error": 0.006283185307179587,
         "category": "length",
-        "unit": "mm^[2]"
+        "unit": "mm^2"
     },
     "circle_length": {
         "symbol": "lc",
@@ -42,14 +42,14 @@
         "unit": "mm"
     },
     "step": {
-        "symbol": "\u0394",
+        "symbol": "step",
         "value": 2.46,
         "absolute_error": 0.01,
         "category": "length",
         "unit": "(mm)/(unit)"
     },
     "circle_length_with_step": {
-        "symbol": "l",
+        "symbol": "turn",
         "value": 501.4042222012618,
         "absolute_error": 3.1337763887578864,
         "category": "length",
@@ -60,6 +60,6 @@
         "value": 0.001057046592636946,
         "absolute_error": 5.28523296318473e-05,
         "category": "number",
-        "unit": "unit^[-1]*Om*m"
+        "unit": "unit^-1*Om*m"
     }
 }
