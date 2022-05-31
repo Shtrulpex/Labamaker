@@ -1,7 +1,5 @@
-import json
-
 from matplotlib.pyplot import figure as fig
-
+import json
 from engine.data.table import *
 
 
@@ -79,15 +77,18 @@ class DataResult(Data):
 
     def get_parameters_dict(self) -> dict:
         d = dict()
-        for parameter in self.get_parameters():
-            d[parameter.get_name()] = parameter
+        for i in self._parameters:
+            d[i.get_name()] = i
         return d
 
     def get_images_dict(self) -> dict:
-        pass
+        return {'graph': f'{self.image_folder()}/graph.png'}
 
     def get_tables_dict(self) -> dict:
-        pass
+        d = dict()
+        for i in self._tables:
+            d[i.name()] = i
+        return d
 
     def image_folder(self):
         return f'{self.folder()}/images'
@@ -97,9 +98,9 @@ class DataResult(Data):
 
     def add_image(self, image: fig):
         self._images.append(image)
-        image.savefig(f'{self.image_folder()}/graph.pdf')
+        image.savefig(f'{self.image_folder()}/graph.png')
 
-    def end(self):
+    def write_json(self):
         d = {}
         for i in self._parameters:
             d[i.get_name()] = i.__dict__()

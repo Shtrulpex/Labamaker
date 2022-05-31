@@ -16,6 +16,8 @@ class Data(Enum):
     l = auto()
     d = auto()
     N = auto()
+    STEP = auto()
+    h = auto()
 
 
 class GraphType(Enum):

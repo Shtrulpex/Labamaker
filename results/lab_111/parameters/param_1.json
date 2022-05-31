@@ -43,15 +43,15 @@
     },
     "circle_length_with_step": {
         "symbol": "l",
-        "value": 502.6608441761578,
-        "absolute_error": 3.1416302761009867,
+        "value": 501.4042222012618,
+        "absolute_error": 3.1337763887578864,
         "category": "length",
         "unit": "mm"
     },
     "resistivity": {
         "symbol": "\u03c1",
-        "value": 0.001054404039527456,
-        "absolute_error": 5.27202019763728e-05,
+        "value": 0.001057046592636946,
+        "absolute_error": 5.28523296318473e-05,
         "category": "number",
         "unit": "unit^[-1]*Om*m"
     }
