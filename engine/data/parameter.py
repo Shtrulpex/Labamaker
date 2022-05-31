@@ -143,12 +143,20 @@ class Parameter:
     @staticmethod
     def __action(first: Parameter, second: Parameter | float | int, action: str):  # '+', '-', '*', '**'
         if action in ('+', '-'):
-            if bool(first.get_unit()) != bool(second.get_unit()):
-                raise RuntimeError(f'incorrect units to add')
-            if action == '+':
-                value = first.get_value() + second.get_value()
+            if type(second) == Parameter:
+                if bool(first.get_unit()) != bool(second.get_unit()):
+                    raise RuntimeError(f'incorrect units to add')
+                if action == '+':
+                    value = first.get_value() + second.get_value()
+                else:
+                    value = first.get_value() - second.get_value()
             else:
-                value = first.get_value() - second.get_value()
+                if not first.get_unit().is_unit():
+                    raise RuntimeError(f'incorrect units to add')
+                if action == '+':
+                    value = first.get_value() + second
+                else:
+                    value = first.get_value() - second
             unit = first.get_unit()
             options = first.get_options()
             symbol = first.get_symbol()
@@ -193,10 +201,10 @@ class Parameter:
         other = Parameter.__get_flipped(other)
         return self * other
 
-    def __add__(self, other: Parameter):
+    def __add__(self, other: Parameter | int | float):
         return Parameter.__action(self, other, '+')
 
-    def __sub__(self, other: Parameter):
+    def __sub__(self, other: Parameter | int | float):
         return Parameter.__action(self, other, '-')
 
     def __pow__(self, power: float):

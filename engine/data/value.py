@@ -36,7 +36,7 @@ class Value:
             self.__abs_err /= 10 ** self.get_multiplier()
 
     @staticmethod
-    def __count_rel_err(action: str, first: Value, second: Value | float, *res_value):  # '*', '/', '+', '-', '**'
+    def __count_rel_err(action: str, first: Value, second: Value | float | int, *res_value):  # '*', '/', '+', '-', '**'
         if action == '*' or action == '/':
             if not first and not second:
                 rel_err = None
@@ -108,13 +108,19 @@ class Value:
         rel_err = Value.__count_rel_err('/', self, other)
         return Value(value, rel_err, multiplier=multiplier)
 
-    def __add__(self, other: Value):
-        value = self.get_value() * 10 ** self.get_multiplier() + other.get_value() * 10 ** other.get_multiplier()
+    def __add__(self, other: Value | float | int):
+        if type(other) == Value:
+            value = self.get_value() * 10 ** self.get_multiplier() + other.get_value() * 10 ** other.get_multiplier()
+        else:
+            value = self.get_value() * 10 ** self.get_multiplier() - other
         rel_err = Value.__count_rel_err('+', self, other, value)
         return Value(value, rel_err)
 
-    def __sub__(self, other: Value):
-        value = self.get_value() * 10 ** self.get_multiplier() - other.get_value() * 10 ** other.get_multiplier()
+    def __sub__(self, other: Value | float | int):
+        if type(other) == Value:
+            value = self.get_value() * 10 ** self.get_multiplier() - other.get_value() * 10 ** other.get_multiplier()
+        else:
+            value = self.get_value() * 10 ** self.get_multiplier() - other
         rel_err = Value.__count_rel_err('-', self, other, value)
         return Value(value, rel_err)
 
