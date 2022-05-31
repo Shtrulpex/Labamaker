@@ -43,22 +43,22 @@
     },
     "step": {
         "symbol": "\u0394",
-        "value": 2.46,
-        "absolute_error": 0.01,
+        "value": 2.510204081632653,
+        "absolute_error": 0.010204081632653062,
         "category": "length",
         "unit": "(mm)/(unit)"
     },
     "circle_length_with_step": {
         "symbol": "l",
-        "value": 501.4042222012618,
-        "absolute_error": 3.1337763887578864,
+        "value": 501.4044710269183,
+        "absolute_error": 3.13377794391824,
         "category": "length",
         "unit": "mm"
     },
     "resistivity": {
         "symbol": "\u03c1",
-        "value": 0.001057046592636946,
-        "absolute_error": 5.28523296318473e-05,
+        "value": 0.0010570460680698,
+        "absolute_error": 5.285230340349e-05,
         "category": "number",
         "unit": "unit^[-1]*Om*m"
     }
