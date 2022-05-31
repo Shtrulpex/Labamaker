@@ -31,7 +31,8 @@ class Template:
         parameters = self.data_result.get_parameters_dict()
         tables = self.data_result.get_tables_dict()
 
-
+        r = 2
+        pi = 3.14
         with doc.create(Section(bold('Data Processing'))):
             with doc.create(Itemize()) as itemize:
                 itemize.add_item('Wire resistivity: ')
