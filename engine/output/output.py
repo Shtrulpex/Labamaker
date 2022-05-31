@@ -1,36 +1,63 @@
 from pylatex import Document, Section, Subsection, Tabular
-from pylatex import Math, TikZ, Axis, Plot, Figure, Matrix, Alignat
-from pylatex.utils import italic
+from pylatex import Math, Alignat, Itemize, Command
+from pylatex.utils import italic, bold
+
 import os
 
-if __name__ == '__main__':
-    image_filename = os.path.join(os.path.dirname(__file__), 'kitten.jpg')
 
-    geometry_options = {"tmargin": "1cm", "lmargin": "10cm"}
-    doc = Document(geometry_options=geometry_options)
+class Template:
+    def __init__(self,
+                 lab: str,
+                 geometry_options=None
+                 ):
+        if geometry_options is None:
+            geometry_options = {"tmargin": "1.5cm", "lmargin": "2cm", "rmargin": "2cm"}
+        self.__geomytry_options = geometry_options
+        self.__doc = Document(geometry_options=geometry_options)
+        self.result_path = None
+        self.result_filename = None
+        self.__load_template(lab)
 
-    # creating a pdf with title "the simple stuff"
-    with doc.create(Section('The simple stuff')):
-        doc.append('Some regular text and some')
-        doc.append(italic('italic text. '))
-        doc.append('\nAlso some crazy characters: $&#{}')
-        with doc.create(Subsection('Math that is incorrect')):
-            doc.append(Math(data=['2*3', '=', 9]))
+    def get_pdf(self, **parameters):
+        self.__fill(**parameters)
+        self.__generate_pdf()
 
-        # creating subsection of a pdf
-        with doc.create(Subsection('Table of something')):
-            with doc.create(Tabular('rc|cl')) as table:
-                table.add_hline()
-                table.add_row((1, 2, 3, 4))
-                table.add_hline(1, 2)
-                table.add_empty_row()
-                table.add_row((4, 5, 6, 7))
+    def __fill(self, **kwargs):
+        r = 2
+        pi = 3.14
+        doc = self.__doc
+        with doc.create(Section(bold('Data Processing'))):
+            with doc.create(Itemize()) as itemize:
+                itemize.add_item('Wire resistivity: ')
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    agn.append(r'\rho =\frac{RS}{l}')
+            with doc.create(Subsection(bold('Wire section area'))):
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    agn.append(r'S=\frac{\pi d^2}{4}=')
+                    s = f'{r}^2'
+                    agn.append(fr'\frac{pi}{s}')
 
-    # making a pdf using .generate_pdf
-    doc.generate_pdf('full', clean_tex=True)
+            with doc.create(Subsection(bold('Turn length'))):
+                pass
 
+            with doc.create(Subsection(bold('LSM'))):
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
+                    agn.append(italic(r'b=0'))
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
+                    agn.append(italic(r'b=0'))
 
-class Output:
-    def __init__(self, ):
-        pass
+    def __generate_pdf(self):
+        current_file = os.getcwd()
+        os.chdir(self.result_path)
+        self.__doc.generate_pdf(self.result_filename, clean_tex=True)
+        os.chdir(current_file)
 
+    # load template from file,
+    # set Template attributes:
+    #   - self.result_path
+    #   - self.result_filename
+    def __load_template(self, lab: str):
+        self.result_path = './results/lab_111'
+        self.result_filename = 'lab_111_result'

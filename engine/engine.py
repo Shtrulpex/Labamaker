@@ -1,11 +1,13 @@
 from engine.data.data import *
 from engine.data_processing.data_processing import *
+from engine.output.output import *
 from engine.visualization.visualization import *
 
 
 class Lab:
-    def __init__(self, data_controller: DataController):
+    def __init__(self, data_controller: DataController, template: Template):
         self.data = data_controller
+        self.template = template
 
     def make_lab(self):
         pass
@@ -17,8 +19,16 @@ class Lab:
         for i in params:
             self.data.result.add_parameter(i)
 
+    def end_lab(self):
+        self.data.result.end()
+        parameters = self.data.result.get_parameters_dict()
+        self.template.get_pdf(**parameters)
+
 
 class Lab111(Lab):
+    def __init__(self):
+        super(Lab111, self).__init__(DataController('lab_111'), Template('lab_111'))
+
     def make_lab(self):
         params = self.data.material.get_parameters()
         tables = self.data.material.get_tables()
@@ -45,4 +55,4 @@ class Lab111(Lab):
 
         for i in self.data.result.get_parameters():
             print(i)
-        self.data.result.end()
+        self.end_lab()
