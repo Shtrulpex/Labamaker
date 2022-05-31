@@ -1,7 +1,6 @@
 from engine.data.data import *
 from engine.data_processing.data_processing import *
 from engine.visualization.visualization import *
-from math import pi
 
 
 class Laba:
@@ -46,3 +45,4 @@ class Laba111(Laba):
 
         for i in self.data.result.get_parameters():
             print(i)
+        self.data.result.end()
