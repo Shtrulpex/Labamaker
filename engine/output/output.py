@@ -1,27 +1,3 @@
-# from pylatex import Document, Section, Subsection
-# from pylatex import Math
-# from pylatex.utils import italic, bold
-#
-# import os
-#
-#
-# class Doc:
-#     def __init__(self, result_path: str):
-#         self.__path = result_path
-#
-#     def generate_pdf(self):
-#         pass
-#
-#
-#
-
-
-# Python program creating a
-# small document using pylatex
-
-import numpy as np
-
-# importing from a pylatex module
 from pylatex import Document, Section, Subsection, Tabular
 from pylatex import Math, TikZ, Axis, Plot, Figure, Matrix, Alignat
 from pylatex.utils import italic
@@ -52,3 +28,9 @@ if __name__ == '__main__':
 
     # making a pdf using .generate_pdf
     doc.generate_pdf('full', clean_tex=True)
+
+
+class Output:
+    def __init__(self, ):
+        pass
+
