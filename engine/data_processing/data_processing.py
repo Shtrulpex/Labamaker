@@ -1,4 +1,7 @@
+import unicodedata
+
 import numpy as np
+from math import pi
 from engine.enums import *
 
 
@@ -8,7 +11,7 @@ class Method:
         self.args = arguments
         self.sequence = sequence
 
-    def calc(self):
+    def do(self):
         for i in self.sequence:
             self.result = i.do(self.result)
         return self.result
@@ -89,6 +92,57 @@ class Divide(CalcData):
         return d
 
 
+class CalcCircleSquare(CalcData):
+    @staticmethod
+    def do(d):
+        s = d[Data.d] ** 2 * pi * 0.25
+        s.set_symbol('S')
+        s.set_name('circle_square')
+        d[Data.S] = s
+        return d
+
+
+class CalcStep(CalcData):
+    @staticmethod
+    def do(d):
+        step = d[Data.L] / d[Data.N]
+        step.set_symbol('Δ')
+        step.set_name('step')
+        d[Data.RESULT] = step
+        return d
+
+
+class CalcCircleL(CalcData):
+    @staticmethod
+    def do(d):
+        l = d[Data.D] * pi
+        l.set_symbol('l')
+        l.set_name('circle_length')
+        d[Data.l] = l
+        return d
+
+
+class CalcCirclenStep(CalcData):
+    @staticmethod
+    def do(d):
+        l = d[Data.l] ** 2 + d[Data.RESULT] ** 2
+        l = l ** 0.5
+        l.set_symbol('l')
+        l.set_name('circle_length_with_step')
+        d[Data.l] = l
+        return d
+
+
+class CalcResistivity(CalcData):
+    @staticmethod
+    def do(d):
+        p = d[Data.K] * d[Data.S] / d[Data.l]
+        p.set_symbol('ρ')
+        p.set_name('resistivity')
+        d[Data.P] = p
+        return d
+
+
 class MLS(Method):
     def __init__(self, arguments):
         super().__init__(CalcData.do(arguments), arguments, [CalcData, CalcK, CalcB, CalcDK, CalcDB])
@@ -97,3 +151,8 @@ class MLS(Method):
 class Division(Method):
     def __init__(self, arguments):
         super().__init__(CalcData.do(arguments), arguments, [CalcData, Divide])
+
+
+class Resistivity(Method):
+    def __init__(self, arguments, circle_wire=True, use_mls=True):
+        super().__init__(CalcData.do(arguments), arguments, [CalcData, CalcK, CalcCircleSquare, CalcStep, CalcCircleL, CalcCirclenStep, CalcResistivity])

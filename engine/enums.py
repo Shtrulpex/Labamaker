@@ -9,6 +9,13 @@ class Data(Enum):
     DK = auto()
     DB = auto()
     RESULT = auto()
+    S = auto()
+    L = auto()
+    D = auto()
+    P = auto()
+    l = auto()
+    d = auto()
+    N = auto()
 
 
 class GraphType(Enum):
