@@ -24,8 +24,8 @@ class Lab:
             self.data.result.add_table(i)
 
     def __prepare_data(self):
-        self._add_params(*self.data.source.get_parameters())
-        self._add_tables(*self.data.source.get_tables())
+        self._add_params(*self.data.material.get_parameters())
+        self._add_tables(*self.data.material.get_tables())
 
     def end_lab(self):
         self.data.result.write_json()
