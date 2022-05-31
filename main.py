@@ -1,4 +1,4 @@
 from engine.engine import *
 
-Laba111(DataController('Lab_111')).make_laba()
+Laba111(DataController('lab_111')).make_laba()
 

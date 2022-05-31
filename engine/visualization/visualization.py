@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from enums import *
+from engine.enums import *
 
 
 class Visualizator:
@@ -30,10 +30,10 @@ class MLSLine(Graph):
         fig, ax = plt.subplots(1, 1, figsize=(self.size_x, self.size_y), dpi=self.dpi)
         if self.grid:
             ax.grid()
-        x = np.array(list(map(lambda x: x.get_value(), self.args[Data.X])))
-        y = np.array(list(map(lambda x: x.get_value(), self.args[Data.Y])))
-        k = self.args[Data.K].get_value()
-        b = self.args[Data.B].get_value()
+        x = np.array(list(map(lambda x: x.get_number(), self.args[Data.X])))
+        y = np.array(list(map(lambda x: x.get_number(), self.args[Data.Y])))
+        k = self.args[Data.K].get_number()
+        b = self.args[Data.B].get_number()
         ax.plot(x, k*x + b)
         ax.scatter(x, y)
         return fig

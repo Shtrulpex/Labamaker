@@ -82,6 +82,9 @@ class Parameter:
     def get_value(self):
         return self.__value
 
+    def get_number(self):
+        return self.get_value().get_value() * 10 ** self.get_multiplier()
+
     def get_symbol(self):
         return self.__symbol
 
@@ -135,7 +138,7 @@ class Parameter:
             symbol = obj.get_symbol() + '^[-1]'
             parameter = Parameter(value, unit, symbol, symbol, options=options)
             return parameter
-        elif type(obj) in (int, float):
+        else:
             if obj == 0:
                 raise RuntimeError(f'Division by zero')
             return 1 / obj
@@ -159,13 +162,10 @@ class Parameter:
                 value = first.get_value() * second.get_value()
                 unit = first.get_unit() * second.get_unit()
                 symbol = first.get_symbol() + second.get_symbol()
-            elif type(second) in (float, int):
+            else:
                 value = first.get_value() * second
                 unit = first.get_unit()
                 symbol = first.get_symbol()
-            else:
-                raise RuntimeError(f'Incorrect operators of mul:'
-                                   f'Parameter and {type(second)}')
             options = first.get_options()
             parameter = Parameter(value, unit, symbol, symbol, options=options)
             return parameter
