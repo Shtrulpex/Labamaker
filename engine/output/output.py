@@ -43,8 +43,8 @@ class Template:
             with doc.create(Subsection(bold('Wire section area'))):
                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
                     agn.append(r'S=\frac{\pi d^2}{4}=')
-                    s = f'{r}^2'
-                    agn.append(fr'\frac{pi}{s}')
+                    pi_d2 = f'{pi} * ({parameters["wire_diameter"].get_value()})^2'
+                    agn.append(fr'\frac{pi_d2}{4}')
 
             with doc.create(Subsection(bold('Turn length'))):
                 pass

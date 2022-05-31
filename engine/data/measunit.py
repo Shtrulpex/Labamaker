@@ -176,6 +176,9 @@ class BaseMeasUnit:
         else:
             self.set_prefix("")
 
+    def is_unit(self):
+        return self.get_category() == 'unit'
+
     def __update_multiplier(self, n: int = None):
         if n is None:
             n = self.get_prefix().get_multiplier()
@@ -342,7 +345,9 @@ class DerivedMeasUnit:
         self.__update_multipliers()
 
     def is_unit(self):
-        return not self.numerator() and not self.denominator()
+        v1 = not self.numerator() and not self.denominator()
+        v2 = not self.denominator() and len(self.numerator()) == 1 and self.numerator()[0].is_unit()
+        return v1 or v2
 
     def __get_flipped(self):
         unit = DerivedMeasUnit.copy(self)

@@ -1,0 +1,14 @@
+mls_koef_k = a - мнк
+k_error - погрешность мнк
+circle_square - площадь сечения провода
+step - длина шага
+circle_length_with_step - длина витка(учитывая шаг)
+resistivity - удельное сопротивление
+circle_length - просто длина окружности
+
+    "wire_diameter"
+    "reochord_drum"
+    "length of the drum section with the wire"
+    "total number of turns":
+    "Resistance of 40 turns"
+    "Groove depth"
