@@ -1,5 +1,5 @@
 from pylatex import Document, Section, Subsection, Tabular
-from pylatex import Math, Alignat, Itemize, Command
+from pylatex import Alignat, Itemize
 from pylatex.utils import italic, bold
 
 from engine.data.data import *
@@ -12,34 +12,38 @@ def to_fixed(num: float, digits=3):
 class Template:
     def __init__(self,
                  lab: str,
-                 data_result: DataResult,
                  geometry_options=None
                  ):
         if geometry_options is None:
             geometry_options = {"tmargin": "1.5cm", "lmargin": "2cm", "rmargin": "2cm"}
         self.__geomytry_options = geometry_options
         self.__doc = Document(geometry_options=geometry_options)
-        self.data_result = data_result
         self.result_path = None
         self.result_filename = None
         self.__load_template(lab)
 
-    def write_pdf(self):
-        self.__fill()
+    def write_pdf(self, **kwargs):
+        self.__fill(**kwargs)
         self.__generate_pdf()
 
-    def __fill(self):
+    def __fill(self, **kwargs):
         doc = self.__doc
-        images = self.data_result.get_images_dict()
-        parameters = self.data_result.get_parameters_dict()
-        tables = self.data_result.get_tables_dict()
+        images = kwargs['images']
+        parameters = kwargs['parameters']
+        tables = kwargs['tables']
 
-        def write_res(alignant, parameter: Parameter):
-            alignant.append(fr'{to_fixed(parameter.get_value())} \pm')
-            alignant.append(fr'{to_fixed(parameter.get_abs_err())}')
-            alignant.append(fr'{parameter.get_unit()}\\')
-            alignant.append(fr'\sigma_({parameter.get_symbol()}) ='
-                            fr'{to_fixed(parameter.get_rel_err() * 100, digits=2)} \% \\')
+        def write_res(alignant, parameter: Parameter, digit=3, shift=True, abs_err=0):
+            if shift:
+                alignant.append(fr'{to_fixed(parameter.get_value())} \pm')
+                alignant.append(fr'{to_fixed(parameter.get_abs_err(), digits=digit)}')
+                alignant.append(fr'{parameter.get_unit()}\\')
+                alignant.append(fr'\sigma({parameter.get_symbol()}) ='
+                                fr'{to_fixed(parameter.get_rel_err() * 100, digits=2)} \% \\')
+            else:
+                alignant.append(fr'{to_fixed(parameter.get_value())} \pm')
+                alignant.append(fr'{to_fixed(abs_err.get_value())}')
+                alignant.append(fr'{parameter.get_unit()}\\')
+
 
         pi = 3.14
         with doc.create(Section(bold('Data Processing'))):
@@ -68,6 +72,7 @@ class Template:
                     cl = parameters["circle_length"]
                     D = parameters["reochord_drum"]
                     h = parameters["groove_depth"]
+
                     agn.append(r'l_{step}=\frac{L}{N}=')
                     agn.append(fr'{L.get_value()}/{n.get_value()}=')
                     write_res(agn, step)
@@ -81,8 +86,24 @@ class Template:
 
             with doc.create(Subsection(bold('LSM'))):
                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    k = parameters["mls_koef_k"]
+                    dk = parameters["k_error"]
+
                     agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
                     agn.append(italic(r'b=0'))
+                    agn.append(r'\\k=\frac{<{R_n}> - <n><{R_n}>}{<n^2> - <n>^2}=')
+                    write_res(agn, k, shift=False, abs_err=dk)
+
+            with doc.create(Subsection(bold('Resistivity'))):
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    p = parameters['resistivity']
+                    k = parameters['mls_koef_k']
+                    s = parameters['circle_square']
+                    l = parameters['circle_length_with_step']
+
+                    agn.append(r'\rho=\frac{S*a}{l}=')
+                    agn.append(fr'{to_fixed(s.get_value())} * {to_fixed(k.get_value())}/{to_fixed(l.get_value())}=')
+                    write_res(agn, p, digit=7)
 
     def __generate_pdf(self):
         current_file = os.getcwd()

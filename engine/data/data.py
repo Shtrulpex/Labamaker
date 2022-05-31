@@ -101,7 +101,12 @@ class DataResult(Data):
         return d
 
     def write_pdf(self):
-        return self._template.write_pdf()
+        d = {
+            'images': self.get_images_dict(),
+            'parameters': self.get_parameters_dict(),
+            'tables': self.get_tables_dict()
+        }
+        return self._template.write_pdf(**d)
 
     def write_json(self):
         d = {}
@@ -121,6 +126,16 @@ class DataResult(Data):
     def add_image(self, image: fig):
         self._images.append(image)
         image.savefig(f'{self.image_folder()}/graph.png')
+
+    def __read_template(self):
+        self._template = Template('lab_111')
+
+
+class DataMaterial(Data):
+    def __init__(self, folder: str):
+        super(DataMaterial, self).__init__(folder)
+        self._read_tables()
+        self._read_parameters()
 
     def __read_template(self):
         self._template = Template('lab_111', self)

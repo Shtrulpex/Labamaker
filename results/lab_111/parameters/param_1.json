@@ -3,8 +3,8 @@
         "symbol": "k",
         "value": 4.217666666666666,
         "absolute_error": null,
-        "category": "number",
-        "unit": "unit^-1*Om"
+        "category": "resistance",
+        "unit": "Om*unit^-1"
     },
     "mls_koef_b": {
         "symbol": "b",
@@ -15,14 +15,14 @@
     },
     "k_error": {
         "symbol": "dk",
-        "value": 1.331297437718846,
+        "value": 0.01331297437718846,
         "absolute_error": null,
         "category": "resistance",
         "unit": "(Om)/(unit)"
     },
     "b_error": {
         "symbol": "db",
-        "value": 15.29544306430294,
+        "value": 0.1529544306430294,
         "absolute_error": null,
         "category": "resistance",
         "unit": "(Om)/()"
@@ -35,7 +35,7 @@
         "unit": "mm^2"
     },
     "circle_length": {
-        "symbol": "lc",
+        "symbol": "circle",
         "value": 501.398187512931,
         "absolute_error": 3.1337386719558187,
         "category": "length",
@@ -56,10 +56,10 @@
         "unit": "mm"
     },
     "resistivity": {
-        "symbol": "\u03c1",
+        "symbol": "\\rho",
         "value": 0.001057046592636946,
         "absolute_error": 5.28523296318473e-05,
-        "category": "number",
-        "unit": "unit^-1*Om*m"
+        "category": "resistance",
+        "unit": "Om*unit^-1*m"
     }
 }
