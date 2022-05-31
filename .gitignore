@@ -4,3 +4,4 @@ engine/__pycache__/
 *.pyc
 
 results/lab_111/images/graph.pdf
+engine/output/new_full.pdf
