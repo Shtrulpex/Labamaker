@@ -148,7 +148,7 @@ class MLS(Method):
         super().__init__(CalcData.do(arguments), arguments, [CalcData, CalcK, CalcB, CalcDK, CalcDB])
 
 
-class Division(Method):
+class Fraction(Method):
     def __init__(self, arguments):
         super().__init__(CalcData.do(arguments), arguments, [CalcData, Divide])
 
