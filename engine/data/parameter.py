@@ -120,9 +120,6 @@ class Parameter:
         self.__unit.to_si()
         self.__update_multiplier()
 
-    def to_json(self, file: str):
-        pass
-
     def __update_multiplier(self):
         self.__multiplier = self.get_value().get_multiplier() +\
                             self.get_unit().get_rel_multiplier()
@@ -212,3 +209,10 @@ class Parameter:
     def __lshift__(self, n: int):
         self.__value << n
         self.__update_multiplier()
+
+    def __dict__(self):
+        return {'symbol': self.__symbol,
+                'value': self.get_number(),
+                'absolute_error': self.__value.get_abs_err(),
+                'category': self.__unit.get_category(),
+                'unit': self.get_unit().__str__()}
