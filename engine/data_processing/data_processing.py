@@ -103,7 +103,7 @@ class CalcCircleSquare(CalcData):
 class CalcStep(CalcData):
     @staticmethod
     def do(d):
-        step = d[Data.L] / d[Data.N]
+        step = d[Data.L] / (d[Data.N])
         step.set_symbol('Δ')
         step.set_name('step')
         d[Data.STEP] = step
