@@ -14,6 +14,10 @@ class Laba:
     def get_userdata(self):
         return self.data.source.get_tables()
 
+    def add_params(self, *params):
+        for i in params:
+            self.data.result.add_parameter(i)
+
 
 class Laba111(Laba):
     def make_laba(self):
@@ -29,10 +33,7 @@ class Laba111(Laba):
                         Data.Y: resistance_table['R'].to_numpy()}).do()
         figure = Visualizator.illustrate(mls_args, GraphType.MLS)
         self.data.result.add_image(figure)
-        self.data.result.add_parameter(mls_args[Data.K])
-        self.data.result.add_parameter(mls_args[Data.B])
-        self.data.result.add_parameter(mls_args[Data.DK])
-        self.data.result.add_parameter(mls_args[Data.DB])
+        self.add_params(mls_args[Data.K], mls_args[Data.B], mls_args[Data.DK], mls_args[Data.DB])
 
         p = {Data.X: resistance_table['N'].to_numpy(),
              Data.Y: resistance_table['R'].to_numpy(),
@@ -41,10 +42,7 @@ class Laba111(Laba):
              Data.N: params[3],
              Data.D: params[1]}
         p = Resistivity(p).do()
-        self.data.result.add_parameter(p[Data.S])
-        self.data.result.add_parameter(p[Data.RESULT])
-        self.data.result.add_parameter(p[Data.l])
-        self.data.result.add_parameter(p[Data.P])
+        self.add_params(p[Data.S], p[Data.RESULT], p[Data.l], p[Data.P])
 
         for i in self.data.result.get_parameters():
             print(i)
