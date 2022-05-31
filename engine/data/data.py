@@ -75,8 +75,19 @@ class DataResult(Data):
     def __init__(self, folder: str):
         super().__init__(folder)
         self._images = []
-        self._texts = []
         self.__read_texts()
+
+    def get_parameters_dict(self) -> dict:
+        d = dict()
+        for parameter in self.get_parameters():
+            d[parameter.get_name()] = parameter
+        return d
+
+    def get_images_dict(self) -> dict:
+        pass
+
+    def get_tables_dict(self) -> dict:
+        pass
 
     def image_folder(self):
         return f'{self.folder()}/images'
@@ -92,9 +103,9 @@ class DataResult(Data):
         d = {}
         for i in self._parameters:
             d[i.get_name()] = i.__dict__()
-        jsonText = json.dumps(d, indent=4)
+        json_text = json.dumps(d, indent=4)
         f = open(f'{self.parameter_folder()}/param_1.json', 'w', encoding='utf8')
-        f.write(jsonText)
+        f.write(json_text)
         f.close()
 
     def __read_texts(self):
