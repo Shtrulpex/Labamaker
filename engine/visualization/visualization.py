@@ -34,6 +34,8 @@ class MLSLine(Graph):
         y = np.array(list(map(lambda x: x.get_number(), self.args[Data.Y])))
         k = self.args[Data.K].get_number()
         b = self.args[Data.B].get_number()
+        plt.xlabel(self.args[Data.X][0].get_symbol() + ', ' + str(self.args[Data.X][0].get_unit()))
+        plt.ylabel(self.args[Data.Y][0].get_symbol() + ', ' + str(self.args[Data.Y][0].get_unit()))
         ax.plot(x, k*x + b)
         ax.scatter(x, y)
         return fig
