@@ -177,7 +177,7 @@ class BaseMeasUnit:
             self.set_prefix("")
 
     def is_unit(self):
-        return self.get_category() == 'unit'
+        return self.get_category() == 'number'
 
     def __update_multiplier(self, n: int = None):
         if n is None:
