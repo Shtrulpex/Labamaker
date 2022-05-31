@@ -341,6 +341,9 @@ class DerivedMeasUnit:
             unit.to_si()
         self.__update_multipliers()
 
+    def is_unit(self):
+        return not self.numerator() and not self.denominator()
+
     def __get_flipped(self):
         unit = DerivedMeasUnit.copy(self)
         unit.__denominator, unit.__numerator = unit.__numerator, unit.__denominator

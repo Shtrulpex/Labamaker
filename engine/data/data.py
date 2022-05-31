@@ -26,7 +26,7 @@ class Data:
 
     def add_table(self, table_: Table):
         self._tables.append(table_)
-        table_.to_csv(self.table_folder())
+        # table_.to_csv(self.table_folder())
 
     def add_parameter(self, parameter: Parameter):
         self._parameters.append(parameter)

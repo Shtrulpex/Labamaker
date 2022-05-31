@@ -30,13 +30,16 @@ class Template:
         parameters = self.data_result.get_parameters_dict()
         tables = self.data_result.get_tables_dict()
 
-        r = 2
         pi = 3.14
+        r = 2
         with doc.create(Section(bold('Data Processing'))):
             with doc.create(Itemize()) as itemize:
                 itemize.add_item('Wire resistivity: ')
                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
                     agn.append(r'\rho =\frac{RS}{l}')
+                itemize.add_item('Wire section area')
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    agn.append(r'S=\frac{\pi d^2}{4}')
             with doc.create(Subsection(bold('Wire section area'))):
                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
                     agn.append(r'S=\frac{\pi d^2}{4}=')
@@ -47,9 +50,6 @@ class Template:
                 pass
 
             with doc.create(Subsection(bold('LSM'))):
-                with doc.create(Alignat(numbering=False, escape=False)) as agn:
-                    agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
-                    agn.append(italic(r'b=0'))
                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
                     agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
                     agn.append(italic(r'b=0'))
