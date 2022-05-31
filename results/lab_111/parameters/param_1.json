@@ -34,6 +34,13 @@
         "category": "length",
         "unit": "mm^[2]"
     },
+    "circle_length": {
+        "symbol": "lc",
+        "value": 501.398187512931,
+        "absolute_error": 3.1337386719558187,
+        "category": "length",
+        "unit": "mm"
+    },
     "step": {
         "symbol": "\u0394",
         "value": 2.46,

@@ -62,7 +62,7 @@ class Lab111(Lab):
              Data.N: params[3],
              Data.D: params[1]}
         p = Resistivity(p).do()
-        self._add_params(p[Data.S], p[Data.STEP], p[Data.l], p[Data.P])
+        self._add_params(p[Data.S], p[Data.lc], p[Data.STEP], p[Data.l], p[Data.P])
 
         for i in self.data.result.get_parameters():
             print(i)
