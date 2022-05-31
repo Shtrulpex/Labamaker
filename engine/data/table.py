@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 from engine.data.parameter import *
-from engine.data.value import *
+# from engine.data.value import *
 
 
 class Table:

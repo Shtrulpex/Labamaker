@@ -3,11 +3,11 @@ from engine.data_processing.data_processing import *
 from engine.visualization.visualization import *
 
 
-class Laba:
+class Lab:
     def __init__(self, data_controller: DataController):
         self.data = data_controller
 
-    def make_laba(self):
+    def make_lab(self):
         pass
 
     def get_userdata(self):
@@ -18,8 +18,8 @@ class Laba:
             self.data.result.add_parameter(i)
 
 
-class Laba111(Laba):
-    def make_laba(self):
+class Lab111(Lab):
+    def make_lab(self):
         params = self.data.material.get_parameters()
         tables = self.data.material.get_tables()
         resistance_table = tables[0]
@@ -41,7 +41,7 @@ class Laba111(Laba):
              Data.N: params[3],
              Data.D: params[1]}
         p = Resistivity(p).do()
-        self.add_params(p[Data.S], p[Data.RESULT], p[Data.l], p[Data.P])
+        self.add_params(p[Data.S], p[Data.STEP], p[Data.l], p[Data.P])
 
         for i in self.data.result.get_parameters():
             print(i)

@@ -1,7 +1,5 @@
-import json
-
 from matplotlib.pyplot import figure as fig
-
+import json
 from engine.data.table import *
 
 

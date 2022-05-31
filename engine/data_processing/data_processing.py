@@ -1,5 +1,3 @@
-import unicodedata
-
 import numpy as np
 from math import pi
 from engine.enums import *
@@ -7,14 +5,14 @@ from engine.enums import *
 
 class Method:
     def __init__(self, result, arguments, sequence):
-        self.result = result
-        self.args = arguments
-        self.sequence = sequence
+        self.__result = result
+        self.__args = arguments
+        self.__sequence = sequence
 
     def do(self):
-        for i in self.sequence:
-            self.result = i.do(self.result)
-        return self.result
+        for i in self.__sequence:
+            self.__result = i.do(self.__result)
+        return self.__result
 
 
 class CalcData:
@@ -108,7 +106,7 @@ class CalcStep(CalcData):
         step = d[Data.L] / d[Data.N]
         step.set_symbol('Δ')
         step.set_name('step')
-        d[Data.RESULT] = step
+        d[Data.STEP] = step
         return d
 
 
@@ -125,7 +123,7 @@ class CalcCircleL(CalcData):
 class CalcCirclenStep(CalcData):
     @staticmethod
     def do(d):
-        l = d[Data.l] ** 2 + d[Data.RESULT] ** 2
+        l = d[Data.l] ** 2 + d[Data.STEP] ** 2
         l = l ** 0.5
         l.set_symbol('l')
         l.set_name('circle_length_with_step')
