@@ -73,14 +73,19 @@ class DataResult(Data):
     def __init__(self, folder: str):
         super().__init__(folder)
         self._images = []
-        self._texts = []
         self.__read_texts()
 
-    def get_parameters_dict(self):
+    def get_parameters_dict(self) -> dict:
         d = dict()
         for parameter in self.get_parameters():
             d[parameter.get_name()] = parameter
         return d
+
+    def get_images_dict(self) -> dict:
+        pass
+
+    def get_tables_dict(self) -> dict:
+        pass
 
     def image_folder(self):
         return f'{self.folder()}/images'

@@ -2,30 +2,36 @@ from pylatex import Document, Section, Subsection, Tabular
 from pylatex import Math, Alignat, Itemize, Command
 from pylatex.utils import italic, bold
 
-import os
+from engine.data.data import *
 
 
 class Template:
     def __init__(self,
                  lab: str,
+                 data_result: DataResult,
                  geometry_options=None
                  ):
         if geometry_options is None:
             geometry_options = {"tmargin": "1.5cm", "lmargin": "2cm", "rmargin": "2cm"}
         self.__geomytry_options = geometry_options
         self.__doc = Document(geometry_options=geometry_options)
+        self.data_result = data_result
         self.result_path = None
         self.result_filename = None
         self.__load_template(lab)
 
-    def get_pdf(self, **parameters):
-        self.__fill(**parameters)
+    def get_pdf(self):
+        self.__fill()
         self.__generate_pdf()
 
-    def __fill(self, **kwargs):
+    def __fill(self):
+        doc = self.__doc
+        images = self.data_result.get_images_dict()
+        parameters = self.data_result.get_parameters_dict()
+        tables = self.data_result.get_tables_dict()
+
         r = 2
         pi = 3.14
-        doc = self.__doc
         with doc.create(Section(bold('Data Processing'))):
             with doc.create(Itemize()) as itemize:
                 itemize.add_item('Wire resistivity: ')
@@ -54,8 +60,8 @@ class Template:
         self.__doc.generate_pdf(self.result_filename, clean_tex=True)
         os.chdir(current_file)
 
-    # load template from file,
-    # set Template attributes:
+    # load template from file!!!!
+    # and set Template attributes:
     #   - self.result_path
     #   - self.result_filename
     def __load_template(self, lab: str):

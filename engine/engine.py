@@ -1,6 +1,6 @@
 from engine.data.data import *
-from engine.data_processing.data_processing import *
 from engine.output.output import *
+from engine.data_processing.data_processing import *
 from engine.visualization.visualization import *
 
 
@@ -21,13 +21,14 @@ class Lab:
 
     def end_lab(self):
         self.data.result.end()
-        parameters = self.data.result.get_parameters_dict()
-        self.template.get_pdf(**parameters)
+        self.template.get_pdf()
 
 
 class Lab111(Lab):
     def __init__(self):
-        super(Lab111, self).__init__(DataController('lab_111'), Template('lab_111'))
+        dc = DataController('lab_111')
+        data_result = dc.result
+        super(Lab111, self).__init__(dc, Template('lab_111', data_result))
 
     def make_lab(self):
         params = self.data.material.get_parameters()
