@@ -39,7 +39,7 @@
     },
     "length of the drum section with the wire": {
         "symbol": "L",
-        "value": 132,
+        "value": 123,
         "absolute_error": 0.5,
         "category": "length",
         "unit": ["base",
