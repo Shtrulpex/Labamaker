@@ -1,3 +1,5 @@
+import json
+
 from matplotlib.pyplot import figure as fig
 
 from engine.data.table import *
@@ -30,7 +32,6 @@ class Data:
 
     def add_parameter(self, parameter: Parameter):
         self._parameters.append(parameter)
-        parameter.to_json(self.parameter_folder())
 
     def _read_tables(self):
         path = self.table_folder()
@@ -87,6 +88,14 @@ class DataResult(Data):
         self._images.append(image)
         image.savefig(f'{self.image_folder()}/graph.pdf')
 
+    def end(self):
+        d = {}
+        for i in self._parameters:
+            d[i.get_name()] = i.__dict__()
+        jsonText = json.dumps(d, indent=4)
+        f = open(f'{self.parameter_folder()}/param_1.json', 'w', encoding='utf8')
+        f.write(jsonText)
+        f.close()
 
     def __read_texts(self):
         pass
