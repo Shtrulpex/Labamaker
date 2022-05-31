@@ -1,5 +1,5 @@
 from pylatex import Document, Section, Subsection, Tabular
-from pylatex import Math, Alignat, Itemize, Command
+from pylatex import Alignat, Itemize
 from pylatex.utils import italic, bold
 
 from engine.data.data import *
@@ -34,12 +34,18 @@ class Template:
         parameters = self.data_result.get_parameters_dict()
         tables = self.data_result.get_tables_dict()
 
-        def write_res(alignant, parameter: Parameter):
-            alignant.append(fr'{to_fixed(parameter.get_value())} \pm')
-            alignant.append(fr'{to_fixed(parameter.get_abs_err())}')
-            alignant.append(fr'{parameter.get_unit()}\\')
-            alignant.append(fr'\sigma_({parameter.get_symbol()}) ='
-                            fr'{to_fixed(parameter.get_rel_err() * 100, digits=2)} \% \\')
+        def write_res(alignant, parameter: Parameter, digit=3, shift=True, abs_err=0):
+            if shift:
+                alignant.append(fr'{to_fixed(parameter.get_value())} \pm')
+                alignant.append(fr'{to_fixed(parameter.get_abs_err(), digits=digit)}')
+                alignant.append(fr'{parameter.get_unit()}\\')
+                alignant.append(fr'\sigma({parameter.get_symbol()}) ='
+                                fr'{to_fixed(parameter.get_rel_err() * 100, digits=2)} \% \\')
+            else:
+                alignant.append(fr'{to_fixed(parameter.get_value())} \pm')
+                alignant.append(fr'{to_fixed(abs_err.get_value())}')
+                alignant.append(fr'{parameter.get_unit()}\\')
+
 
         pi = 3.14
         with doc.create(Section(bold('Data Processing'))):
@@ -68,6 +74,7 @@ class Template:
                     cl = parameters["circle_length"]
                     D = parameters["reochord_drum"]
                     h = parameters["groove_depth"]
+
                     agn.append(r'l_{step}=\frac{L}{N}=')
                     agn.append(fr'{L.get_value()}/{n.get_value()}=')
                     write_res(agn, step)
@@ -81,8 +88,24 @@ class Template:
 
             with doc.create(Subsection(bold('LSM'))):
                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    k = parameters["mls_koef_k"]
+                    dk = parameters["k_error"]
+
                     agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
                     agn.append(italic(r'b=0'))
+                    agn.append(r'\\k=\frac{<{R_n}> - <n><{R_n}>}{<n^2> - <n>^2}=')
+                    write_res(agn, k, shift=False, abs_err=dk)
+
+            with doc.create(Subsection(bold('Resistivity'))):
+                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                    p = parameters['resistivity']
+                    k = parameters['mls_koef_k']
+                    s = parameters['circle_square']
+                    l = parameters['circle_length_with_step']
+
+                    agn.append(r'\rho=\frac{S*a}{l}=')
+                    agn.append(fr'{to_fixed(s.get_value())} * {to_fixed(k.get_value())}/{to_fixed(l.get_value())}=')
+                    write_res(agn, p, digit=7)
 
     def __generate_pdf(self):
         current_file = os.getcwd()

@@ -24,10 +24,10 @@ class CalcData:
 class CalcK(CalcData):
     @staticmethod
     def do(d):
-        xy_ = (d[Data.X] * d[Data.Y]).mean()
+        xy_ = (d[Data.Y] * d[Data.X]).mean()
         x_ = d[Data.X].mean()
         y_ = d[Data.Y].mean()
-        k = xy_ - x_ * y_
+        k = xy_ - y_ * x_
         x2_ = (d[Data.X] ** 2).mean()
         x_2 = (d[Data.X]).mean() ** 2
         k = k / (x2_ - x_2)
@@ -58,7 +58,7 @@ class CalcDK(CalcData):
         y2_ = (d[Data.Y] ** 2).mean()
         dk = (y2_ - y_2) / (x2_ - x_2) - d[Data.B] ** 2
         dk = dk ** 0.5
-        dk = dk / (len(d[Data.X]) ** 0.5)
+        dk = dk / 100 / (len(d[Data.X]) ** 0.5)
         d[Data.DK] = dk
         dk.set_symbol('dk')
         dk.set_name('k_error')
@@ -117,7 +117,7 @@ class CalcCircleL(CalcData):
         l.set_symbol('circle')
         l.set_name('circle_length')
         d[Data.lc] = l
-        l.set_symbol('lc')
+        l.set_symbol('circle')
         l.set_name('circle_length')
         return d
 
@@ -137,7 +137,7 @@ class CalcResistivity(CalcData):
     @staticmethod
     def do(d):
         p = d[Data.K] * d[Data.S] / d[Data.l]
-        p.set_symbol('ρ')
+        p.set_symbol(r'\rho')
         p.set_name('resistivity')
         d[Data.P] = p
         return d
