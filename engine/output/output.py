@@ -24,7 +24,7 @@ class Template:
         self.result_filename = None
         self.__load_template(lab)
 
-    def get_pdf(self):
+    def write_pdf(self):
         self.__fill()
         self.__generate_pdf()
 
