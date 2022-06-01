@@ -1,0 +1,12 @@
+
+engine/__pycache__/
+
+*.pyc
+
+results/lab_111/images/graph.pdf
+engine/output/new_full.pdf
+lab_111_result.pdf
+
+results/lab_111/tables
+
+.DS_Store

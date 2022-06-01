@@ -1,0 +1,65 @@
+{
+    "mls_koef_k": {
+        "symbol": "k",
+        "value": 4.217666666666666,
+        "absolute_error": null,
+        "category": "resistance",
+        "unit": "Om"
+    },
+    "mls_koef_b": {
+        "symbol": "b",
+        "value": 0.25533333333335406,
+        "absolute_error": null,
+        "category": "resistance",
+        "unit": "Om"
+    },
+    "k_error": {
+        "symbol": "dk",
+        "value": 0.01331297437718846,
+        "absolute_error": null,
+        "category": "resistance",
+        "unit": "Om"
+    },
+    "b_error": {
+        "symbol": "db",
+        "value": 0.1529544306430294,
+        "absolute_error": null,
+        "category": "resistance",
+        "unit": "Om"
+    },
+    "circle_square": {
+        "symbol": "S",
+        "value": 0.12566370614359174,
+        "absolute_error": 0.006283185307179587,
+        "category": "length",
+        "unit": "mm^2"
+    },
+    "circle_length": {
+        "symbol": "circle",
+        "value": 501.398187512931,
+        "absolute_error": 3.1337386719558187,
+        "category": "length",
+        "unit": "mm"
+    },
+    "step": {
+        "symbol": "step",
+        "value": 2.46,
+        "absolute_error": 0.01,
+        "category": "length",
+        "unit": "mm"
+    },
+    "circle_length_with_step": {
+        "symbol": "turn",
+        "value": 501.4042222012618,
+        "absolute_error": 3.1337763887578864,
+        "category": "length",
+        "unit": "mm"
+    },
+    "resistivity": {
+        "symbol": "\\rho",
+        "value": 0.001057046592636946,
+        "absolute_error": 5.28523296318473e-05,
+        "category": "resistance",
+        "unit": "Om*m"
+    }
+}
