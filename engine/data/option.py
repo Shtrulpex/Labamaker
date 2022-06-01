@@ -1,20 +1,6 @@
 import json
-import enum
 
-
-class TextKinds(enum.Enum):
-    text = 'text'
-    formula = 'formula'
-    list = 'list'
-    title = 'title'
-    default = 'default'
-
-    par_val = 'parameter_value'
-    par_abs_err = 'parameter_absolute_error'
-    par_rel_err = 'parameter_relative_error'
-    par_unit = 'parameter_unit'
-    par_name = 'parameter_name'
-    par_symb = 'parameter_symbol'
+from engine.enums import TextKinds
 
 
 class Option:
@@ -42,15 +28,6 @@ class TextOption(Option):
         self.italics = kwargs['italics']
         self.frame = kwargs['frame']
         self.underline = kwargs['underline']
-
-
-class Text:
-    def __init__(self, text: str = '',
-                 kind: str = TextKinds.default.value,
-                 **params):
-        self.text = text
-        self.kind = kind  # text/formula/list/title
-        self.options = TextOption(kind=kind, **params)
 
 
 class ParamOptions(Option):
