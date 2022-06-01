@@ -157,7 +157,7 @@ class Parameter:
                 else:
                     value = first.get_value() - second.get_value()
             else:
-                if not first.get_unit().is_unit():
+                if not first.get_unit().is_number():
                     raise RuntimeError(f'incorrect units to add')
                 if action == '+':
                     value = first.get_value() + second

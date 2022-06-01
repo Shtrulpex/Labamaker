@@ -175,7 +175,7 @@ class BaseMeasUnit:
         else:
             self.set_prefix("")
 
-    def is_unit(self):
+    def is_number(self):
         return self.get_category() == 'number'
 
     def __update_multiplier(self, n: int = None):
@@ -343,9 +343,9 @@ class DerivedMeasUnit:
             unit.to_si()
         self.__update_multipliers()
 
-    def is_unit(self):
+    def is_number(self):
         v1 = not self.numerator() and not self.denominator()
-        v2 = not self.denominator() and len(self.numerator()) == 1 and self.numerator()[0].is_unit()
+        v2 = not self.denominator() and len(self.numerator()) == 1 and self.numerator()[0].is_number()
         return v1 or v2
 
     def __get_flipped(self):
@@ -377,14 +377,22 @@ class DerivedMeasUnit:
         self.__multiplier = multiplier
 
     def __str__(self):
-        if not self.numerator() and not self.denominator():
+        if self.is_number():
             return 'unit'
+        sp1 = filter(lambda x: not x.is_number(), self.numerator())
+        sp2 = filter(lambda x: not x.is_number(), self.denominator())
         if not self.denominator():
-            return '*'.join(str(i) for i in self.numerator())
+            if not sp1:
+                return 'unit'
+            return '*'.join(str(i) for i in sp1)
         if not self.numerator():
-            return '^-1*'.join(str(i) for i in self.numerator()) + '[-1]'
-        s1 = '*'.join(str(i) for i in self.numerator())
-        s2 = '*'.join(str(i) for i in self.denominator())
+            if not sp2:
+                return 'unit'
+            return '^-1*'.join(str(i) for i in sp2) + '[-1]'
+        s1 = '*'.join(str(i) for i in sp1)
+        s2 = '*'.join(str(i) for i in sp2)
+        if not s2:
+            return s1
         return f'({s1})/({s2})'
 
     def __repr__(self):
