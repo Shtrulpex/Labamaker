@@ -1,0 +1,76 @@
+Index: engine/engine.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from engine.data.data import *\r\nfrom engine.output.output import *\r\nfrom engine.data_processing.data_processing import *\r\nfrom engine.visualization.visualization import *\r\n\r\n\r\nclass Lab:\r\n    def __init__(self, data_controller: DataController, template: Template):\r\n        self.data = data_controller\r\n        self.template = template\r\n\r\n    def make_lab(self):\r\n        pass\r\n\r\n    def get_userdata(self):\r\n        return self.data.source.get_tables()\r\n\r\n    def add_params(self, *params):\r\n        for i in params:\r\n            self.data.result.add_parameter(i)\r\n\r\n    def end_lab(self):\r\n        self.data.result.end()\r\n        self.template.get_pdf()\r\n\r\n\r\nclass Lab111(Lab):\r\n    def __init__(self):\r\n        dc = DataController('lab_111')\r\n        data_result = dc.result\r\n        super(Lab111, self).__init__(dc, Template('lab_111', data_result))\r\n\r\n    def make_lab(self):\r\n        params = self.data.material.get_parameters()\r\n        tables = self.data.material.get_tables()\r\n        resistance_table = tables[0]\r\n        for i in tables:\r\n            if i.name() == 'measures_1':\r\n                resistance_table = i\r\n                break\r\n\r\n        mls_args = MLS({Data.X: resistance_table['N'].to_numpy(),\r\n                        Data.Y: resistance_table['R'].to_numpy()}).do()\r\n        figure = Visualizator.illustrate(mls_args, GraphType.MLS)\r\n        self.data.result.add_image(figure)\r\n        self.add_params(mls_args[Data.K], mls_args[Data.B], mls_args[Data.DK], mls_args[Data.DB])\r\n\r\n        p = {Data.X: resistance_table['N'].to_numpy(),\r\n             Data.Y: resistance_table['R'].to_numpy(),\r\n             Data.d: params[0],\r\n             Data.L: params[2],\r\n             Data.N: params[3],\r\n             Data.D: params[1]}\r\n        p = Resistivity(p).do()\r\n        self.add_params(p[Data.S], p[Data.RESULT], p[Data.l], p[Data.P])\r\n\r\n        for i in self.data.result.get_parameters():\r\n            print(i)\r\n        self.end_lab()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/engine/engine.py b/engine/engine.py
+--- a/engine/engine.py	
++++ b/engine/engine.py	
+@@ -20,7 +20,7 @@
+             self.data.result.add_parameter(i)
+ 
+     def end_lab(self):
+-        self.data.result.end()
++        self.data.result.write_json()
+         self.template.get_pdf()
+ 
+ 
+Index: engine/data/data.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import json\r\n\r\nfrom matplotlib.pyplot import figure as fig\r\n\r\nfrom engine.data.table import *\r\n\r\n\r\nclass Data:\r\n    def __init__(self, folder: str):\r\n        self._folder = folder\r\n        self._tables = []  # list of tables:\r\n        self._parameters = []  # list of parameters\r\n\r\n    def get_tables(self):\r\n        return self._tables\r\n\r\n    def get_parameters(self):\r\n        return self._parameters\r\n\r\n    def folder(self):\r\n        return self._folder\r\n\r\n    def table_folder(self):  # returns path to tables\r\n        return f'{self.folder()}/tables'\r\n\r\n    def parameter_folder(self):   # returns path to tables\r\n        return f'{self.folder()}/parameters'\r\n\r\n    def add_table(self, table_: Table):\r\n        self._tables.append(table_)\r\n        table_.to_csv(self.table_folder())\r\n\r\n    def add_parameter(self, parameter: Parameter):\r\n        self._parameters.append(parameter)\r\n\r\n    def _read_tables(self):\r\n        path = self.table_folder()\r\n        files = os.listdir(path=path)\r\n        current_directory = os.getcwd()\r\n        os.chdir(path)\r\n        for file in files:\r\n            if not file.endswith('.json'):\r\n                continue\r\n            with open(file, 'r', encoding='utf8') as f:\r\n                data = json.load(f)\r\n            for name in data.keys():\r\n                self._tables.append(\r\n                    Table.init_from_file(name, data[name])\r\n                )\r\n        os.chdir(current_directory)\r\n\r\n    def _read_parameters(self):\r\n        path = self.parameter_folder()\r\n        files = os.listdir(path=path)\r\n        current_directory = os.getcwd()\r\n        os.chdir(path)\r\n        for file in files:\r\n            with open(file, 'r', encoding='utf8') as f:\r\n                data = json.load(f)\r\n            for name in data.keys():\r\n                self._parameters.append(\r\n                    Parameter.init_from_file(name, data[name])\r\n                )\r\n        os.chdir(current_directory)\r\n\r\n\r\nclass DataSource(Data):\r\n    def __init__(self, folder: str):\r\n        super(DataSource, self).__init__(folder)\r\n        self._read_tables()\r\n        self._read_parameters()\r\n\r\n\r\nclass DataResult(Data):\r\n    def __init__(self, folder: str):\r\n        super().__init__(folder)\r\n        self._images = []\r\n        self.__read_texts()\r\n\r\n    def get_parameters_dict(self) -> dict:\r\n        d = dict()\r\n        for parameter in self.get_parameters():\r\n            d[parameter.get_name()] = parameter\r\n        return d\r\n\r\n    def get_images_dict(self) -> dict:\r\n        pass\r\n\r\n    def get_tables_dict(self) -> dict:\r\n        pass\r\n\r\n    def image_folder(self):\r\n        return f'{self.folder()}/images'\r\n\r\n    def get_images(self):\r\n        return self._images\r\n\r\n    def add_image(self, image: fig):\r\n        self._images.append(image)\r\n        image.savefig(f'{self.image_folder()}/graph.pdf')\r\n\r\n    def end(self):\r\n        d = {}\r\n        for i in self._parameters:\r\n            d[i.get_name()] = i.__dict__()\r\n        json_text = json.dumps(d, indent=4)\r\n        f = open(f'{self.parameter_folder()}/param_1.json', 'w', encoding='utf8')\r\n        f.write(json_text)\r\n        f.close()\r\n\r\n    def __read_texts(self):\r\n        pass\r\n\r\n\r\nclass DataMaterial(Data):\r\n    def __init__(self, folder: str):\r\n        super(DataMaterial, self).__init__(folder)\r\n        self._read_tables()\r\n        self._read_parameters()\r\n\r\n\r\nclass DataController:\r\n    def __init__(self, lab: str):\r\n        self.lab = lab\r\n        self.__generate_data()\r\n\r\n    def __generate_data(self):\r\n        source_folder = f'sources/{self.lab}'\r\n        self.source = DataSource(source_folder)\r\n\r\n        material_folder = f'materials/{self.lab}'\r\n        self.material = DataMaterial(material_folder)\r\n\r\n        result_folder = f'results/{self.lab}'\r\n        self.result: DataResult = DataResult(result_folder)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/engine/data/data.py b/engine/data/data.py
+--- a/engine/data/data.py	
++++ b/engine/data/data.py	
+@@ -99,7 +99,7 @@
+         self._images.append(image)
+         image.savefig(f'{self.image_folder()}/graph.pdf')
+ 
+-    def end(self):
++    def write_json(self):
+         d = {}
+         for i in self._parameters:
+             d[i.get_name()] = i.__dict__()
+Index: engine/output/output.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from pylatex import Document, Section, Subsection, Tabular\r\nfrom pylatex import Math, Alignat, Itemize, Command\r\nfrom pylatex.utils import italic, bold\r\n\r\nfrom engine.data.data import *\r\n\r\n\r\nclass Template:\r\n    def __init__(self,\r\n                 lab: str,\r\n                 data_result: DataResult,\r\n                 geometry_options=None\r\n                 ):\r\n        if geometry_options is None:\r\n            geometry_options = {\"tmargin\": \"1.5cm\", \"lmargin\": \"2cm\", \"rmargin\": \"2cm\"}\r\n        self.__geomytry_options = geometry_options\r\n        self.__doc = Document(geometry_options=geometry_options)\r\n        self.data_result = data_result\r\n        self.result_path = None\r\n        self.result_filename = None\r\n        self.__load_template(lab)\r\n\r\n    def get_pdf(self):\r\n        self.__fill()\r\n        self.__generate_pdf()\r\n\r\n    def __fill(self):\r\n        doc = self.__doc\r\n        images = self.data_result.get_images_dict()\r\n        parameters = self.data_result.get_parameters_dict()\r\n        tables = self.data_result.get_tables_dict()\r\n\r\n        r = 2\r\n        pi = 3.14\r\n        with doc.create(Section(bold('Data Processing'))):\r\n            with doc.create(Itemize()) as itemize:\r\n                itemize.add_item('Wire resistivity: ')\r\n                with doc.create(Alignat(numbering=False, escape=False)) as agn:\r\n                    agn.append(r'\\rho =\\frac{RS}{l}')\r\n            with doc.create(Subsection(bold('Wire section area'))):\r\n                with doc.create(Alignat(numbering=False, escape=False)) as agn:\r\n                    agn.append(r'S=\\frac{\\pi d^2}{4}=')\r\n                    s = f'{r}^2'\r\n                    agn.append(fr'\\frac{pi}{s}')\r\n\r\n            with doc.create(Subsection(bold('Turn length'))):\r\n                pass\r\n\r\n            with doc.create(Subsection(bold('LSM'))):\r\n                with doc.create(Alignat(numbering=False, escape=False)) as agn:\r\n                    agn.append(r'{R_n}=\\frac{\\rho l}{S} n=k x + b\\\\')\r\n                    agn.append(italic(r'b=0'))\r\n                with doc.create(Alignat(numbering=False, escape=False)) as agn:\r\n                    agn.append(r'{R_n}=\\frac{\\rho l}{S} n=k x + b\\\\')\r\n                    agn.append(italic(r'b=0'))\r\n\r\n    def __generate_pdf(self):\r\n        current_file = os.getcwd()\r\n        os.chdir(self.result_path)\r\n        self.__doc.generate_pdf(self.result_filename, clean_tex=True)\r\n        os.chdir(current_file)\r\n\r\n    # load template from file!!!!\r\n    # and set Template attributes:\r\n    #   - self.result_path\r\n    #   - self.result_filename\r\n    def __load_template(self, lab: str):\r\n        self.result_path = './results/lab_111'\r\n        self.result_filename = 'lab_111_result'\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/engine/output/output.py b/engine/output/output.py
+--- a/engine/output/output.py	
++++ b/engine/output/output.py	
+@@ -30,13 +30,16 @@
+         parameters = self.data_result.get_parameters_dict()
+         tables = self.data_result.get_tables_dict()
+ 
+-        r = 2
+         pi = 3.14
++        r = 2
+         with doc.create(Section(bold('Data Processing'))):
+             with doc.create(Itemize()) as itemize:
+                 itemize.add_item('Wire resistivity: ')
+                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                     agn.append(r'\rho =\frac{RS}{l}')
++                itemize.add_item('Wire section area')
++                with doc.create(Alignat(numbering=False, escape=False)) as agn:
++                    agn.append(r'S=\frac{\pi d^2}{4}')
+             with doc.create(Subsection(bold('Wire section area'))):
+                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                     agn.append(r'S=\frac{\pi d^2}{4}=')
+@@ -50,9 +53,6 @@
+                 with doc.create(Alignat(numbering=False, escape=False)) as agn:
+                     agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
+                     agn.append(italic(r'b=0'))
+-                with doc.create(Alignat(numbering=False, escape=False)) as agn:
+-                    agn.append(r'{R_n}=\frac{\rho l}{S} n=k x + b\\')
+-                    agn.append(italic(r'b=0'))
+ 
+     def __generate_pdf(self):
+         current_file = os.getcwd()

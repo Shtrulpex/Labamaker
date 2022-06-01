@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="aea2604c-7e20-442b-b508-c618dc80514f" name="Changes" comment="MeasUnit str method has been fixed" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$/LabaMaker" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_COMMON_BRANCH" value="output" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python39/Lib/site-packages/pandas/core/frame.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="278mA2YK1v4rx22aFu9Z6kD1yjv" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Coding\LabaMaker" />
+      <recent name="D:\Coding\LabaMaker\results\lab_111\texts" />
+      <recent name="D:\Coding\LabaMaker\sources\lab_111" />
+      <recent name="D:\Coding\LabaMaker\sources" />
+      <recent name="D:\Coding\LabaMaker\lab_111\source\texts" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.data">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/engine/data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/engine/data/data.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ewfiwh" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ewfiwh.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="LabaMaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="measunit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="LabaMaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/engine/data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/engine/data/measunit.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="output" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="LabaMaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/engine/output" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/engine/output/output.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Autodetect">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="Labamaker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.data" />
+      <item itemvalue="Python.measunit" />
+      <item itemvalue="Python.output" />
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.ewfiwh" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ewfiwh" />
+        <item itemvalue="Python.data" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.measunit" />
+        <item itemvalue="Python.output" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aea2604c-7e20-442b-b508-c618dc80514f" name="Changes" comment="" />
+      <created>1648709940221</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1648709940221</updated>
+    </task>
+    <task id="LOCAL-00001" summary="and for not poor students">
+      <created>1648710636911</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1648710636911</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Sceleton of Data without tables">
+      <created>1650023065947</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650023065947</updated>
+    </task>
+    <task id="LOCAL-00003" summary="intermediate commit">
+      <created>1651074205913</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1651074205913</updated>
+    </task>
+    <task id="LOCAL-00004" summary="class Data: NEW!&#10;    1) 'form_tables' and 'form_texts' methods&#10;    2) 'getters'&#10;class Table: NEW!&#10;    1) inheritance from pandas.DataFrame&#10;    2) 'convert' method for Serias of Table&#10;class Parameter NEW!&#10;    3) 'convert' method for parameter&#10;class Kinds: NEW!&#10;    1) added enum for TextOption initialization&#10;class Text:&#10;    1) Upgraded initialize method with templates&#10;class Text_Option:&#10;    1) Added parameter: &quot;underline&quot;&#10;///////////////&#10;1) Added examples of source filse:&#10;    -param_1.json&#10;    -text_1.json&#10;    -measures_1.xlsx&#10;2) Upgraded units.json:&#10;    Added standard units">
+      <created>1651094710319</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1651094710319</updated>
+    </task>
+    <task id="LOCAL-00005" summary="class Prefix: NEW!&#10;    1) like enum&#10;class Kind:&#10;    1) reworked by adding prefix mechanic&#10;class Category and Si: NEW!&#10;    1) new enum classes for reworked Parameter&#10;class Parameter:&#10;    1) Added 'to_si' method&#10;class Data:&#10;    1) fixed '_form_tables_' and '__form_texts' methods">
+      <created>1651099297496</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651099297496</updated>
+    </task>
+    <task id="LOCAL-00006" summary="class Prefix: NEW!&#10;    1) like enum&#10;class Kind:&#10;    1) reworked by adding prefix mechanic&#10;class Category and Si: NEW!&#10;    1) new enum classes for reworked Parameter&#10;class Parameter:&#10;    1) Added 'to_si' method&#10;    2) Reworked 'convert' method&#10;class Data:&#10;    1) fixed '_form_tables_' and '__form_texts' methods">
+      <created>1651099908380</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651099908380</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Reworked Data class, turned into three children:&#10;    class DataSource new!!!&#10;    class DataMaterial new!!!&#10;    class DataResult new!!!&#10;class Prefix - reworked&#10;method to_si of class Parameter - optimized&#10;and other fixes">
+      <created>1652298695551</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1652298695551</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Reworked Data class, turned into three children:&#10;    class DataSource new!!!&#10;    class DataMaterial new!!!&#10;    class DataResult new!!!&#10;class Prefix - reworked&#10;method to_si of class Parameter - optimized&#10;and other fixes">
+      <created>1652303639192</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1652303639192</updated>
+    </task>
+    <task id="LOCAL-00009" summary="class Parameter - updated&#10;class DataSource and DataResult has been reworked a little">
+      <created>1652340289622</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1652340289622</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Not working data, but reworked)">
+      <created>1653153002025</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1653153002025</updated>
+    </task>
+    <task id="LOCAL-00011" summary="class Parameter - updated&#10;class DataSource and DataResult has been reworked a little">
+      <created>1653154023251</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1653154023251</updated>
+    </task>
+    <task id="LOCAL-00012" summary="A lot of bugs have been fixed">
+      <created>1653221173908</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1653221173908</updated>
+    </task>
+    <task id="LOCAL-00013" summary="DataSource fixed">
+      <created>1653258735109</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1653258735109</updated>
+    </task>
+    <task id="LOCAL-00014" summary="reworked class Prefix initialization">
+      <created>1653402081397</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1653402081397</updated>
+    </task>
+    <task id="LOCAL-00015" summary="reworked Prefix&#10;         Kind -&gt; (BaseKind &amp;&amp; DerivedKind)&#10;         MeasUnit&#10;reworked &quot;param.json&quot; &amp;&amp; &quot;units.json&quot; files, &#10;like already after parser">
+      <created>1653436109445</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1653436109445</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Completely redesigned engine!!!">
+      <created>1653576586100</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1653576586100</updated>
+    </task>
+    <task id="LOCAL-00017" summary="First release (with bugs) of all data without data">
+      <created>1653777806687</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1653777806687</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Not Debugged version of DataBlock">
+      <created>1653784730088</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1653784730088</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Fixed measunit.py">
+      <created>1653862855541</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1653862855541</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fixed measunit.py">
+      <created>1653866324548</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1653866324548</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Fixed data.py&#10;UHU!!!">
+      <created>1653911009821</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1653911009821</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Added test examples to data.py">
+      <created>1653911074490</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1653911074490</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Added test examples to data.py">
+      <created>1653920341236</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1653920341236</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Added default ParamOption to initialization of Parameter&#10;Added 'set_symbol' to Parameter">
+      <created>1653924132355</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1653924132355</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Added division of Parameter by numbers">
+      <created>1653924894955</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1653924894955</updated>
+    </task>
+    <task id="LOCAL-00026" summary="start to write paths with os">
+      <created>1653935045824</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1653935045824</updated>
+    </task>
+    <task id="LOCAL-00027" summary="added example of LateX-PDF file">
+      <created>1653989945938</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1653989945938</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Start of develop of output">
+      <created>1653990808585</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1653990808585</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Output first success!">
+      <created>1654006618113</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1654006618113</updated>
+    </task>
+    <task id="LOCAL-00030" summary="All is starting from main.py">
+      <created>1654011587956</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1654011587956</updated>
+    </task>
+    <task id="LOCAL-00031" summary="All is starting from main.py">
+      <created>1654013198509</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1654013198509</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Merge remote-tracking branch 'origin/develop' into develop&#10;&#10;# Conflicts:&#10;#&#9;engine/data/data.py&#10;#&#9;engine/engine.py&#10;#&#9;engine/output/output.py&#10;#&#9;results/lab_111/images/graph.pdf">
+      <created>1654013692527</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1654013692527</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Merge remote-tracking branch 'origin/develop' into develop&#10;&#10;# Conflicts:&#10;#&#9;engine/data/data.py&#10;#&#9;engine/engine.py&#10;#&#9;engine/output/output.py&#10;#&#9;results/lab_111/images/graph.pdf">
+      <created>1654013738602</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1654013738602</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Merge remote-tracking branch 'origin/develop' into develop&#10;&#10;# Conflicts:&#10;#&#9;engine/data/data.py&#10;#&#9;engine/engine.py&#10;#&#9;engine/output/output.py&#10;#&#9;results/lab_111/images/graph.pdf">
+      <created>1654020395627</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1654020395627</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Merge remote-tracking branch 'origin/develop' into develop&#10;&#10;# Conflicts:&#10;#&#9;engine/data/data.py&#10;#&#9;engine/engine.py&#10;#&#9;engine/output/output.py&#10;#&#9;results/lab_111/images/graph.pdf">
+      <created>1654021364011</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1654021364011</updated>
+    </task>
+    <task id="LOCAL-00036" summary="2 of 5 parts of output file">
+      <created>1654029621588</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1654029621588</updated>
+    </task>
+    <task id="LOCAL-00037" summary="4 of 5 parts of output file&#10;graph is left">
+      <created>1654035118256</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1654035118256</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Run fix">
+      <created>1654035642215</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1654035642215</updated>
+    </task>
+    <task id="LOCAL-00039" summary="PDF is ready">
+      <created>1654048201829</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1654048201829</updated>
+    </task>
+    <task id="LOCAL-00040" summary="MeasUnit str method has been fixed">
+      <created>1654049940264</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1654049940264</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="develop" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/develop" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Not working data, but reworked)" />
+    <MESSAGE value="class Parameter - updated&#10;class DataSource and DataResult has been reworked a little" />
+    <MESSAGE value="A lot of bugs have been fixed" />
+    <MESSAGE value="DataSource fixed" />
+    <MESSAGE value="reworked class Prefix initialization" />
+    <MESSAGE value="reworked Prefix&#10;         Kind -&gt; (BaseKind &amp;&amp; DerivedKind)&#10;         MeasUnit&#10;reworked &quot;param.json&quot; &amp;&amp; &quot;units.json&quot; files, &#10;like already after parser" />
+    <MESSAGE value="Completely redesigned engine!!!" />
+    <MESSAGE value="First release (with bugs) of all data without data" />
+    <MESSAGE value="Not Debugged version of DataBlock" />
+    <MESSAGE value="Fixed measunit.py" />
+    <MESSAGE value="Fixed data.py&#10;UHU!!!" />
+    <MESSAGE value="Added test examples to data.py" />
+    <MESSAGE value="Added default ParamOption to initialization of Parameter&#10;Added 'set_symbol' to Parameter" />
+    <MESSAGE value="Added division of Parameter by numbers" />
+    <MESSAGE value="start to write paths with os" />
+    <MESSAGE value="added example of LateX-PDF file" />
+    <MESSAGE value="Start of develop of output" />
+    <MESSAGE value="Output first success!" />
+    <MESSAGE value="All is starting from main.py" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/develop' into develop&#10;&#10;# Conflicts:&#10;#&#9;engine/data/data.py&#10;#&#9;engine/engine.py&#10;#&#9;engine/output/output.py&#10;#&#9;results/lab_111/images/graph.pdf" />
+    <MESSAGE value="2 of 5 parts of output file" />
+    <MESSAGE value="4 of 5 parts of output file&#10;graph is left" />
+    <MESSAGE value="Run fix" />
+    <MESSAGE value="PDF is ready" />
+    <MESSAGE value="MeasUnit str method has been fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="MeasUnit str method has been fixed" />
+  </component>
+</project>

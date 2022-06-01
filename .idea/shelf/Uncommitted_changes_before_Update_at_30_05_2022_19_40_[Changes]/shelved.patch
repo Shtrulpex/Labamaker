@@ -1,0 +1,52 @@
+Index: engine/data/data.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nfrom matplotlib.pyplot import figure as fig\r\n\r\nfrom table import *\r\n\r\n\r\nclass Data:\r\n    def __init__(self, folder: str):\r\n        self._folder = folder\r\n        self._tables = []  # list of tables:\r\n        self._parameters = []  # list of parameters\r\n\r\n    def get_tables(self):\r\n        return self._tables\r\n\r\n    def get_parameters(self):\r\n        return self._parameters\r\n\r\n    def folder(self):\r\n        return self._folder\r\n\r\n    def table_folder(self):  # returns path to tables\r\n        return f'{self.folder()}\\\\tables'\r\n\r\n    def parameter_folder(self):   # returns path to tables\r\n        return f'{self.folder()}\\\\parameters'\r\n\r\n    def add_table(self, table_: Table):\r\n        self._tables.append(table_)\r\n        table_.to_csv(self.table_folder())\r\n\r\n    def add_parameter(self, parameter: Parameter):\r\n        self._parameters.append(parameter)\r\n        parameter.to_json(self.parameter_folder())\r\n\r\n    def _read_tables(self):\r\n        path = self.table_folder()\r\n        files = os.listdir(path=path)\r\n        current_directory = os.getcwd()\r\n        os.chdir(path)\r\n        for file in files:\r\n            if not file.endswith('.json'):\r\n                continue\r\n            with open(file, 'r', encoding='utf8') as f:\r\n                data = json.load(f)\r\n            for name in data.keys():\r\n                self._tables.append(\r\n                    Table.init_from_file(name, data[name])\r\n                )\r\n        os.chdir(current_directory)\r\n\r\n    def _read_parameters(self):\r\n        path = self.parameter_folder()\r\n        files = os.listdir(path=path)\r\n        current_directory = os.getcwd()\r\n        os.chdir(path)\r\n        for file in files:\r\n            with open(file, 'r', encoding='utf8') as f:\r\n                data = json.load(f)\r\n            for name in data.keys():\r\n                self._parameters.append(\r\n                    Parameter.init_from_file(name, data[name])\r\n                )\r\n        os.chdir(current_directory)\r\n\r\n\r\nclass DataSource(Data):\r\n    def __init__(self, folder: str):\r\n        super(DataSource, self).__init__(folder)\r\n        self._read_tables()\r\n        self._read_parameters()\r\n\r\n\r\nclass DataResult(Data):\r\n    def __init__(self, folder: str):\r\n        super().__init__(folder)\r\n        self._images = []\r\n        self._texts = []\r\n        self.__read_texts()\r\n\r\n    def image_folder(self):\r\n        return f'{self.folder()}\\\\images'\r\n\r\n    def get_images(self):\r\n        return self._images\r\n\r\n    def add_image(self, image: fig):\r\n        pass\r\n\r\n    def __read_texts(self):\r\n        pass\r\n\r\n\r\nclass DataMaterial(Data):\r\n    def __init__(self, folder: str):\r\n        super(DataMaterial, self).__init__(folder)\r\n        self._read_tables()\r\n        self._read_parameters()\r\n\r\n\r\nclass DataController:\r\n    def __init__(self, lab: str):\r\n        self.lab = lab\r\n        self.__generate_data()\r\n\r\n    def __generate_data(self):\r\n        source_folder = f'..\\\\..\\\\sources\\\\{self.lab}'\r\n        self.source = DataSource(source_folder)\r\n\r\n        material_folder = f'..\\\\..\\\\materials\\\\{self.lab}'\r\n        self.material = DataMaterial(material_folder)\r\n\r\n        result_folder = f'..\\\\..\\\\results\\\\{self.lab}'\r\n        self.result: DataResult = DataResult(result_folder)\r\n\r\n\r\ndc = DataController('lab_111')\r\nd = dc.material.get_parameters()[0]\r\nD = dc.material.get_parameters()[1]\r\nN = dc.material.get_parameters()[3]\r\nprint(d)\r\nprint(D)\r\nprint(N)\r\ndDd = d * D * d\r\nprint(dDd)\r\ndDd >> 3\r\nprint(dDd)\r\nunit = dDd.get_unit_numerator()[0]\r\ndDd.set_prefix(unit, 'm')\r\nprint(dDd)\r\ndDd.set_prefix(unit, 'M')\r\nprint(dDd)\r\ndDd << 2\r\nprint(dDd)\r\nprint(d)\r\nprint(D)\r\nDN = N / D ** 2\r\nDN >> 5\r\nprint(DN)\r\nk = N / 5\r\nprint(k)\r\nprint('All is good')\r\n\r\n\r\n# testing Tables:\r\ntable = dc.source.get_tables()[0]\r\n\r\nprint(table)\r\nprint(table.keys())\r\ntable['R_ev'] = d\r\ntable['R'][3] = D\r\ntable['R_ev'][3] *= 2\r\ntable['R_ev'] *= table['R'][3]\r\nprint(table)\r\nprint()\r\nprint(table.iloc[2])\r\nprint()\r\n\r\n\r\ntable1 = dc.material.get_tables()[0]\r\nprint(table1)\r\ntable1.insert(2, '12321', table['R_ev'])\r\nprint(table1)\r\n\r\nprint('All is good')\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/engine/data/data.py b/engine/data/data.py
+--- a/engine/data/data.py	(revision 11744e3c28b9c7f6b2b754679480af15a75c4ca0)
++++ b/engine/data/data.py	(date 1653927880872)
+@@ -104,15 +104,22 @@
+         self.__generate_data()
+ 
+     def __generate_data(self):
+-        source_folder = f'..\\..\\sources\\{self.lab}'
++        start_path = os.getcwd()
++        os.chdir('/engine/data')
++
++        source_folder = os.path.join(os.getcwd(), 'sources', self.lab)
+         self.source = DataSource(source_folder)
+ 
+-        material_folder = f'..\\..\\materials\\{self.lab}'
++        # material_folder = f'..\\..\\materials\\{self.lab}'
++        material_folder = os.path.join(os.getcwd(), 'materials', self.lab)
+         self.material = DataMaterial(material_folder)
+ 
+-        result_folder = f'..\\..\\results\\{self.lab}'
++        # result_folder = f'..\\..\\results\\{self.lab}'
++        result_folder = os.path.join(os.getcwd(), 'result', self.lab)
+         self.result: DataResult = DataResult(result_folder)
+ 
++        os.chdir(start_path)
++
+ 
+ dc = DataController('lab_111')
+ d = dc.material.get_parameters()[0]
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from engine.engine import *\r\n\r\nLaba111().make_laba()\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 11744e3c28b9c7f6b2b754679480af15a75c4ca0)
++++ b/main.py	(date 1653927917929)
+@@ -1,4 +1,4 @@
+ from engine.engine import *
+ 
+-Laba111().make_laba()
++dc = DataController()
+ 
