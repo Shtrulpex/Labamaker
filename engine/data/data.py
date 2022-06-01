@@ -85,7 +85,7 @@ class DataResult(Data):
         return d
 
     def get_images_dict(self) -> dict:
-        return {'graph': f'{self.image_folder()}/graph.png'}
+        return {'graph': f'{self.image_folder()}/graph.jpg'}
 
     def get_tables_dict(self) -> dict:
         d = dict()
@@ -118,7 +118,7 @@ class DataResult(Data):
 
     def add_image(self, image: fig):
         self._images.append(image)
-        image.savefig(f'{self.image_folder()}/graph.png')
+        image.savefig(f'{self.image_folder()}/graph.jpg')
 
     def __read_template(self):
         self._template = Template('lab_111')

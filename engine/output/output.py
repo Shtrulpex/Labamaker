@@ -1,7 +1,7 @@
 from pylatex import Document, Section, Subsection, Tabular
-from pylatex import Alignat, Itemize
-from pylatex.utils import italic, bold
-
+from pylatex import Alignat, Itemize, Figure
+from pylatex.utils import italic, bold, NoEscape
+import os
 from engine.data.data import *
 
 
@@ -104,6 +104,11 @@ class Template:
                     agn.append(r'\rho=\frac{S*a}{l}=')
                     agn.append(fr'{to_fixed(s.get_value())} * {to_fixed(k.get_value())}/{to_fixed(l.get_value())}=')
                     write_res(agn, p, digit=7)
+
+            with doc.create(Figure(position='htbp')) as graphic:
+                image_filename = str(os.getcwd() + '\\' + images['graph'])
+                graphic.add_image(image_filename)
+                graphic.add_caption('R(N)')
 
     def __generate_pdf(self):
         current_file = os.getcwd()
