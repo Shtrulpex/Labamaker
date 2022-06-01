@@ -71,6 +71,13 @@ class DataSource(Data):
         self._read_parameters()
 
 
+class DataMaterial(Data):
+    def __init__(self, folder: str):
+        super(DataMaterial, self).__init__(folder)
+        self._read_tables()
+        self._read_parameters()
+
+
 class DataResult(Data):
     def __init__(self, folder: str):
         super().__init__(folder)
@@ -129,6 +136,9 @@ class DataMaterial(Data):
         super(DataMaterial, self).__init__(folder)
         self._read_tables()
         self._read_parameters()
+
+    def __read_template(self):
+        self._template = Template('lab_111', self)
 
 
 class DataController:
