@@ -106,7 +106,7 @@ class Template:
                     write_res(agn, p, digit=7)
 
             with doc.create(Figure(position='htbp')) as graphic:
-                image_filename = str(os.getcwd() + '\\' + images['graph'])
+                image_filename = str(os.getcwd() + '/' + images['graph'])
                 graphic.add_image(image_filename)
                 graphic.add_caption('R(N)')
 
